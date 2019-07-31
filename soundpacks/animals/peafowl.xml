@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="(.+) has grown to become a Blue ((Peahen)|(Peacock))\.">
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Blue ((Peahen)|(Peacock))\.">
+	</sound>
+
+</sounds>

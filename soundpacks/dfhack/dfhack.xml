@@ -1,0 +1,111 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<!-- elections -->
+
+	<!-- non dfhack -->
+	<sound logPattern="(.+), mayor has been re-elected\." playbackThreshhold="4">
+		<soundFile fileName="../social/votes/paper_mix_1.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_2.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_3.mp3" randomBalance="true" />
+	</sound>
+
+	<!-- non dfhack -->
+	<sound logPattern="(.+) has been elected mayor\." playbackThreshhold="4">
+		<soundFile fileName="../social/votes/paper_mix_1.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_2.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_3.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) became mayor\." playbackThreshhold="4">
+		<soundFile fileName="../social/votes/paper_mix_1.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_2.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_3.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="Mayor position is now vacant\." playbackThreshhold="4" ansiFormat="&#27;[31m">
+		<soundFile fileName="../social/promotions/29819__HerbertBoland__PianoMood14.mp3" randomBalance="true" />
+		<soundFile fileName="../social/promotions/29820__HerbertBoland__PianoMood15.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="Expedition leader was replaced by mayor\." playbackThreshhold="4">
+		<soundFile fileName="../social/promotions/29837__HerbertBoland__PianoMood32.mp3" randomBalance="true" />
+		<soundFile fileName="../social/promotions/29839__HerbertBoland__PianoMood34.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) became expedition leader\." playbackThreshhold="4">
+		<soundFile fileName="../social/votes/paper_mix_1.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_2.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_3.mp3" randomBalance="true" />
+	</sound>
+	
+	<!-- non dfhack -->
+	<sound logPattern="(.+) has assumed the position of expedition leader of (.+)\." playbackThreshhold="4">
+		<soundFile fileName="../social/votes/paper_mix_1.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_2.mp3" randomBalance="true" />
+		<soundFile fileName="../social/votes/paper_mix_3.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="Expedition leader position is now vacant\." playbackThreshhold="4" ansiFormat="&#27;[31m">
+		<soundFile fileName="../social/promotions/29819__HerbertBoland__PianoMood14.mp3" randomBalance="true" />
+		<soundFile fileName="../social/promotions/29820__HerbertBoland__PianoMood15.mp3" randomBalance="true" />
+	</sound>
+
+	<!-- invaders -->
+
+	<sound logPattern="Siege was broken\.">
+		<!-- http://www.freesound.org/people/SuperDaveOsbourne/sounds/63643/ -->
+		<soundFile fileName="63643__superdaveosbourne__bong.mp3" />
+	</sound>
+
+	<!-- skills -->
+
+	<sound logPattern="(.+) is now rusty (.+)\." ansiFormat="&#27;[31m" timeout="100">
+		<!-- http://www.freesound.org/people/NenadSimic/sounds/171696/ -->
+		<soundFile fileName="rust/171696__nenadsimic__picked-coin-echo.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) is now very rusty (.+)\." ansiFormat="&#27;[31m" timeout="100">
+		<soundFile fileName="rust/171696__nenadsimic__picked-coin-echo.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) is no longer rusty (.+)\.">
+		<!-- http://www.freesound.org/people/NenadSimic/sounds/171756/ -->
+		<soundFile fileName="rust/171756__nenadsimic__picked-coin-echo-2.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) is no longer very rusty (.+)\.">
+		<soundFile fileName="rust/171756__nenadsimic__picked-coin-echo-2.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) has became Proficient (.+)\." timeout="200">
+		<!-- http://www.freesound.org/people/Sub-d/sounds/46993/ -->
+		<soundFile fileName="gain/46993__sub-d__emin9th-chord-tweaked-in-lo.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) has became Accomplished (.+)\." timeout="100">
+		<!-- http://www.freesound.org/people/Sub-d/sounds/46992/ -->
+		<soundFile fileName="gain/46992__sub-d__emin-9-guitar-chord-interup.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="(.+) has became Legendary (.+)\." timeout="50">
+		<!-- http://www.freesound.org/people/Sub-d/sounds/46994/ -->
+		<soundFile fileName="gain/46994__sub-d__guitar-chordal-improv.mp3" randomBalance="true" />
+	</sound>
+
+	<!-- non dfhack -->
+	<sound logPattern="(.+): I have mastered (.+)\.  That was very satisfying!" timeout="50">
+		<!-- http://www.freesound.org/people/Sub-d/sounds/46994/ -->
+		<soundFile fileName="gain/46994__sub-d__guitar-chordal-improv.mp3" randomBalance="true" />
+	</sound>
+
+
+	<!-- workshops -->
+
+	<sound logPattern="(.+) was built\." timeout="50">
+		<soundFile fileName="build/saw_and_hammer_1.mp3" randomBalance="true" />
+		<soundFile fileName="build/saw_and_hammer_2.mp3" randomBalance="true" />
+		<soundFile fileName="build/saw_and_hammer_3.mp3" randomBalance="true" />
+		<soundFile fileName="build/saw_and_hammer_4.mp3" randomBalance="true" />
+	</sound>
+</sounds>

@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="(.+) has grown to become a ((Billy)|(Nanny)) Goat\.">
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to a goat kid\.">
+	</sound>
+
+</sounds>

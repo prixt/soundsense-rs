@@ -1,0 +1,112 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="\*\* ((Starting)|(Loading)|(Unretiring)) Adventurer \*\*" loop="start" channel="music" ansiFormat="&#27;[33;1m">
+		<soundFile fileName="../seasons/spring/Willow and the Light.mp3" />
+		<soundFile fileName="../seasons/spring/Savannah Sketch.mp3" />
+		<soundFile fileName="../seasons/spring/Not As It Seems.mp3" />
+		<soundFile fileName="../seasons/spring/Celtic Impulse.mp3" />
+		<soundFile fileName="../seasons/spring/Achaidh Cheide.mp3" />		
+		<soundFile fileName="../seasons/399596_Quest___Overworld_Theme_1.mp3" />
+		<soundFile fileName="../seasons/summer/Chase.mp3" />
+		<soundFile fileName="../seasons/summer/Heroic Age.mp3" />
+		<soundFile fileName="../seasons/summer/Expeditionary.mp3" />
+		<soundFile fileName="../seasons/summer/Double Drift.mp3" />
+		<soundFile fileName="../seasons/summer/Confused State.mp3" />
+		<soundFile fileName="../seasons/384438_One_Eternal_Dream.mp3" />
+		<soundFile fileName="../seasons/[tindeck.com] - rdriftwood - Hey Di Lee Hi.mp3" weight="25" />
+		<soundFile fileName="../seasons/autumn/The Pyre.mp3" />
+		<soundFile fileName="../seasons/autumn/Temple of the Manes.mp3" />
+		<soundFile fileName="../seasons/autumn/Skye Cuillin.mp3" />
+		<soundFile fileName="../seasons/autumn/Opium.mp3" />
+		<soundFile fileName="../seasons/autumn/Constancy Part Two.mp3" />
+		<soundFile fileName="../seasons/433242_Times__only_moment.mp3" />
+		<soundFile fileName="../seasons/419488_Catacombs_Of_Valhalla.mp3" />
+		<soundFile fileName="../seasons/winter/Unpromised.mp3" />
+	 	<soundFile fileName="../seasons/winter/To the Ends.mp3" />
+	 	<soundFile fileName="../seasons/winter/Senbazuru.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz (Alternate).mp3" />
+		<soundFile fileName="../seasons/423736_ultimatewhimsyoverturefix.mp3" />
+		
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Encounter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/theelvesofthecoast.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-The Balanced Dunes.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Koganusan.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Whip Vine.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Kobold March.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Bonecrafter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-ZTIQ.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Decapitated Camels.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Inith and Od Travel North.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Spelunker.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Galena.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Emergence.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dagger Dance.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - The King Is Dead.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Cuggan's Cove.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dolomite Lullaby.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_danger-room.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_the-storm-and-the-bounty.mp3" />
+		
+		<soundFile fileName="../seasons/roguebard/9_22.mp3" />
+		<soundFile fileName="../seasons/roguebard/7_20.mp3" />
+	
+		<soundFile fileName="../seasons/alexandrzhelanov/Ambush in buch.mp3">
+			<attribution author="Alexandr Zhelanov" url="http://opengameart.org/users/alexandr-zhelanov" license="CC BY 3.0" description="Ambush in buch" />
+		</soundFile>
+		<soundFile fileName="../seasons/alexandrzhelanov/Campaign_0.mp3">
+			<attribution author="Alexandr Zhelanov" url="http://opengameart.org/users/alexandr-zhelanov" license="CC BY 3.0" description="Campaign 0" />
+		</soundFile>
+		<soundFile fileName="../seasons/alexandrzhelanov/Zombies also love to play the fool.mp3" weight="25">
+			<attribution author="Alexandr Zhelanov" url="http://opengameart.org/users/alexandr-zhelanov" license="CC BY 3.0" description="Zombies also love to play the fool" />
+		</soundFile>
+		<soundFile fileName="../seasons/alexandrzhelanov/Path to Lake Land.mp3">
+			<attribution author="Alexandr Zhelanov" url="http://opengameart.org/users/alexandr-zhelanov" license="CC BY 3.0" description="Path to Lake Land" />
+		</soundFile>
+		<soundFile fileName="../seasons/alexandrzhelanov/Caves of sorrow.mp3">
+			<attribution author="Alexandr Zhelanov" url="http://opengameart.org/users/alexandr-zhelanov" license="CC BY 3.0" description="Caves of sorrow" />
+		</soundFile>
+		<soundFile fileName="../seasons/alexandrzhelanov/04.Histories and tales_0.mp3">
+			<attribution author="Alexandr Zhelanov" url="http://opengameart.org/users/alexandr-zhelanov" license="CC BY 3.0" description="Histories and tales" />
+		</soundFile>
+		
+	</sound>
+	
+	<sound logPattern="You have been struck down\." ansiFormat="&#27;[31;1m">
+		<soundFile fileName="../deaths/WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="You have been shot and killed\." ansiFormat="&#27;[31;1m">
+		<soundFile fileName="../deaths/WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="You have bled to death\." ansiFormat="&#27;[31;1m">
+		<soundFile fileName="../deaths/WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="You have drowned\." ansiFormat="&#27;[31m;1m">
+		<soundFile fileName="../deaths/WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="You cannot travel through the (.+)\." ansiFormat="&#27;[31m">
+		<soundFile fileName="../production/12884__schluppipuppie__tack_06.mp3" />
+		<soundFile fileName="../production/12894__schluppipuppie__tsch_02.mp3" />
+		<soundFile fileName="../production/12828__schluppipuppie__besteck_08.mp3" />
+	</sound>
+	
+	<sound logPattern="You have discovered a (.+)\." channel="music" ansiFormat="&#27;[34m">
+		<soundFile fileName="../mining/win music 1.mp3" />
+		<soundFile fileName="../mining/win music 2.mp3" />
+		<soundFile fileName="../mining/win music 3.mp3" />
+	</sound>
+	
+	<sound logPattern="It is noon\.">
+	</sound>
+	
+	<sound logPattern="Night is falling.">
+		<soundFile fileName="night/51690__inchadney__Owls.mp3" randomBalance="true" />
+		<soundFile fileName="night/42917__inchadney__Owl.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>

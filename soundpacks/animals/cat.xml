@@ -1,0 +1,33 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+	
+	<sound logPattern="(.+) has given birth to ((a kitten)|(kittens))\." playbackThreshhold="3">
+		<soundFile fileName="cat/18272__zippi1__sound_meow3.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="An animal has grown to become a Stray Cat\." playbackThreshhold="4">
+		<soundFile fileName="cat/4913__NoiseCollector__cat1.mp3" randomBalance="true" />
+		<soundFile fileName="cat/33657__Corsica_S__Meow.mp3" randomBalance="true" />
+	</sound>
+	
+	<!-- named kitten growing -->
+	<sound logPattern="(.+) has grown to become a Cat\." playbackThreshhold="4">
+		<soundFile fileName="cat/4913__NoiseCollector__cat1.mp3" randomBalance="true" />
+		<soundFile fileName="cat/33657__Corsica_S__Meow.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Cat\." playbackThreshhold="4">
+		<soundFile fileName="cat/4913__NoiseCollector__cat1.mp3" randomBalance="true" />
+		<soundFile fileName="cat/33657__Corsica_S__Meow.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has become a Stray Cat\." playbackThreshhold="4">
+		<soundFile fileName="cat/4913__NoiseCollector__cat1.mp3" randomBalance="true" />
+		<soundFile fileName="cat/33657__Corsica_S__Meow.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has adopted (.+)\." playbackThreshhold="3">
+		<soundFile fileName="cat/24966__mich3d__CatPurring_01.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>

@@ -1,0 +1,375 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="(.+) cancels (.+): Need(s?) (.+)\." concurency="5" timeout="3500" propability="75" playbackThreshhold="4">
+		<!-- http://soundbible.com/1445-Drop-Metal-Thing.html -->
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.mp3" weight="44" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12884 -->
+		<soundFile fileName="12884__schluppipuppie__tack_06.mp3" weight="22" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12894 -->
+		<soundFile fileName="12894__schluppipuppie__tsch_02.mp3" weight="22" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12828 -->
+		<soundFile fileName="12828__schluppipuppie__besteck_08.mp3" weight="22" />
+		
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+		
+	</sound>
+	
+	<sound logPattern="(.+) cancels Hunt: No ammunition\.">
+	
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Interrupted by (.+)\." concurency="1" timeout="5000" propability="75" playbackThreshhold="4">
+		<!-- http://soundbible.com/1445-Drop-Metal-Thing.html -->
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.mp3" volumeAdjustment="-20" weight="3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12884 -->
+		<soundFile fileName="12884__schluppipuppie__tack_06.mp3" volumeAdjustment="-20" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12894 -->
+		<soundFile fileName="12894__schluppipuppie__tsch_02.mp3" volumeAdjustment="-20" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12828 -->
+		<soundFile fileName="12828__schluppipuppie__besteck_08.mp3" volumeAdjustment="-20" />
+	</sound>
+
+	<sound logPattern="(.+) cancels Construct Building: Item blocking site\." playbackThreshhold="4">
+		<!-- http://soundbible.com/1445-Drop-Metal-Thing.html -->
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.mp3" weight="3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12884 -->
+		<soundFile fileName="12884__schluppipuppie__tack_06.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12894 -->
+		<soundFile fileName="12894__schluppipuppie__tsch_02.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12828 -->
+		<soundFile fileName="12828__schluppipuppie__besteck_08.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Construct Building: Cannot reach site\." playbackThreshhold="4">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Construct Building: Building site submerged\." playbackThreshhold="4">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+
+	<sound logPattern="The (.+) were unable to complete the (.+)\." playbackThreshhold="3">
+		<!-- http://soundbible.com/1445-Drop-Metal-Thing.html -->
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.mp3" weight="3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12884 -->
+		<soundFile fileName="12884__schluppipuppie__tack_06.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12894 -->
+		<soundFile fileName="12894__schluppipuppie__tsch_02.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12828 -->
+		<soundFile fileName="12828__schluppipuppie__besteck_08.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Construct Building: Creature occupying site\." concurency="2" timeout="2900" playbackThreshhold="4">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="The (.+) suspended the construction of (.+)\." concurency="2" timeout="2900" playbackThreshhold="4">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Store Item in Barrel: Drop-off inaccessible." concurency="1" timeout="5000" propability="75" playbackThreshhold="4">
+		<!-- http://soundbible.com/1445-Drop-Metal-Thing.html -->
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.mp3" volumeAdjustment="-20" weight="3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12884 -->
+		<soundFile fileName="12884__schluppipuppie__tack_06.mp3" volumeAdjustment="-20" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12894 -->
+		<soundFile fileName="12894__schluppipuppie__tsch_02.mp3" volumeAdjustment="-20" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=12828 -->
+		<soundFile fileName="12828__schluppipuppie__besteck_08.mp3" volumeAdjustment="-20" />
+		
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Could not find path\." concurency="1" timeout="5000" playbackThreshhold="4">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Store Owned Item: Item inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Handle Large Creature: Animal inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Get Provisions: Item inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Store Item in ((Stockpile)|(Bin)|(Bag)): Item inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Store Item in ((Stockpile)|(Bin)|(Bag)): Drop-off inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Dump Item: Item inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Dump Item: Drop-off inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Place Item in Tomb: Item inaccessible\.">
+	</sound>
+	
+	<!-- dump item, store item in stockpile,  -->
+	<sound logPattern="(.+) cancels (.+): Job item misplaced.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Job item lost or destroyed\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Forbidden area\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Dangerous terrain\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Exhausted\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Patient not resting\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Load Ballista: No ammunition\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Slaughter Animal: No creature\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Dig: Inappropriate dig square\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Train War Animal: No creature\." playbackThreshhold="4">
+		<soundFile fileName="NoTrainableAnimals/NoTrainableAnimals1.mp3" />
+		<soundFile fileName="NoTrainableAnimals/NoTrainableAnimals2.mp3" />
+		<soundFile fileName="NoTrainableAnimals/NoTrainableAnimals3.mp3" />
+	</sound>
+	
+	<sound logPattern="The dwarves suspended a linkage from (.+) Lever\.">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="The dwarves suspended a linkage from Pressure Plate\.">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Link a Building to Trigger: Cannot reach site\.">
+		<soundFile fileName="NotPossible/NotPossible01.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible02.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible03.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible04.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible05.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible06.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible07.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible08.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible09.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible10.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible11.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible12.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible13.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible14.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible15.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible16.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible17.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible18.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible19.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible20.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible21.mp3" weight="1" />
+		<soundFile fileName="NotPossible/NotPossible22.mp3" weight="1" />
+	</sound>
+	
+	<!-- TODO: horror cancelation -->
+	<sound logPattern="(.+) cancels (.+): Horrified\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Unconscious\.">
+	</sound>
+	
+</sounds>

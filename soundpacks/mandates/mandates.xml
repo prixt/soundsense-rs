@@ -1,0 +1,58 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiPattern="&#27;[35m">
+
+	<sound logPattern="(.+) has mandated the construction of certain goods\." playbackThreshhold="1">
+		<!-- http://soundbible.com/782-Clearing-Throat-Male.html -->
+		<soundFile fileName="Clearing Throat Male-SoundBible.com-37691700.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=34209 -->
+		<soundFile fileName="34209__acclivity__ClearingThroat_Female.mp3" />
+		
+		<soundFile fileName="NewMandate/NewMandate1.mp3" />
+		<soundFile fileName="NewMandate/NewMandate2.mp3" />
+		<soundFile fileName="NewMandate/NewMandate3.mp3" />
+		<soundFile fileName="NewMandate/NewMandate4.mp3" />
+		<soundFile fileName="NewMandate/NewMandate5.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has imposed a ban on certain exports\." playbackThreshhold="3">
+		<!-- http://soundbible.com/782-Clearing-Throat-Male.html -->
+		<soundFile fileName="Clearing Throat Male-SoundBible.com-37691700.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=34209 -->
+		<soundFile fileName="34209__acclivity__ClearingThroat_Female.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has ended a mandate\." playbackThreshhold="3">
+		<soundFile fileName="MandateEnds/MandateEnds1.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds2.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds3.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds4.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+)'s mandate has ended\." playbackThreshhold="3">
+		<soundFile fileName="MandateEnds/MandateEnds1.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds2.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds3.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds4.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+)'s mandates have ended\." playbackThreshhold="3">
+		<soundFile fileName="MandateEnds/MandateEnds1.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds2.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds3.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds4.mp3" />
+		<soundFile fileName="MandateEnds/MandateEnds5.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has a new demand\." playbackThreshhold="1">
+		<!-- http://soundbible.com/782-Clearing-Throat-Male.html -->
+		<soundFile fileName="Clearing Throat Male-SoundBible.com-37691700.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=34209 -->
+		<soundFile fileName="34209__acclivity__ClearingThroat_Female.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has forgotten a demand\.">
+	</sound>
+
+</sounds>

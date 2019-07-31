@@ -1,0 +1,28 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m" strictAttributions="true"> 
+
+	<sound logPattern="(.+) has grown to become a Stray Yak (Bull|Cow)\.">
+		<soundFile fileName="./yak/yak_1.mp3" randomBalance="true">
+			<attribution url="http://www.facebook.com/video/video.php?v=3588696486429" license="Fair Use" author="Southwick's Zoo" description="I love Yaks!" />
+		</soundFile>
+		<soundFile fileName="./yak/yak_2.mp3" randomBalance="true">
+			<attribution url="http://www.facebook.com/video/video.php?v=3588696486429" license="Fair Use" author="Southwick's Zoo" description="I love Yaks!" />
+		</soundFile>
+		<soundFile fileName="./yak/yak_3.mp3" randomBalance="true">
+			<attribution url="http://www.facebook.com/video/video.php?v=3588696486429" license="Fair Use" author="Southwick's Zoo" description="I love Yaks!" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to a yak calf\.">
+		<soundFile fileName="./yak/yak_1.mp3" randomBalance="true">
+			<attribution url="http://www.facebook.com/video/video.php?v=3588696486429" license="Fair Use" author="Southwick's Zoo" description="I love Yaks!" />
+		</soundFile>
+		<soundFile fileName="./yak/yak_2.mp3" randomBalance="true">
+			<attribution url="http://www.facebook.com/video/video.php?v=3588696486429" license="Fair Use" author="Southwick's Zoo" description="I love Yaks!" />
+		</soundFile>
+		<soundFile fileName="./yak/yak_3.mp3" randomBalance="true">
+			<attribution url="http://www.facebook.com/video/video.php?v=3588696486429" license="Fair Use" author="Southwick's Zoo" description="I love Yaks!" />
+		</soundFile>
+	</sound>
+	
+</sounds>

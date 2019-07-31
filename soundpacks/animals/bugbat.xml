@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="(.+) has given birth to a bugbat pup\.">
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to bugbat pups\.">
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Bugbat\.">
+	</sound>
+	
+</sounds>

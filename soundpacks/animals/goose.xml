@@ -1,0 +1,88 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m" strictAttributions="true">
+
+	<sound logPattern="Goslings have hatched\." haltOnMatch="false">
+		<soundFile fileName="egg/155873__erdie__eier01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Erdie/sounds/155873/" license="CC BY 3.0" author="Erdie" description="eier01.wav" />
+		</soundFile>
+		<soundFile fileName="egg/155872__erdie__eier02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Erdie/sounds/155872/" license="CC BY 3.0" author="Erdie" description="eier02.wav" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="Goslings have hatched\.">
+		<soundFile fileName="goose/168776__jahffar__goose-in-the-pond.mp3">
+			<attribution url="http://www.freesound.org/people/Jahffar/sounds/168776/" license="CC BY 3.0" author="Jahffar" description="goose_in_the_pond.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_03.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a Goose\.">
+		<soundFile fileName="goose/168776__jahffar__goose-in-the-pond.mp3">
+			<attribution url="http://www.freesound.org/people/Jahffar/sounds/168776/" license="CC BY 3.0" author="Jahffar" description="goose_in_the_pond.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_03.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Goose\.">
+		<soundFile fileName="goose/168776__jahffar__goose-in-the-pond.mp3">
+			<attribution url="http://www.freesound.org/people/Jahffar/sounds/168776/" license="CC BY 3.0" author="Jahffar" description="goose_in_the_pond.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_03.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Gander\.">
+		<soundFile fileName="goose/168776__jahffar__goose-in-the-pond.mp3">
+			<attribution url="http://www.freesound.org/people/Jahffar/sounds/168776/" license="CC BY 3.0" author="Jahffar" description="goose_in_the_pond.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_03.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Gander\.">
+		<soundFile fileName="goose/168776__jahffar__goose-in-the-pond.mp3">
+			<attribution url="http://www.freesound.org/people/Jahffar/sounds/168776/" license="CC BY 3.0" author="Jahffar" description="goose_in_the_pond.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+		<soundFile fileName="goose/164484__adam-n__geese_03.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Adam_N/sounds/164484/" license="CC BY 3.0" author="Adam_N" description="Geese.wav" />
+		</soundFile>
+	</sound>
+	
+</sounds>

@@ -1,0 +1,58 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m" strictAttributions="true">
+
+	<sound logPattern="Chicks have hatched\." haltOnMatch="false">
+		<soundFile fileName="egg/155873__erdie__eier01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Erdie/sounds/155873/" license="CC BY 3.0" author="Erdie" description="eier01.wav" />
+		</soundFile>
+		<soundFile fileName="egg/155872__erdie__eier02.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Erdie/sounds/155872/" license="CC BY 3.0" author="Erdie" description="eier02.wav" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="Chicks have hatched\.">
+		<soundFile fileName="chicken/43381__agfx__rooster-chicken-calls-1.mp3" randomBalance="true" delay="2000">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43381/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_1.wav" />
+		</soundFile>
+		<soundFile fileName="chicken/43382__agfx__rooster-chicken-calls-2.mp3" randomBalance="true" delay="2000">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43382/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_2.wav" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a Rooster\.">
+		<soundFile fileName="chicken/43381__agfx__rooster-chicken-calls-1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43381/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_1.wav" />
+		</soundFile>
+		<soundFile fileName="chicken/43382__agfx__rooster-chicken-calls-2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43382/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_2.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Rooster\.">
+		<soundFile fileName="chicken/43381__agfx__rooster-chicken-calls-1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43381/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_1.wav" />
+		</soundFile>
+		<soundFile fileName="chicken/43382__agfx__rooster-chicken-calls-2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43382/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_2.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Hen\.">
+		<soundFile fileName="chicken/43381__agfx__rooster-chicken-calls-1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43381/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_1.wav" />
+		</soundFile>
+		<soundFile fileName="chicken/43382__agfx__rooster-chicken-calls-2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43382/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_2.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Hen\.">
+		<soundFile fileName="chicken/43381__agfx__rooster-chicken-calls-1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43381/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_1.wav" />
+		</soundFile>
+		<soundFile fileName="chicken/43382__agfx__rooster-chicken-calls-2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/AGFX/sounds/43382/" license="CC BY 3.0" author="AGFX" description="Rooster chicken calls_2.wav" />
+		</soundFile>
+	</sound>
+	
+</sounds>

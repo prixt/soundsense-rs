@@ -1,0 +1,77 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+) has been found dead\." playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has been found dead, dehydrated\." playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has been found, starved to death\." playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been found dead, badly crushed." playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been found dead, drowned\." playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been found dead, completely drained of blood!" haltOnMatch="false" playbackThreshhold="1">
+		<!-- http://soundbible.com/33-Evil-Laugh-Cackle.html -->
+		<soundFile fileName="../moods/Evil Laugh Cackle-SoundBible.com-957382653.mp3" volumeAdjustment="-5" />
+	</sound>
+	
+	<sound logPattern="(.+) has been found dead, completely drained of blood!" playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been found dead, contorted in fear!" haltOnMatch="false" playbackThreshhold="1">
+		<!-- http://soundbible.com/33-Evil-Laugh-Cackle.html -->
+		<soundFile fileName="../moods/Evil Laugh Cackle-SoundBible.com-957382653.mp3" volumeAdjustment="-5" />
+	</sound>
+	
+	<sound logPattern="(.+) has been found dead, contorted in fear!" playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128553/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128554/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128555/ -->
+		<soundFile fileName="founddead/128554__herbertboland__pianomoodsad1.mp3" />
+		<soundFile fileName="founddead/128555__herbertboland__pianomoodsad2.mp3" />
+		<soundFile fileName="founddead/128553__herbertboland__pianomoodsad3.mp3" />
+	</sound>
+	
+</sounds>

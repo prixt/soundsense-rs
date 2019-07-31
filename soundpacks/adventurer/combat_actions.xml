@@ -1,0 +1,70 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="You charge at (.+)!">
+	</sound>
+	
+	<sound logPattern="You collide with (.+)!">
+		<soundFile fileName="../battle/hit/strike/strike1.mp3" />
+		<soundFile fileName="../battle/hit/strike/strike2.mp3" />
+		<soundFile fileName="../battle/hit/strike/strike3.mp3" />
+	</sound>
+	
+	<sound logPattern="You slam into an obstacle!">
+		<soundFile fileName="../battle/hit/strike/strike1.mp3" />
+		<soundFile fileName="../battle/hit/strike/strike2.mp3" />
+		<soundFile fileName="../battle/hit/strike/strike3.mp3" />
+	</sound>
+	
+	<sound logPattern="You latch on firmly!">
+		<soundFile fileName="../battle/wrestling/swingfist1.mp3" />
+		<soundFile fileName="../battle/wrestling/swingfist2.mp3" />
+		<soundFile fileName="../battle/wrestling/swingfist3.mp3" />	
+		<soundFile fileName="../battle/wrestling/swingfist4.mp3" />	
+	</sound>
+	
+	<sound logPattern="You feel sick!">
+		<soundFile fileName="../battle/sick/43481__jppi_Stu__SW_Cough.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/sick/52323__stephsinger22__coughing.mp3" />
+		<soundFile fileName="../battle/sick/63102__Robinhood76__00553_coughing_man_2.mp3" />
+	</sound>
+
+	<sound logPattern="You vomit\.">
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Koops/sounds/13652/" license="CC BY 3.0" author="Koops" description="Sick_In_Toilet_01.wav" />
+		</soundFile>
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_02.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_03.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_04.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_05.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="You retch\.">
+		<soundFile fileName="../battle/sick/43481__jppi_Stu__SW_Cough.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/sick/52323__stephsinger22__coughing.mp3" />
+		<soundFile fileName="../battle/sick/63102__Robinhood76__00553_coughing_man_2.mp3" />
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Koops/sounds/13652/" license="CC BY 3.0" author="Koops" description="Sick_In_Toilet_01.wav" />
+		</soundFile>
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_02.mp3" randomBalance="true" />
+		<soundFile fileName="../battle/vomit/13652__Koops__Sick_In_Toilet_03.mp3" randomBalance="true" />
+
+	</sound>
+	
+	<sound logPattern="You give in to pain\.">
+	</sound>
+	
+	<sound logPattern="You regain consciousness\.">
+	</sound>
+	
+	<sound logPattern="You are no longer stunned\.">
+	</sound>
+	
+	<sound logPattern="You fall over\.">
+	</sound>
+	
+	<sound logPattern="You are having trouble breathing\.">
+	</sound>
+
+</sounds>

@@ -1,0 +1,218 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="The (.+) and the (.+) have married\.  Congratulations!" playbackThreshhold="3">
+		<soundFile fileName="bell.mp3" randomBalance="true">
+			<attribution url="https://www.freesound.org/people/Peaveycroquette/sounds/78381/" license="CC BY 3.0" author="Peaveycroquette" description="Angelus Bell.aif" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="They have organized a wedding reception at (.+)\." playbackThreshhold="3">
+		<soundFile fileName="Party/Party1.mp3" />
+		<soundFile fileName="Party/Party2.mp3" />
+		<soundFile fileName="Party/Party3.mp3" />
+		<soundFile fileName="Party/Party4.mp3" />
+	</sound>
+
+	<sound logPattern="They have decided to forego any formal celebrations\.">
+	</sound>
+
+	<sound logPattern="The (.+) has organized a party at (.+)\." playbackThreshhold="3">
+		<soundFile fileName="Party/Party1.mp3" />
+		<soundFile fileName="Party/Party2.mp3" />
+		<soundFile fileName="Party/Party3.mp3" />
+		<soundFile fileName="Party/Party4.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has given birth to a boy\." playbackThreshhold="3">
+		<soundFile fileName="babyborn/babyborn_01.mp3" />
+		<soundFile fileName="babyborn/babyborn_02.mp3" />
+		<soundFile fileName="babyborn/babyborn_03.mp3" />
+		<soundFile fileName="babyborn/babyborn_04.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has given birth to a girl\." playbackThreshhold="3">
+		<soundFile fileName="babyborn/babyborn_01.mp3" />
+		<soundFile fileName="babyborn/babyborn_02.mp3" />
+		<soundFile fileName="babyborn/babyborn_03.mp3" />
+		<soundFile fileName="babyborn/babyborn_04.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has given birth to ((twins)|(triplets))\." playbackThreshhold="3">
+		<soundFile fileName="babyborn/babyborn_01.mp3" />
+		<soundFile fileName="babyborn/babyborn_02.mp3" />
+		<soundFile fileName="babyborn/babyborn_03.mp3" />
+		<soundFile fileName="babyborn/babyborn_04.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) cancels (.+): Seeking Infant\.">
+	</sound>
+
+	<sound logPattern="(.+) cancels Seek Infant: Infant inaccessible\.">
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a ((Dwarven )?)Child\.">
+	</sound>
+
+	<sound logPattern="The fortress attracted no migrants this season\." playbackThreshhold="3" ansiFormat="&#27;[31m">
+		<soundFile fileName="MigrantsNone/MigrantsNone1.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone2.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone3.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone4.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone5.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone6.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone7.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone8.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone9.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone10.mp3" />
+	</sound>
+
+	<sound logPattern="No one even considered making the journey to such a cursed death-trap this season\." playbackThreshhold="3">
+		<soundFile fileName="MigrantsNone/MigrantsNone1.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone2.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone3.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone4.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone5.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone6.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone7.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone8.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone9.mp3" />
+		<soundFile fileName="MigrantsNone/MigrantsNone10.mp3" />
+	</sound>
+	
+	<sound logPattern="A migrant has arrived\." playbackThreshhold="2" ansiFormat="&#27;[34;1m">
+		<soundFile fileName="MigrantsArrived/MigrantsArrived1.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived2.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived3.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived4.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived5.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived6.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived7.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived8.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived9.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived10.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived11.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived12.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived13.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived14.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived15.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived16.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived17.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived18.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived19.mp3" />
+	</sound>
+
+	<sound logPattern="Some migrants have arrived\." playbackThreshhold="2" ansiFormat="&#27;[34;1m">
+		<soundFile fileName="MigrantsArrived/MigrantsArrived1.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived2.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived3.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived4.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived5.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived6.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived7.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived8.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived9.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived10.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived11.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived12.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived13.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived14.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived15.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived16.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived17.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived18.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived19.mp3" />
+	</sound>
+
+	<sound logPattern="Some migrants have arrived, despite the danger\." playbackThreshhold="2" ansiFormat="&#27;[34;1m">
+		<soundFile fileName="MigrantsArrived/MigrantsArrived1.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived2.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived3.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived4.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived5.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived6.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived7.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived8.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived9.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived10.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived11.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived12.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived13.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived14.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived15.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived16.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived17.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived18.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived19.mp3" />
+	</sound>
+
+	<sound logPattern="Some migrants have decided to brave this terrifying place, knowing it may be their tomb\." playbackThreshhold="2" ansiFormat="&#27;[34;1m">
+		<soundFile fileName="MigrantsArrived/MigrantsArrived1.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived2.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived3.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived4.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived5.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived6.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived7.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived8.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived9.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived10.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived11.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived12.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived13.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived14.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived15.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived16.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived17.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived18.mp3" />
+		<soundFile fileName="MigrantsArrived/MigrantsArrived19.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a (.+)\." playbackThreshhold="2" ansiFormat="&#27;[34;1m">
+		<soundFile fileName="promotions/29697__HerbertBoland__PianoMood1.mp3" />
+		<soundFile fileName="promotions/29701__HerbertBoland__PianoMood2.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) is more experienced\.">
+	</sound>
+
+	<sound logPattern="(.+) has become a expedition leader\." playbackThreshhold="4">
+		<soundFile fileName="promotions/29819__HerbertBoland__PianoMood14.mp3" />
+		<soundFile fileName="promotions/29820__HerbertBoland__PianoMood15.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has become a militia commander\." playbackThreshhold="4">
+		<soundFile fileName="promotions/29819__HerbertBoland__PianoMood14.mp3" />
+		<soundFile fileName="promotions/29820__HerbertBoland__PianoMood15.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) and the surrounding lands have been made a barony\." playbackThreshhold="3" ansiFormat="&#27;[33m">
+		<soundFile fileName="promotions/29837__HerbertBoland__PianoMood32.mp3" />
+		<soundFile fileName="promotions/29839__HerbertBoland__PianoMood34.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) and the surrounding lands have been made a county\." playbackThreshhold="3" ansiFormat="&#27;[33m">
+		<soundFile fileName="promotions/29837__HerbertBoland__PianoMood32.mp3" />
+		<soundFile fileName="promotions/29839__HerbertBoland__PianoMood34.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) and the surrounding lands have been made a duchy\." playbackThreshhold="3" ansiFormat="&#27;[33m">
+		<soundFile fileName="promotions/29837__HerbertBoland__PianoMood32.mp3" />
+		<soundFile fileName="promotions/29839__HerbertBoland__PianoMood34.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+), being the rightful heir, has inherited the position of ((king)|(queen)) of The (.+)\." playbackThreshhold="3" ansiFormat="&#27;[33m">
+		<soundFile fileName="promotions/29837__HerbertBoland__PianoMood32.mp3" />
+		<soundFile fileName="promotions/29839__HerbertBoland__PianoMood34.mp3" />
+	</sound>
+	
+	<sound logPattern="After a polite discussion with ((local rivals)|(a local rival)), (.+) has claimed the position of ((king)|(queen)) of (.+)\." playbackThreshhold="3" ansiFormat="&#27;[33m">
+		<soundFile fileName="promotions/29837__HerbertBoland__PianoMood32.mp3" />
+		<soundFile fileName="promotions/29839__HerbertBoland__PianoMood34.mp3" />
+	</sound>
+
+	<!-- too much of random spam for this. -->
+	<sound logPattern="(.+) has become a (.+)\.">
+	</sound>
+
+</sounds>

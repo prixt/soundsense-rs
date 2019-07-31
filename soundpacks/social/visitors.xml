@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="(.+), (.+) is visiting\." playbackThreshhold="3">
+		<soundFile fileName="visitors/hotel_bell_1.mp3" randomBalance="true">
+			<attribution url="https://www.freesound.org/people/lth_stp/sounds/120499/" license="CC BY 3.0" author="lth_stp" description="Bell4.aif" />
+		</soundFile>
+		<soundFile fileName="visitors/hotel_bell_2.mp3" randomBalance="true">
+			<attribution url="https://www.freesound.org/people/lth_stp/sounds/120499/" license="CC BY 3.0" author="lth_stp" description="Bell4.aif" />
+		</soundFile>
+	</sound>
+
+</sounds>

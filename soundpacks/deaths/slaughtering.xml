@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[34;1m">
+
+	<sound logPattern="(.+) has been slaughtered\." playbackThreshhold="2">
+		<!-- http://opengameart.org/content/8-wet-squish-slurp-impacts -->
+		<soundFile fileName="slaugtering/impactsplat01.mp3" randomBalance="true" />
+		<soundFile fileName="slaugtering/impactsplat03.mp3" randomBalance="true" />
+	</sound>
+
+</sounds>

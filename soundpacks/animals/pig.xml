@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<!-- http://www.freesound.org/people/Erdie/sounds/44271/ -->
+	<!-- http://www.freesound.org/people/Erdie/sounds/44273/ -->
+	<!-- http://www.freesound.org/people/Erdie/sounds/44275/ -->
+
+	<sound logPattern="(.+) has given birth to a piglet\.">
+		<soundFile fileName="pig/44271__erdie__pig02.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44273__erdie__pig04.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44275__erdie__pig06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to a wild boar piglet\.">
+		<soundFile fileName="pig/44271__erdie__pig02.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44273__erdie__pig04.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44275__erdie__pig06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Sow\.">
+		<soundFile fileName="pig/44271__erdie__pig02.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44273__erdie__pig04.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44275__erdie__pig06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Sow\.">
+		<soundFile fileName="pig/44271__erdie__pig02.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44273__erdie__pig04.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44275__erdie__pig06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Boar\.">
+		<soundFile fileName="pig/44271__erdie__pig02.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44273__erdie__pig04.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44275__erdie__pig06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray Boar\.">
+		<soundFile fileName="pig/44271__erdie__pig02.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44273__erdie__pig04.mp3" randomBalance="true" />
+		<soundFile fileName="pig/44275__erdie__pig06.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>

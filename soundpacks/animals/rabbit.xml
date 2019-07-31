@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<!-- http://www.freesound.org/people/dobroide/sounds/84141/ -->
+
+	<sound logPattern="(.+) has grown to become a ((Buck)|(Doe)) Rabbit\.">
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_1.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_2.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_3.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Stray ((Buck)|(Doe)) Rabbit\.">
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_1.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_2.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_3.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to bunnies\.">
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_1.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_2.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_3.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to a bunny\.">
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_1.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_2.mp3" randomBalance="true" />
+		<soundFile fileName="rabbit/84141__dobroide__20091122-rabbit-carrot_3.mp3" randomBalance="true" />
+	</sound>
+
+</sounds>

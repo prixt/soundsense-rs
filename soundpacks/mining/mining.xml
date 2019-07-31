@@ -1,0 +1,154 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="You have struck (.+)!" concurency="8" timeout="50" playbackThreshhold="3" ansiPattern="&#27;[37;1m">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=52143 -->
+		<soundFile fileName="52143__blaukreuz__imp_01.mp3" randomBalance="true" />
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFPICK.mp3" randomBalance="true" />
+		<soundFile fileName="DFRUBBLE.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="Raw adamantine!  Praise the miners!" playbackThreshhold="1" ansiPattern="&#27;[34m">
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFINTRO.mp3" />
+		<soundFile fileName="DFINTROEND.mp3" />
+		<!-- http://opengameart.org/content/win-music-1 -->
+		<soundFile fileName="win music 1.mp3" />
+		<!-- http://opengameart.org/content/win-music-2 -->
+		<soundFile fileName="win music 2.mp3" />
+		<!-- http://opengameart.org/content/win-music-3 -->
+		<soundFile fileName="win music 3.mp3" />
+	</sound>
+
+	<sound logPattern="You have discovered an expansive cavern deep underground\." channel="music" playbackThreshhold="1" ansiPattern="&#27;[34m">
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFINTRO.mp3" />
+		<soundFile fileName="DFINTROEND.mp3" />
+		<!-- http://opengameart.org/content/win-music-1 -->
+		<soundFile fileName="win music 1.mp3" />
+		<!-- http://opengameart.org/content/win-music-2 -->
+		<soundFile fileName="win music 2.mp3" />
+		<!-- http://opengameart.org/content/win-music-3 -->
+		<soundFile fileName="win music 3.mp3" />
+	</sound>
+	
+	<sound logPattern="You have discovered an eerie cavern\.  The air above the dark stone floor is alive with vortices of purple light and dark, boiling clouds\.  Seemingly bottomless glowing pits mark the surface\." haltOnMatch="false" channel="music" playbackThreshhold="1" ansiPattern="&#27;[31;1m">
+		<soundFile fileName="../seasons/Musopen.Com  Arvo Part-Magnificat.mp3" />
+	</sound>
+	
+	<sound logPattern="You have discovered an eerie cavern\.  The air above the dark stone floor is alive with vortices of purple light and dark, boiling clouds\.  Seemingly bottomless glowing pits mark the surface\.">
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut1.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut2.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut3.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut4.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut5.ogg" />
+	</sound>
+	
+	<!-- HFS -->
+	<sound logPattern="Horrifying screams come from the darkness below!" haltOnMatch="false" channel="music" playbackThreshhold="1" ansiPattern="&#27;[31;1m">
+		<soundFile fileName="../seasons/Musopen.Com  Arvo Part-Magnificat.mp3" />
+	</sound>
+	
+	<sound logPattern="Horrifying screams come from the darkness below!">
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut1.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut2.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut3.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut4.ogg" />
+		<soundFile fileName="demon/Scary_Demon_Haunting-Adam_Webb-97651262_cut5.ogg" />
+	</sound>
+	
+	<sound logPattern="You have discovered a deep pit\." channel="music" playbackThreshhold="1" ansiPattern="&#27;[34m">
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFINTRO.mp3" />
+		<soundFile fileName="DFINTROEND.mp3" />
+		<!-- http://opengameart.org/content/win-music-1 -->
+		<soundFile fileName="win music 1.mp3" />
+		<!-- http://opengameart.org/content/win-music-2 -->
+		<soundFile fileName="win music 2.mp3" />
+		<!-- http://opengameart.org/content/win-music-3 -->
+		<soundFile fileName="win music 3.mp3" />
+	</sound>
+	
+	<sound logPattern="You have discovered a magma pool\." channel="music" playbackThreshhold="1" ansiPattern="&#27;[34m">
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFINTRO.mp3" />
+		<soundFile fileName="DFINTROEND.mp3" weight="10" />
+		<!-- http://opengameart.org/content/win-music-1 -->
+		<soundFile fileName="win music 1.mp3" />
+		<!-- http://opengameart.org/content/win-music-2 -->
+		<soundFile fileName="win music 2.mp3" />
+		<!-- http://opengameart.org/content/win-music-3 -->
+		<soundFile fileName="win music 3.mp3" />
+	</sound>
+	
+	<sound logPattern="You have discovered a great magma sea\." channel="music" playbackThreshhold="1" ansiPattern="&#27;[34m">
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFINTRO.mp3" />
+		<soundFile fileName="DFINTROEND.mp3" weight="10" />
+		<!-- http://opengameart.org/content/win-music-1 -->
+		<soundFile fileName="win music 1.mp3" />
+		<!-- http://opengameart.org/content/win-music-2 -->
+		<soundFile fileName="win music 2.mp3" />
+		<!-- http://opengameart.org/content/win-music-3 -->
+		<soundFile fileName="win music 3.mp3" />
+	</sound>
+	
+	<sound logPattern="You have discovered a downward passage\." channel="music" playbackThreshhold="1" ansiPattern="&#27;[34m">
+		<!-- from dwarf fortress intro -->
+		<soundFile fileName="DFINTRO.mp3" />
+		<soundFile fileName="DFINTROEND.mp3" weight="10" />
+		<!-- http://opengameart.org/content/win-music-1 -->
+		<soundFile fileName="win music 1.mp3" />
+		<!-- http://opengameart.org/content/win-music-2 -->
+		<soundFile fileName="win music 2.mp3" />
+		<!-- http://opengameart.org/content/win-music-3 -->
+		<soundFile fileName="win music 3.mp3" />
+	</sound>
+	
+	<sound logPattern="Digging designation cancelled: damp stone located\." playbackThreshhold="2" ansiPattern="&#27;[35m">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=30341 -->
+		<soundFile fileName="30341__junggle__waterdrop24.mp3" randomBalance="true" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=30342 -->
+		<soundFile fileName="30342__junggle__waterdrop25.mp3" randomBalance="true" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=25879 -->
+		<soundFile fileName="25879__acclivity__Drip1.mp3" randomBalance="true" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=16746 -->
+		<soundFile fileName="16746__kijjaz__water_drop_01.mp3" randomBalance="true" />
+		<!-- http://soundbible.com/1126-Water-Drop.html -->
+		<soundFile fileName="Water Drop-SoundBible.com-2039669379.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="Digging designation cancelled: warm stone located\." playbackThreshhold="2" ansiPattern="&#27;[35m">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=81205 -->
+		<soundFile fileName="81205__Mirors___FryPanSizlzLongRelease.mp3" randomBalance="true" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=45579 -->
+		<soundFile fileName="45579__burriss__pan_hiss_part1.mp3" />
+		<soundFile fileName="45579__burriss__pan_hiss_part2.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=69299 -->
+		<soundFile fileName="69299__Nummer39__steam.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="A section of the cavern has collapsed!" haltOnMatch="false" playbackThreshhold="1" ansiPattern="&#27;[31;1m">
+		<soundFile fileName="33637__HerbertBoland__CinematicBoomNorm.mp3" randomBalance="true" />
+		<soundFile fileName="33637__HerbertBoland__CinematicBoomNorm.mp3" randomBalance="true" volumeAdjustment="-10" weight="2" />
+		<soundFile fileName="33637__HerbertBoland__CinematicBoomNorm.mp3" randomBalance="true" volumeAdjustment="-20" weight="3" />
+	</sound>
+
+	<sound logPattern="A section of the cavern has collapsed!" playbackThreshhold="1" ansiPattern="&#27;[31;1m">
+		<soundFile fileName="60085__Benboncan__Rockfall_in_mine1.mp3" randomBalance="true" weight="6" />
+		<soundFile fileName="60085__Benboncan__Rockfall_in_mine2.mp3" randomBalance="true" weight="6" />
+	</sound>
+	
+	<sound logPattern="Something has collapsed on the surface!" haltOnMatch="false" playbackThreshhold="1" ansiPattern="&#27;[31;1m">
+		<soundFile fileName="33637__HerbertBoland__CinematicBoomNorm.mp3" randomBalance="true" />
+		<soundFile fileName="33637__HerbertBoland__CinematicBoomNorm.mp3" randomBalance="true" volumeAdjustment="-10" weight="2" />
+		<soundFile fileName="33637__HerbertBoland__CinematicBoomNorm.mp3" randomBalance="true" volumeAdjustment="-20" weight="3" />
+	</sound>
+
+	<sound logPattern="Something has collapsed on the surface!" playbackThreshhold="1" ansiPattern="&#27;[31;1m">
+		<soundFile fileName="60085__Benboncan__Rockfall_in_mine1.mp3" randomBalance="true" weight="6" />
+		<soundFile fileName="60085__Benboncan__Rockfall_in_mine2.mp3" randomBalance="true" weight="6" />
+	</sound>
+
+</sounds>

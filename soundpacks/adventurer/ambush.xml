@@ -1,0 +1,104 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[31;1m">
+
+	<sound logPattern="Night creature!">
+		<soundFile fileName="uneasy/8919__patchen__scrapes_30.mp3" />
+		<soundFile fileName="uneasy/8915__patchen__scrapes_26.mp3" />
+		<soundFile fileName="uneasy/8913__patchen__scrapes_24.mp3" />
+		<soundFile fileName="uneasy/8895__patchen__scrapes_05.mp3" />
+	</sound>
+	
+	<sound logPattern="You feel uneasy\.">
+		<soundFile fileName="uneasy/8919__patchen__scrapes_30.mp3" />
+		<soundFile fileName="uneasy/8915__patchen__scrapes_26.mp3" />
+		<soundFile fileName="uneasy/8913__patchen__scrapes_24.mp3" />
+		<soundFile fileName="uneasy/8895__patchen__scrapes_05.mp3" />
+	</sound>
+	
+	<sound logPattern="You are surrounded by incessant cackling\.">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=84746 -->
+		<soundFile fileName="cackling/84606__Robinhood76__01384_woman_insane_laughter_5.mp3" weight="1" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=84606 -->
+		<soundFile fileName="cackling/84746__Robinhood76__01385_witch_cackle_3_natural.mp3" weight="1" />
+		
+		<!-- by mikefictiti0us -->
+		<soundFile fileName="cackling/Mixed.ogg" weight="20" />
+	</sound>
+	
+	<sound logPattern="You are still surrounded by cackling\.">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=84746 -->
+		<soundFile fileName="cackling/84606__Robinhood76__01384_woman_insane_laughter_5.mp3" weight="1" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=84606 -->
+		<soundFile fileName="cackling/84746__Robinhood76__01385_witch_cackle_3_natural.mp3" weight="1" />
+		
+		<!-- by mikefictiti0us -->
+		<soundFile fileName="cackling/Mixed.ogg" weight="20" />
+	</sound>
+	
+	<sound logPattern="The cackling fades away\.">
+	</sound>
+	
+	<sound logPattern="You don't feel safe enough to make a campfire\.">
+		<soundFile fileName="../production/12884__schluppipuppie__tack_06.mp3" />
+		<soundFile fileName="../production/12894__schluppipuppie__tsch_02.mp3" />
+		<soundFile fileName="../production/12828__schluppipuppie__besteck_08.mp3" />
+	</sound>
+	
+	<sound logPattern="You don't feel safe enough to travel\.">
+		<soundFile fileName="../production/12884__schluppipuppie__tack_06.mp3" />
+		<soundFile fileName="../production/12894__schluppipuppie__tsch_02.mp3" />
+		<soundFile fileName="../production/12828__schluppipuppie__besteck_08.mp3" />
+	</sound>
+	
+	<sound logPattern="You cannot travel until you leave this site\.">
+		<soundFile fileName="../production/12884__schluppipuppie__tack_06.mp3" />
+		<soundFile fileName="../production/12894__schluppipuppie__tsch_02.mp3" />
+		<soundFile fileName="../production/12828__schluppipuppie__besteck_08.mp3" />
+	</sound>
+
+	<sound logPattern="\&quot;Tell them it was the (.+), if you live!\&quot;" channel="music">
+		<!-- http://opengameart.org/content/radakan-dramatic-event-2 -->	
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<!-- http://opengameart.org/content/radakan-game-lost -->
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="\&quot;You will remember the (.+) when we're finished with you!\&quot;">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="\&quot;Halt in the name of the (.+)!\&quot;">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="Wolves!">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="Wolf!">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="Black bear!">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="Sasquatch!">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="Giant desert scorpion!">
+		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
+		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
+	</sound>
+	
+	<sound logPattern="\&quot;(.+)\&quot;">
+	</sound>
+
+</sounds>

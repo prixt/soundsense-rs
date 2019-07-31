@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="(.+) has given birth to a boy\." playbackThreshhold="3">
+		<soundFile fileName="babyborn/babyborn_01.mp3" />
+		<soundFile fileName="babyborn/babyborn_02.mp3" />
+		<soundFile fileName="babyborn/babyborn_03.mp3" />
+		<soundFile fileName="babyborn/babyborn_04.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has given birth to a girl\." playbackThreshhold="3">
+		<soundFile fileName="babyborn/babyborn_01.mp3" />
+		<soundFile fileName="babyborn/babyborn_02.mp3" />
+		<soundFile fileName="babyborn/babyborn_03.mp3" />
+		<soundFile fileName="babyborn/babyborn_04.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has given birth to ((twins)|(triplets))\." playbackThreshhold="3">
+		<soundFile fileName="babyborn/babyborn_01.mp3" />
+		<soundFile fileName="babyborn/babyborn_02.mp3" />
+		<soundFile fileName="babyborn/babyborn_03.mp3" />
+		<soundFile fileName="babyborn/babyborn_04.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) cancels (.+): Seeking Infant\.">
+	</sound>
+
+	<sound logPattern="(.+) cancels Seek Infant: Infant inaccessible\.">
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a ((Dwarven )?)Child\.">
+	</sound>
+
+</sounds>

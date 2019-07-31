@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<!-- http://www.freesound.org/people/CGEffex/sounds/93100/ -->
+	<sound logPattern="[(]tame rat[)] has gnawed its way out of confinement!" ansiFormat="&#27;[34;1m">
+		<soundFile fileName="rat/143125__zabuhailo__ratsqueak_1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Zabuhailo/sounds/143125/" license="CC0 1.0" author="Zabuhailo" description="ratSqueak.wav" />
+		</soundFile>
+		<soundFile fileName="rat/143125__zabuhailo__ratsqueak_2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Zabuhailo/sounds/143125/" license="CC0 1.0" author="Zabuhailo" description="ratSqueak.wav" />
+		</soundFile>
+		<soundFile fileName="rat/143125__zabuhailo__ratsqueak_3.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Zabuhailo/sounds/143125/" license="CC0 1.0" author="Zabuhailo" description="ratSqueak.wav" />
+		</soundFile>
+	</sound>
+
+
+	<sound logPattern="[(]tame hamster[)] has gnawed its way out of confinement!" ansiFormat="&#27;[34;1m">
+	</sound>
+
+</sounds>

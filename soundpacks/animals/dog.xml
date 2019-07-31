@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="(.+) has given birth to ((a puppy)|(puppies))\." playbackThreshhold="3">
+		<soundFile fileName="dog/86279__Tito_Lahaye__6_week_beagle_bark.mp3" randomBalance="true" />
+	</sound>
+
+	<sound logPattern="An animal has grown to become a Stray Dog\." playbackThreshhold="3">
+		<soundFile fileName="dog/24965__mich3d__BigDogBarking_02.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Dog\." playbackThreshhold="3">
+		<soundFile fileName="dog/24965__mich3d__BigDogBarking_02.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="An animal has become a Stray ((hunting)|(war)) Dog\." playbackThreshhold="4">
+		<soundFile fileName="dog/34872__Sruddi1__BARK1.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>
