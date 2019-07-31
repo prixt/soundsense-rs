@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="(.+) has grown to become a Cavy Sow\.">
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Cavy Boar\.">
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to a cavy pup\.">
+	</sound>
+	
+	<sound logPattern="(.+) has given birth to cavy pups\.">
+	</sound>
+	
+</sounds>

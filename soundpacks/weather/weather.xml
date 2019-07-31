@@ -1,0 +1,43 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[36;1m">
+
+	<sound logPattern="It has started raining\." channel="weather" loop="start" playbackThreshhold="3">
+	 	<!-- http://soundbible.com/886-Distant-Thunder-And-Light-Rain.html -->
+		<soundFile fileName="rain/Distant Thunder And Light Rain-SoundBible.com-148277450.mp3" />
+		<!-- http://soundbible.com/318-Lightning-Strike-Summer-Storm.html -->
+		<soundFile fileName="rain/Lightning Strike Summer Storm-SoundBible.com-1070450923.mp3" />
+		
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=2523 -->
+		<soundFile fileName="rain/2523__RHumphries__rbh_thunder_storm_part1.mp3" />
+		<soundFile fileName="rain/2523__RHumphries__rbh_thunder_storm_part2.mp3" />
+		<soundFile fileName="rain/2523__RHumphries__rbh_thunder_storm_part3.mp3" />
+		<soundFile fileName="rain/2523__RHumphries__rbh_thunder_storm_part4.mp3" />
+	</sound>
+	
+	<sound logPattern="It is raining (.+)\." channel="weather" playbackThreshhold="3">
+		<!-- http://www.freesound.org/people/Benboncan/sounds/116730/ -->
+		<soundFile fileName="goreRain/116730__benboncan__drips-in-mine.mp3" />
+	</sound>
+	
+	<sound logPattern="It is raining (.+)\!" channel="weather" playbackThreshhold="3">
+		<!-- http://www.freesound.org/people/Benboncan/sounds/116730/ -->
+		<soundFile fileName="goreRain/116730__benboncan__drips-in-mine.mp3" />
+	</sound>
+	
+	<sound logPattern="A cloud of (.+) has drifted nearby!" channel="weather" playbackThreshhold="3">
+		<!-- http://www.freesound.org/people/genelythgow/sounds/141605/ -->
+		<!-- http://www.freesound.org/people/genelythgow/sounds/141606/ -->
+		<!-- http://www.freesound.org/people/genelythgow/sounds/141612/ -->
+		<soundFile fileName="mist/141612__genelythgow__wine-glass-vocorder.mp3" />
+		<soundFile fileName="mist/141605__genelythgow__wine-glass-vocorder-6.mp3" />
+		<soundFile fileName="mist/141606__genelythgow__wine-glass-vocorder-7.mp3" />
+	</sound>
+	
+	<sound logPattern="A snow storm has come\." channel="weather" loop="start" playbackThreshhold="3">
+		<soundFile fileName="snow/22606__martypinso__DMP013016_HEAVYSNOWSTORM.mp3" />
+	</sound>
+	
+	<sound logPattern="The weather has cleared\." channel="weather" loop="stop" playbackThreshhold="0">
+	</sound>
+
+</sounds>

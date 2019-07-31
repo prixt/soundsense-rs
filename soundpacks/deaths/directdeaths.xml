@@ -1,0 +1,167 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+) has drowned\." playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has died ((of)|(from)) thirst\." playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has starved to death\." playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) has been struck down\." playbackThreshhold="2">
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+) has been crushed by a drawbridge\." playbackThreshhold="2">
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has died after colliding with an obstacle\." playbackThreshhold="2">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=52143 -->
+		<soundFile fileName="50776__smcameron__fall_with_impact.mp3" />
+		
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) slams into an obstacle and blows apart!" playbackThreshhold="2">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=52143 -->
+		<soundFile fileName="50776__smcameron__fall_with_impact.mp3" />
+		
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+) has bled to death\." playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has died of old age\." playbackThreshhold="3">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has suffocated\." playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been encased in ice\." playbackThreshhold="3">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been encased in cooling lava\.">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been shot and killed\." playbackThreshhold="2"> 
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has succumbed to infection\." playbackThreshhold="3">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" weight="10" />
+	</sound>
+	
+	<sound logPattern="(.+) has been impaled on spikes\." playbackThreshhold="2">
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has been killed by a flying object\." playbackThreshhold="2">
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has been killed by a trap\." playbackThreshhold="2">
+		<soundFile fileName="WilhelmScream_vbr.mp3" >
+			<attribution url="https://archive.org/details/WilhelmScreamSample" license="Public Domain" author="Sheb Wooley" description="Wilhelm Scream Sample (1951)" />
+		</soundFile>
+		
+		<soundFile fileName="gutwrenching_scream.mp3">
+			<attribution url="http://www.freewebs.com/notthewilhelmscream/download.html" license="?" author="Soundelux" description="Screams 3; Man, Gut-wrenching Scream And Fall Into Distance" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has been murdered by (.+)!" haltOnMatch="false" playbackThreshhold="1">
+		<!-- http://soundbible.com/33-Evil-Laugh-Cackle.html -->
+		<soundFile fileName="../moods/Evil Laugh Cackle-SoundBible.com-957382653.mp3" volumeAdjustment="-5" />
+	</sound>
+	
+	<sound logPattern="(.+) has been murdered by (.+)!" playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+		
+		<!-- http://www.freewebs.com/notthewilhelmscream/download.html -->
+		<soundFile fileName="gutwrenching_scream.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been scared to death by the (.+)!" haltOnMatch="false" playbackThreshhold="1">
+		<!-- http://soundbible.com/33-Evil-Laugh-Cackle.html -->
+		<soundFile fileName="../moods/Evil Laugh Cackle-SoundBible.com-957382653.mp3" volumeAdjustment="-5" />
+	</sound>
+	
+	<sound logPattern="(.+) has been scared to death by the (.+)!" playbackThreshhold="2">
+		<!-- http://www.archive.org/details/WilhelmScreamSample -->
+		<soundFile fileName="WilhelmScream_vbr.mp3" />
+		
+		<!-- http://www.freewebs.com/notthewilhelmscream/download.html -->
+		<soundFile fileName="gutwrenching_scream.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has collapsed\.">
+		<!-- http://opengameart.org/content/8-wet-squish-slurp-impacts -->
+		<soundFile fileName="slaugtering/impactsplat01.mp3" randomBalance="true" />
+		<soundFile fileName="slaugtering/impactsplat03.mp3" randomBalance="true" />
+	</sound>
+
+</sounds>

@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<!-- http://www.sheep.com/sheep_sounds.cfm -->
+
+	<sound logPattern="(.+) has given birth to a lamb\.">
+		<soundFile fileName="sheep/baalamb3.mp3" randomBalance="true" />
+		<soundFile fileName="sheep/LambSound_4.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a ((Stray )?)Ram\.">
+		<soundFile fileName="sheep/SheepSound_10.mp3" randomBalance="true" />
+		<soundFile fileName="sheep/SheepSound_5.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Ewe\.">
+		<soundFile fileName="sheep/baalamb3.mp3" randomBalance="true" />
+		<soundFile fileName="sheep/LambSound_4.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>

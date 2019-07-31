@@ -1,0 +1,40 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m" strictAttributions="true">
+
+	<sound logPattern="Poults have hatched\.">
+		<soundFile fileName="turkey/67675__sinatra314__turkeygobble1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/sinatra314/sounds/67675/" license="CC BY 3.0" author="sinatra314" description="turkeygobble1.wav" />
+		</soundFile>
+		<soundFile fileName="turkey/Turkey Gobble-SoundBible.com-123256561.mp3" randomBalance="true">
+			<attribution url="http://soundbible.com/1737-Turkey-Gobble.html" license="Public Domain" author="bod" description="Turkey Gobble Sound" />
+		</soundFile>
+		<soundFile fileName="turkey/Turkey Gobble-SoundBible.com-333537286.mp3" randomBalance="true">
+			<attribution url="http://soundbible.com/1663-Turkey-Gobble.html" license="Public Domain" author="bod" description="Turkey Gobble Sound" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a Turkey Gobbler\.">
+		<soundFile fileName="turkey/67675__sinatra314__turkeygobble1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/sinatra314/sounds/67675/" license="CC BY 3.0" author="sinatra314" description="turkeygobble1.wav" />
+		</soundFile>
+		<soundFile fileName="turkey/Turkey Gobble-SoundBible.com-123256561.mp3" randomBalance="true">
+			<attribution url="http://soundbible.com/1737-Turkey-Gobble.html" license="Public Domain" author="bod" description="Turkey Gobble Sound" />
+		</soundFile>
+		<soundFile fileName="turkey/Turkey Gobble-SoundBible.com-333537286.mp3" randomBalance="true">
+			<attribution url="http://soundbible.com/1663-Turkey-Gobble.html" license="Public Domain" author="bod" description="Turkey Gobble Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Turkey Hen\.">
+		<soundFile fileName="turkey/67675__sinatra314__turkeygobble1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/sinatra314/sounds/67675/" license="CC BY 3.0" author="sinatra314" description="turkeygobble1.wav" />
+		</soundFile>
+		<soundFile fileName="turkey/Turkey Gobble-SoundBible.com-123256561.mp3" randomBalance="true">
+			<attribution url="http://soundbible.com/1737-Turkey-Gobble.html" license="Public Domain" author="bod" description="Turkey Gobble Sound" />
+		</soundFile>
+		<soundFile fileName="turkey/Turkey Gobble-SoundBible.com-333537286.mp3" randomBalance="true">
+			<attribution url="http://soundbible.com/1663-Turkey-Gobble.html" license="Public Domain" author="bod" description="Turkey Gobble Sound" />
+		</soundFile>
+	</sound>
+	
+</sounds>

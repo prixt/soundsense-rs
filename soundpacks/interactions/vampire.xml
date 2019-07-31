@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+), (.+) has been cursed by (.+)!">
+		<soundFile fileName="curse/133000__cosmicd__hell-s-foundation-b.mp3" randomBalance="true">
+			<attribution url="https://www.freesound.org/people/CosmicD/sounds/133000/" license="CC BY 3.0" author="CosmicD" description="Hell's Foundations B" />
+		</soundFile>
+		<soundFile fileName="curse/133001__cosmicd__hell-s-foundations-c.mp3" randomBalance="true">
+			<attribution url="https://www.freesound.org/people/CosmicD/sounds/133001/" license="CC BY 3.0" author="CosmicD" description="Hell's Foundations C" />
+		</soundFile>
+		<soundFile fileName="curse/133004__cosmicd__hell-s-foundation-d.mp3" randomBalance="true">
+			<attribution url="https://www.freesound.org/people/CosmicD/sounds/133004/" license="CC BY 3.0" author="CosmicD" description="Hell's Foundations D" />
+		</soundFile>
+	</sound>
+	
+</sounds>

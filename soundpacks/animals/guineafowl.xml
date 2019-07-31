@@ -1,0 +1,17 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<!-- https://www.youtube.com/watch?v=sbX5KoVELrU -->
+	<!-- https://www.youtube.com/watch?v=_L9Sj1RCVYQ -->
+
+	<sound logPattern="(.+) has grown to become a Guineahen\.">
+		<soundFile fileName="guineafowl/nest_call_1.mp3" randomBalance="true" />
+		<soundFile fileName="guineafowl/nest_call_2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Guineacock\.">
+		<soundFile fileName="guineafowl/male_1.mp3" randomBalance="true" />
+		<soundFile fileName="guineafowl/male_2.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>

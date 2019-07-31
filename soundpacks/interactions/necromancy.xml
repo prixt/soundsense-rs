@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+) gestures!">
+		<!-- http://www.freesound.org/people/StephenSaldanha/sounds/121894/ -->
+		<soundFile fileName="necromancy/121894__stephensaldanha__magical-effect.mp3" />
+	</sound>
+	
+	<sound logPattern="You gesture!">
+		<!-- http://www.freesound.org/people/StephenSaldanha/sounds/121894/ -->
+		<soundFile fileName="necromancy/121894__stephensaldanha__magical-effect.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) shudders and begins to move!" timeout="500">
+		<!-- http://www.freesound.org/people/corpsehere/sounds/20342/ -->
+		<!-- http://www.freesound.org/people/corpsehere/sounds/20343/ -->
+		<soundFile fileName="necromancy/20342__corpsehere__zombieme.mp3" randomBalance="true" />
+		<soundFile fileName="necromancy/20343__corpsehere__zombieme2.mp3" randomBalance="true" />
+	</sound>
+	
+</sounds>

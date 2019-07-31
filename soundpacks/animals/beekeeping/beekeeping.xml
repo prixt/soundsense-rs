@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="(.+) has been stung by a (.+)!" playbackThreshhold="3">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=99955 -->
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_1.mp3" />
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_2.mp3" />
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_3.mp3" />
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_4.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) have been stung by a (.+)!" playbackThreshhold="3">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=99955 -->
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_1.mp3" />
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_2.mp3" />
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_3.mp3" />
+		<soundFile fileName="99955__CGEffex__Bumble_bee_long_4.mp3" />
+	</sound>
+	
+</sounds>

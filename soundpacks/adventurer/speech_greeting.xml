@@ -1,0 +1,490 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[31;1m" strictAttributions="true">
+
+
+	<sound logPattern="(.+): Hello (.+)\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+
+	</sound>
+	
+		<sound logPattern="(.+): Hey (.+)\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+
+	</sound>
+	
+
+	<sound logPattern="(.+): Hello (.+)\.  Long live the cause!" randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Greetings\.  My name is (.+)\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Greetings\.  It is good to see you\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Hey\.  It is good to see you\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): It is good to see you\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Hello\.  It is good to see you\.  It really is a pleasure to speak with you again\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Hello\.  It is good to see you\.  Long live the cause!  Don't travel alone at night, or the bogeyman will get you\."
+		randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Ah, hello\.  I'm (.+)\.  Don't travel alone at night, or the bogeyman will get you\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Hello\.  It is good to see you\.  Traveling alone in the wilds\?!  You know better than that\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Hello\.  It is good to see you\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+): Hello\.  It is good to see you\." randomBalance="true" concurency="5">
+
+		<soundFile fileName="../emotion/voices/Hello1_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello1_6.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_1.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_2.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_3.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_4.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+		<soundFile fileName="../emotion/voices/Hello2_5.mp3">
+			<attribution url="https://soundcloud.com/simonswerwer/" license=" CC BY-NC-SA 2.0" author="Simon Swerwer" description="Hello" />
+		</soundFile>
+	</sound>
+
+</sounds>

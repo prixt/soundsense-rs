@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+) has been missing for a week\." playbackThreshhold="2">
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128551/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128556/ -->
+		<!-- http://www.freesound.org/people/HerbertBoland/sounds/128560/ -->
+		<soundFile fileName="missing/128556__herbertboland__pianomoodmelancholy1.mp3" />
+		<soundFile fileName="missing/128560__herbertboland__pianomoodmelancholy3.mp3" />
+		<soundFile fileName="missing/128551__herbertboland__pianomoodmelancholy6.mp3" />
+	</sound>
+	
+</sounds>

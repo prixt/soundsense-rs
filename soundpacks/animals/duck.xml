@@ -1,0 +1,40 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m" strictAttributions="true">
+
+	<sound logPattern="Ducklings have hatched\.">
+		<soundFile fileName="duck/duck_1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+		<soundFile fileName="duck/duck_2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+		<soundFile fileName="duck/duck_3.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="(.+) has grown to become a Duck\.">
+		<soundFile fileName="duck/duck_1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+		<soundFile fileName="duck/duck_2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+		<soundFile fileName="duck/duck_3.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="(.+) has grown to become a Drake\.">
+		<soundFile fileName="duck/duck_1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+		<soundFile fileName="duck/duck_2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+		<soundFile fileName="duck/duck_3.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/calodas/sounds/188376/" license="CC0 1.0" author="calodas" description="Duck_quack_1_Sweden.wav" />
+		</soundFile>
+	</sound>
+	
+</sounds>

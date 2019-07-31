@@ -1,0 +1,248 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[33m" strictAttributions="true">
+
+	<!-- feature demonstrations and test cases -->
+	
+	<sound logPattern="(.+): (.+)">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	
+	<sound logPattern="RandomBalance">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="BalanceLeft">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav" balanceAdjustment="-1">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="BalanceRight">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav" balanceAdjustment="1">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<!-- play list support -->
+	
+	<sound logPattern="PlayListPLS">
+		<soundFile playlist="true" fileName="playlist.pls" balanceAdjustment="1">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="PlayListM3U">
+		<soundFile playlist="true" fileName="playlist.m3u" balanceAdjustment="1">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="PlayListMixed">
+		<soundFile playlist="true" fileName="playlist.m3u" weight="10">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+		<soundFile playlist="true" fileName="playlist.pls" weight="5">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg" weight="1">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Simple non-repeating sound -->
+	<sound logPattern="SimplePlayback">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Simple non-repeating sound that is low priority -->
+	<sound logPattern="LowConcucenrcy" concurency="3">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Simple non-repeating sound that is higher priority -->
+	<sound logPattern="HighConcurecny" concurency="10">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Start of background loop -->
+	<sound logPattern="StartMusic" channel="music" loop="true">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Stop of background loop -->
+	<sound logPattern="StopMusic" channel="music" loop="stop">
+	</sound>
+	
+	<sound logPattern="StartSwordLoop" channel="swords" loop="start">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="StartSwordLoopWithDelay" channel="swords" loop="start" delay="200">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="SwordLoopEventWithDelay" channel="swords" loop="start" delay="2000">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Stop of background loop which plays one specified sound at last -->
+	<sound logPattern="StopSwordLoop" channel="swords" loop="stop">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Delayed sound -->
+	<sound logPattern="DelayedBy1Seccond" delay="1000">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Random selection of sample with non-even chance -->
+	<sound logPattern="RandomlySelectedSound">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3" weight="10">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Different file formats -->
+	<sound logPattern="WAV">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="OGG">
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- Wolume adjustment of sample -->
+	<sound logPattern="VolumenAdjustment" >
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3" volumeAdjustment="-20">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="VolumenAdjustment2" >
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg" volumeAdjustment="-20">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="VolumenAdjustment3" >
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg" volumeAdjustment="6">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+	
+	<!-- overlaying multiple samples -->
+	<sound logPattern="MultipleMatches" haltOnMatch="false">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="MultipleMatches" >
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<!-- Timeout of sound -->
+	<sound logPattern="Timeout" timeout="5000">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+
+	<!-- Overlaying multiple samples with delay -->
+	<sound logPattern="Sequential" haltOnMatch="false" >
+		<soundFile fileName="Drop Metal Thing-SoundBible.com-401640954.ogg">
+			<attribution url="http://soundbible.com/1445-Drop-Metal-Thing.html" license="CC BY 3.0" author="Caroline Ford" description="Drop Metal Thing Sound" />
+		</soundFile>
+	</sound>
+
+	<sound logPattern="Sequential" delay="2587">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="Propablity" propability="50">
+		<soundFile fileName="Sword Strike And Clash-SoundBible.com-1345262316.mp3">
+			<attribution url="http://soundbible.com/751-Sword-Strike-And-Clash.html" license="CC BY 3.0" author="Mike Koenig" description="Sword Strike And Clash Sound" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="playbackTheshhold0" playbackThreshhold="0">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="playbackTheshhold1" playbackThreshhold="1">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="playbackTheshhold2" playbackThreshhold="2">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="playbackTheshhold3" playbackThreshhold="3">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="playbackTheshhold4" playbackThreshhold="4">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="redLine" ansiFormat="&#27;[31m">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+	
+	<sound logPattern="cyanLine" ansiFormat="&#27;[36m">
+		<soundFile fileName="85791__sandyrb__NATIVE_FLUTE_FIGURE_02.wav">
+			<attribution url="http://www.freesound.org/people/sandyrb/sounds/85791/" license="CC BY 3.0" author="sandyrb" description="NATIVE FLUTE FIGURE 02.wav" />
+		</soundFile>
+	</sound>
+
+</sounds>

@@ -1,0 +1,278 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds>
+
+	<sound logPattern="(.+) skids along the ground!">
+	</sound>
+	
+	<!-- TODO: skid with hit effect -->
+	<sound logPattern="(.+) skids along the ground, (.+)!">
+	</sound>
+	
+	<!-- TODO: skid with hit effect -->
+	<sound logPattern="(.+) skids along the ground and the (.+) splits in gore!">
+	</sound>
+	
+	<sound logPattern="(.+) has been stunned!">
+	</sound>
+	
+	<sound logPattern="(.+) has been stunned again!">
+	</sound>
+	
+	<sound logPattern="(.+) is no longer stunned\.">
+	</sound>
+	
+	<sound logPattern="(.+) gives in to pain\.">
+	</sound>
+	
+	<sound logPattern="(.+) passes out\.">
+	</sound>
+	
+	<sound logPattern="(.+) collapses and falls to the ground from over-exertion\." playbackThreshhold="4">
+	</sound>
+	
+	<sound logPattern="(.+) looks sick!" concurency="1" timeout="2500" playbackThreshhold="4">
+		<soundFile fileName="sick/43481__jppi_Stu__SW_Cough.mp3" randomBalance="true" />
+		<soundFile fileName="sick/52323__stephsinger22__coughing.mp3" />
+		<soundFile fileName="sick/63102__Robinhood76__00553_coughing_man_2.mp3" />
+	</sound>
+
+	<sound logPattern="(.+) looks even more sick!" concurency="1" timeout="2500" playbackThreshhold="4">
+		<soundFile fileName="sick/43481__jppi_Stu__SW_Cough.mp3" randomBalance="true" />
+		<soundFile fileName="sick/52323__stephsinger22__coughing.mp3" />
+		<soundFile fileName="sick/63102__Robinhood76__00553_coughing_man_2.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) vomits\." concurency="1" timeout="30000" playbackThreshhold="4">
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Koops/sounds/13652/" license="CC BY 3.0" author="Koops" description="Sick_In_Toilet_01.wav" />
+		</soundFile>
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_02.mp3" randomBalance="true" />
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_03.mp3" randomBalance="true" />
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_04.mp3" randomBalance="true" />
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_05.mp3" randomBalance="true" />
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_06.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+) retches\." concurency="1" timeout="25000" playbackThreshhold="4">
+		<soundFile fileName="sick/43481__jppi_Stu__SW_Cough.mp3" randomBalance="true" />
+		<soundFile fileName="sick/52323__stephsinger22__coughing.mp3" />
+		<soundFile fileName="sick/63102__Robinhood76__00553_coughing_man_2.mp3" />
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_01.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Koops/sounds/13652/" license="CC BY 3.0" author="Koops" description="Sick_In_Toilet_01.wav" />
+		</soundFile>
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_02.mp3" randomBalance="true" />
+		<soundFile fileName="vomit/13652__Koops__Sick_In_Toilet_03.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The vomit disappears into the water\.">
+	</sound>
+	
+	<sound logPattern="The vomit burns away in the lava\.">
+	</sound>
+	
+	<sound logPattern="(.+) vomits\." concurency="1" timeout="30000" playbackThreshhold="4">
+	</sound>
+	
+	<sound logPattern="(.+) vomits into the ocean wave\.">
+	</sound>
+	
+	<sound logPattern="(.+) is having trouble breathing!">
+	</sound>
+	
+	<sound logPattern="(.+) is having more trouble breathing!">
+	</sound>
+	
+	<sound logPattern="(.+) has become enraged!">
+	</sound>
+	
+	<sound logPattern="(.+) is no longer enraged\.">
+	</sound>
+	
+	<sound logPattern="(.+) has entered a martial trance!">
+	</sound>
+	
+	<sound logPattern="(.+) has left the martial trance\.">
+	</sound>
+	
+	<sound logPattern="(.+) has been knocked unconscious!">
+	</sound>
+	
+	<sound logPattern="(.+) passes out from exhaustion\.">
+	</sound>
+	
+	<sound logPattern="(.+) regains consciousness\.">
+	</sound>
+	
+	<sound logPattern="(.+) is feeling sluggish!">
+	</sound>
+	
+	<sound logPattern="(.+) looks numb!">
+	</sound>
+	
+	<sound logPattern="(.+) is partially paralyzed!">
+	</sound>
+		
+	<sound logPattern="(.+) is completely paralyzed!">
+	</sound>
+	
+	<sound logPattern="(.+) has fully overcome the paralysis\.">
+	</sound>
+	
+	<sound logPattern="(.+) has been bitten by (.+)!">
+		<soundFile fileName="cavespider/84553__vegemyte__bug1.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Vegemyte/sounds/84553/" license="Sampling Plus 1.0" author="Vegemyte" description="bug1.wav" />
+		</soundFile>
+		<soundFile fileName="cavespider/84552__vegemyte__bug1-2.mp3" randomBalance="true">
+			<attribution url="http://www.freesound.org/people/Vegemyte/sounds/84552/" license="Sampling Plus 1.0" author="Vegemyte" description="bug1,2.wav" />
+		</soundFile>
+	</sound> 
+	
+	<sound logPattern="(.+) is injected into the (.+)'s (.+) blood!">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Paralyzed\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Resting injury\.">
+	</sound>
+
+	<!-- creature sounds --> 
+
+	<!-- goblin --> 
+	<sound logPattern="The Goblin (.+) has become enraged!">
+		<soundFile fileName="vocals/goblin/enraged1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/enraged2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/enraged3.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/enraged4.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) has been knocked unconscious!">
+		<soundFile fileName="vocals/goblin/uncon1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/uncon2.mp3" randomBalance="true" />		
+		<soundFile fileName="vocals/goblin/uncon3.mp3" randomBalance="true" />	
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) passes out from exhaustion\.">
+		<soundFile fileName="vocals/goblin/uncon1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/uncon2.mp3" randomBalance="true" />		
+		<soundFile fileName="vocals/goblin/uncon3.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) is partially paralyzed!">
+		<soundFile fileName="vocals/goblin/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain3.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain4.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain5.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain6.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) is completely paralyzed!">
+		<soundFile fileName="vocals/goblin/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain3.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain4.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain5.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain6.mp3" randomBalance="true" />	
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) has been bitten by (.+)!">
+		<soundFile fileName="vocals/goblin/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain3.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain4.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain5.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain6.mp3" randomBalance="true" />
+	</sound> 
+	
+	<sound logPattern="The Goblin (.+) gives in to pain\.">
+		<soundFile fileName="vocals/goblin/dead1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/dead2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/dead3.mp3" randomBalance="true" />	
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) has been stunned!">
+		<soundFile fileName="vocals/goblin/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain3.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain4.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain5.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain6.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) has been stunned again!">
+		<soundFile fileName="vocals/goblin/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain3.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain4.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain5.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/pain6.mp3" randomBalance="true" />
+	</sound>	
+	
+	<sound logPattern="The Goblin (.+) passes out\.">
+		<soundFile fileName="vocals/goblin/dead1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/dead2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/dead3.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Goblin (.+) is having trouble breathing!">
+		<soundFile fileName="vocals/goblin/cantbreath1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/cantbreath2.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/goblin/cantbreath3.mp3" randomBalance="true" />
+	</sound>
+
+	<!-- troll --> 
+	<sound logPattern="The Troll has become enraged!">
+		<soundFile fileName="vocals/troll/enraged1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/enraged2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll has been knocked unconscious!">
+		<soundFile fileName="vocals/troll/uncon1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/uncon2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll passes out from exhaustion\.">
+		<soundFile fileName="vocals/troll/uncon1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/uncon2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll is partially paralyzed!">
+		<soundFile fileName="vocals/troll/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/pain2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll is completely paralyzed!">
+		<soundFile fileName="vocals/troll/pain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/pain2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll has been bitten by (.+)!">
+		<soundFile fileName="vocals/troll/hitpain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/hitpain2.mp3" randomBalance="true" />
+	</sound> 
+	
+	<sound logPattern="The Troll gives in to pain\.">
+		<soundFile fileName="vocals/troll/dead1.mp3" randomBalance="true" />		
+	</sound>
+	
+	<sound logPattern="The Troll has been stunned!">
+		<soundFile fileName="vocals/troll/hitpain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/hitpain2.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll has been stunned again!">
+		<soundFile fileName="vocals/troll/hitpain1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/hitpain2.mp3" randomBalance="true" />
+	</sound>	
+	
+	<sound logPattern="The Troll passes out\.">
+		<soundFile fileName="vocals/troll/dead1.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="The Troll is having trouble breathing!">
+		<soundFile fileName="vocals/troll/enraged1.mp3" randomBalance="true" />
+		<soundFile fileName="vocals/troll/enraged2.mp3" randomBalance="true" />
+	</sound>
+
+</sounds>

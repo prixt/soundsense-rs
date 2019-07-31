@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+) has transformed into a were(.+)!">
+		<!-- http://www.freesound.org/people/AlienXXX/sounds/140488/ -->
+		<soundFile fileName="were/140488__alienxxx__box-25x25x7-thin-roar-009.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+), Were(.+) has transformed into a (.+)!">
+		<!-- http://www.freesound.org/people/AlienXXX/sounds/140491/ -->
+		<soundFile fileName="were/140491__alienxxx__box-25x25x7-thin-roar-006.mp3" randomBalance="true" />
+	</sound>
+	
+	<sound logPattern="(.+), (.+) has transformed into a (.+)!">
+		<!-- http://www.freesound.org/people/AlienXXX/sounds/140491/ -->
+		<soundFile fileName="were/140491__alienxxx__box-25x25x7-thin-roar-006.mp3" randomBalance="true" />
+	</sound>
+	
+	
+</sounds>

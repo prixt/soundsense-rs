@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="A octopus has sprung from ambush!">
+	</sound>
+	
+	<sound logPattern="The Octopus squirts ink\.">
+	</sound>
+	
+</sounds>

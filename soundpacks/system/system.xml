@@ -1,0 +1,199 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[33;1m">
+	
+	<sound logPattern="\*\*\* STARTING NEW GAME \*\*\*" channel="music" loop="stop" playbackThreshhold="0">
+		<!-- http://opengameart.org/content/radakan-moldan-chase-over-success -->
+		<soundFile fileName="Radakan - Moldan Chase over (success).mp3" />
+	</sound>
+	
+	<sound logPattern="Generating world using parameter set (.+)" channel="music" loop="stop" playbackThreshhold="0">
+		<soundFile fileName="Crypto.mp3" >
+			<attribution url="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600013" license="CC BY 3.0" author="Kevin MacLeod" description="Crypto" />
+		</soundFile>
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-The Tankard Basher.mp3" />
+	</sound>
+	
+	<sound logPattern="\*\* Starting New Outpost \*\*" haltOnMatch="false" playbackThreshhold="3">
+		<!-- original rainseeker :) -->
+		<soundFile fileName="embark/embark_01.mp3" />
+		<soundFile fileName="embark/embark_02.mp3" />
+		<soundFile fileName="embark/embark_03.mp3" />
+		<soundFile fileName="embark/embark_04.mp3" />
+		<soundFile fileName="embark/embark_05.mp3" />
+		<soundFile fileName="embark/embark_06.mp3" />
+		<soundFile fileName="embark/embark_07.mp3" />
+		<soundFile fileName="embark/embark_08.mp3" />
+		<soundFile fileName="embark/embark_09.mp3" />
+		<soundFile fileName="embark/embark_10.mp3" />
+		<soundFile fileName="embark/embark_11.mp3" />
+		<soundFile fileName="embark/embark_12.mp3" />
+	</sound>
+	
+	<sound logPattern="\*\* Starting New Outpost \*\*" channel="music" loop="start" playbackThreshhold="0">
+		<soundFile fileName="../seasons/spring/Willow and the Light.mp3" />
+		<soundFile fileName="../seasons/spring/Savannah Sketch.mp3" />
+		<soundFile fileName="../seasons/spring/Not As It Seems.mp3" />
+		<soundFile fileName="../seasons/spring/Celtic Impulse.mp3" />
+		<soundFile fileName="../seasons/spring/Achaidh Cheide.mp3" />
+		<soundFile fileName="../seasons/399596_Quest___Overworld_Theme_1.mp3" />
+		<soundFile fileName="../seasons/roguebard/7_20.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Whip Vine.mp3" />
+	</sound>
+	
+	<sound logPattern="\*\* Starting Reclaim \*\*" channel="music" loop="start" playbackThreshhold="0">
+		<soundFile fileName="../seasons/spring/Willow and the Light.mp3" />
+		<soundFile fileName="../seasons/spring/Savannah Sketch.mp3" />
+		<soundFile fileName="../seasons/spring/Not As It Seems.mp3" />
+		<soundFile fileName="../seasons/spring/Celtic Impulse.mp3" />
+		<soundFile fileName="../seasons/spring/Achaidh Cheide.mp3" />		
+		<soundFile fileName="../seasons/399596_Quest___Overworld_Theme_1.mp3" />
+		<soundFile fileName="../seasons/summer/Chase.mp3" />
+		<soundFile fileName="../seasons/summer/Heroic Age.mp3" />
+		<soundFile fileName="../seasons/summer/Expeditionary.mp3" />
+		<soundFile fileName="../seasons/summer/Double Drift.mp3" />
+		<soundFile fileName="../seasons/summer/Confused State.mp3" />
+		<soundFile fileName="../seasons/384438_One_Eternal_Dream.mp3" />
+		<soundFile fileName="../seasons/[tindeck.com] - rdriftwood - Hey Di Lee Hi.mp3" weight="25" />
+		<soundFile fileName="../seasons/autumn/The Pyre.mp3" />
+		<soundFile fileName="../seasons/autumn/Temple of the Manes.mp3" />
+		<soundFile fileName="../seasons/autumn/Skye Cuillin.mp3" />
+		<soundFile fileName="../seasons/autumn/Opium.mp3" />
+		<soundFile fileName="../seasons/autumn/Constancy Part Two.mp3" />
+		<soundFile fileName="../seasons/433242_Times__only_moment.mp3" />
+		<soundFile fileName="../seasons/419488_Catacombs_Of_Valhalla.mp3" />
+		<soundFile fileName="../seasons/winter/Unpromised.mp3" />
+	 	<soundFile fileName="../seasons/winter/To the Ends.mp3" />
+	 	<soundFile fileName="../seasons/winter/Senbazuru.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz (Alternate).mp3" />
+		<soundFile fileName="../seasons/423736_ultimatewhimsyoverturefix.mp3" />
+		
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Encounter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/theelvesofthecoast.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-The Balanced Dunes.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Koganusan.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Whip Vine.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Kobold March.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Bonecrafter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-ZTIQ.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Decapitated Camels.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Inith and Od Travel North.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Spelunker.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Galena.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Emergence.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dagger Dance.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - The King Is Dead.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Cuggan's Cove.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dolomite Lullaby.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_danger-room.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_the-storm-and-the-bounty.mp3" />
+		
+		<soundFile fileName="../seasons/roguebard/9_22.mp3" />
+		<soundFile fileName="../seasons/roguebard/7_20.mp3" />
+	</sound>
+
+	<sound logPattern="\*\* Loading Fortress \*\*" channel="music" loop="start" playbackThreshhold="0">
+		<soundFile fileName="../seasons/spring/Willow and the Light.mp3" />
+		<soundFile fileName="../seasons/spring/Savannah Sketch.mp3" />
+		<soundFile fileName="../seasons/spring/Not As It Seems.mp3" />
+		<soundFile fileName="../seasons/spring/Celtic Impulse.mp3" />
+		<soundFile fileName="../seasons/spring/Achaidh Cheide.mp3" />		
+		<soundFile fileName="../seasons/399596_Quest___Overworld_Theme_1.mp3" />
+		<soundFile fileName="../seasons/summer/Chase.mp3" />
+		<soundFile fileName="../seasons/summer/Heroic Age.mp3" />
+		<soundFile fileName="../seasons/summer/Expeditionary.mp3" />
+		<soundFile fileName="../seasons/summer/Double Drift.mp3" />
+		<soundFile fileName="../seasons/summer/Confused State.mp3" />
+		<soundFile fileName="../seasons/384438_One_Eternal_Dream.mp3" />
+		<soundFile fileName="../seasons/[tindeck.com] - rdriftwood - Hey Di Lee Hi.mp3" weight="25" />
+		<soundFile fileName="../seasons/autumn/The Pyre.mp3" />
+		<soundFile fileName="../seasons/autumn/Temple of the Manes.mp3" />
+		<soundFile fileName="../seasons/autumn/Skye Cuillin.mp3" />
+		<soundFile fileName="../seasons/autumn/Opium.mp3" />
+		<soundFile fileName="../seasons/autumn/Constancy Part Two.mp3" />
+		<soundFile fileName="../seasons/433242_Times__only_moment.mp3" />
+		<soundFile fileName="../seasons/419488_Catacombs_Of_Valhalla.mp3" />
+		<soundFile fileName="../seasons/winter/Unpromised.mp3" />
+	 	<soundFile fileName="../seasons/winter/To the Ends.mp3" />
+	 	<soundFile fileName="../seasons/winter/Senbazuru.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz (Alternate).mp3" />
+		<soundFile fileName="../seasons/423736_ultimatewhimsyoverturefix.mp3" />
+		
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Encounter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/theelvesofthecoast.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-The Balanced Dunes.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Koganusan.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Whip Vine.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Kobold March.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Bonecrafter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-ZTIQ.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Decapitated Camels.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Inith and Od Travel North.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Spelunker.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Galena.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Emergence.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dagger Dance.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - The King Is Dead.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Cuggan's Cove.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dolomite Lullaby.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_danger-room.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_the-storm-and-the-bounty.mp3" />
+		
+		<soundFile fileName="../seasons/roguebard/9_22.mp3" />
+		<soundFile fileName="../seasons/roguebard/7_20.mp3" />
+	</sound>
+	
+	<sound logPattern="\*\* Starting New Arena \*\*" channel="music" loop="start" playbackThreshhold="0">
+		<soundFile fileName="../seasons/spring/Willow and the Light.mp3" />
+		<soundFile fileName="../seasons/spring/Savannah Sketch.mp3" />
+		<soundFile fileName="../seasons/spring/Not As It Seems.mp3" />
+		<soundFile fileName="../seasons/spring/Celtic Impulse.mp3" />
+		<soundFile fileName="../seasons/spring/Achaidh Cheide.mp3" />		
+		<soundFile fileName="../seasons/399596_Quest___Overworld_Theme_1.mp3" />
+		<soundFile fileName="../seasons/summer/Chase.mp3" />
+		<soundFile fileName="../seasons/summer/Heroic Age.mp3" />
+		<soundFile fileName="../seasons/summer/Expeditionary.mp3" />
+		<soundFile fileName="../seasons/summer/Double Drift.mp3" />
+		<soundFile fileName="../seasons/summer/Confused State.mp3" />
+		<soundFile fileName="../seasons/384438_One_Eternal_Dream.mp3" />
+		<soundFile fileName="../seasons/[tindeck.com] - rdriftwood - Hey Di Lee Hi.mp3" weight="25" />
+		<soundFile fileName="../seasons/autumn/The Pyre.mp3" />
+		<soundFile fileName="../seasons/autumn/Temple of the Manes.mp3" />
+		<soundFile fileName="../seasons/autumn/Skye Cuillin.mp3" />
+		<soundFile fileName="../seasons/autumn/Opium.mp3" />
+		<soundFile fileName="../seasons/autumn/Constancy Part Two.mp3" />
+		<soundFile fileName="../seasons/433242_Times__only_moment.mp3" />
+		<soundFile fileName="../seasons/419488_Catacombs_Of_Valhalla.mp3" />
+		<soundFile fileName="../seasons/winter/Unpromised.mp3" />
+	 	<soundFile fileName="../seasons/winter/To the Ends.mp3" />
+	 	<soundFile fileName="../seasons/winter/Senbazuru.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz.mp3" />
+	 	<soundFile fileName="../seasons/winter/Frost Waltz (Alternate).mp3" />
+		<soundFile fileName="../seasons/423736_ultimatewhimsyoverturefix.mp3" />
+		
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Encounter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/theelvesofthecoast.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-The Balanced Dunes.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Koganusan.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Whip Vine.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Kobold March.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Bonecrafter.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-ZTIQ.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Decapitated Camels.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Inith and Od Travel North.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Spelunker.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer-Galena.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Emergence.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dagger Dance.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - The King Is Dead.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Cuggan's Cove.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/Simon Swerwer - Dolomite Lullaby.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_danger-room.mp3" />
+		<soundFile fileName="../seasons/simonswerwer/simon-swerwer_the-storm-and-the-bounty.mp3" />
+		
+		<soundFile fileName="../seasons/roguebard/9_22.mp3" />
+		<soundFile fileName="../seasons/roguebard/7_20.mp3" />
+	</sound>
+	
+</sounds>

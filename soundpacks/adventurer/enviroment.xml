@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[36;1m">
+	
+	<sound logPattern="It is raining\." channel="weather">
+		<soundFile fileName="../weather/rain/Distant Thunder And Light Rain-SoundBible.com-148277450.mp3" />
+		<soundFile fileName="../weather/rain/Lightning Strike Summer Storm-SoundBible.com-1070450923.mp3" />
+	</sound>
+	
+	<sound logPattern="There is a cool breeze blowing from the (.+)\." channel="weather">
+	</sound>
+	
+	<sound logPattern="It is cold\." channel="weather">
+	</sound>
+	
+</sounds>

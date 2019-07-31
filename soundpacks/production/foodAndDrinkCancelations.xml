@@ -1,0 +1,70 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[35m">
+
+	<sound logPattern="(.+) cancels Drink: Water source vanished\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Drink: Well dry\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Fill Waterskin Well dry\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Fill Waterskin: Water source vanished\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Clean Self Well dry\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Drink: Water source contaminated\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Give Water: No water source\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Apply Cast: No water source\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Clean Patient: No water source\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Place In Traction: No available traction bench\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Fill Pond: No water source\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Give Water: Need empty bucket\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Give Water: Animal inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Clean Self: Water source vanished\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Clean Self: Well dry\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Give Food: No food available\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Hunting vermin for food\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Eat: Item inaccessible\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Getting food\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Getting something to drink\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels (.+): Getting water\.">
+	</sound>
+	
+	<sound logPattern="(.+) cancels Tame (.+): No food available\.">
+	</sound>
+	
+</sounds>

@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiColor="&#27;[34m">
+
+	<sound logPattern="the Armadillo Boar rolls into a ball\.">
+	</sound>
+	
+	<sound logPattern="the Armadillo Boar unrolls\.">
+	</sound>
+	
+</sounds>

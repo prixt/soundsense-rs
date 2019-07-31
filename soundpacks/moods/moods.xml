@@ -1,0 +1,148 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[36m">
+
+	<sound logPattern="(.+) cancels (.+): Taken by mood\.">
+	</sound>
+
+	<!-- <dwarf> is taken by a fey mood! -->
+	<sound logPattern="(.+) is taken by a fey mood!" playbackThreshhold="1">
+		<soundFile fileName="FeyMood/FeyMood1.mp3" />
+		<soundFile fileName="FeyMood/FeyMood2.mp3" />
+		<soundFile fileName="FeyMood/FeyMood3.mp3" />
+		<soundFile fileName="FeyMood/FeyMood4.mp3" />
+		<soundFile fileName="FeyMood/FeyMood5.mp3" />
+		<soundFile fileName="FeyMood/FeyMood6.mp3" />
+		<soundFile fileName="FeyMood/FeyMood7.mp3" />
+		<soundFile fileName="FeyMood/FeyMood8.mp3" />
+		<soundFile fileName="FeyMood/FeyMood9.mp3" />
+		<soundFile fileName="FeyMood/FeyMood10.mp3" />
+	</sound>
+
+	<!-- <dwarf> withdraws from society... -->
+	<sound logPattern="(.+) withdraws from society\.\.\." playbackThreshhold="1">
+		<soundFile fileName="SecretiveMood/SecretiveMood1.mp3" />
+		<soundFile fileName="SecretiveMood/SecretiveMood2.mp3" />
+		<soundFile fileName="SecretiveMood/SecretiveMood3.mp3" />
+		<soundFile fileName="SecretiveMood/SecretiveMood4.mp3" />
+		<soundFile fileName="SecretiveMood/SecretiveMood5.mp3" />
+		<soundFile fileName="SecretiveMood/SecretiveMood6.mp3" />
+	</sound>
+	
+	<!-- <dwarf> begins to stalk and brood... -->
+	<sound logPattern="(.+) begins to stalk and brood\.\.\." playbackThreshhold="1">
+		<soundFile fileName="DarkMood/DarkMood1.mp3" />
+		<soundFile fileName="DarkMood/DarkMood2.mp3" />
+		<soundFile fileName="DarkMood/DarkMood3.mp3" />
+		<soundFile fileName="DarkMood/DarkMood4.mp3" />
+		<soundFile fileName="DarkMood/DarkMood5.mp3" />
+		<soundFile fileName="DarkMood/DarkMood6.mp3" />
+		<soundFile fileName="DarkMood/DarkMood7.mp3" />
+		<soundFile fileName="DarkMood/DarkMood8.mp3" />
+	</sound>
+
+	<!-- <dwarf> has been possessed! -->
+	<sound logPattern="(.+) has been possessed!" haltOnMatch="false" playbackThreshhold="1">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=36410 -->
+		<soundFile fileName="36410__thanvannispen__brth_grp_shk1_tmty1rev.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=52173 -->
+		<soundFile fileName="52173__DJ_Chronos__Moaning_wipe_001.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has been possessed!" playbackThreshhold="1">
+		<soundFile fileName="PossessedMood/PossessedMood1.mp3" />
+		<soundFile fileName="PossessedMood/PossessedMood2.mp3" />
+		<soundFile fileName="PossessedMood/PossessedMood3.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) looses a roaring laughter, fell and terrible!" haltOnMatch="false" playbackThreshhold="1">
+		<!-- http://soundbible.com/33-Evil-Laugh-Cackle.html -->
+		<soundFile fileName="Evil Laugh Cackle-SoundBible.com-957382653.mp3" volumeAdjustment="-10" />
+	</sound>
+
+	<!-- <dwarf> looses a roaring laughter, fell and terrible! -->
+	<sound logPattern="(.+) looses a roaring laughter, fell and terrible!" playbackThreshhold="1">
+		<soundFile fileName="FellMood/FellMood1.mp3" />
+		<soundFile fileName="FellMood/FellMood2.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has begun a mysterious construction!" playbackThreshhold="2">
+		<soundFile fileName="66097__the_semen_incident__another_drone.mp3" />
+	</sound>
+
+	<!-- (.+) cancels Strange Mood: Went insane. -->
+	<sound logPattern="(.+) cancels (.+): Went insane\." ansiFormat="&#27;[31m">
+	</sound>
+	
+	<sound logPattern="(.+) has gone berserk!" playbackThreshhold="3" ansiFormat="&#27;[31;1m">
+		<soundFile fileName="MoodFailBerserking/MoodFailBerserking1.mp3" />
+		<soundFile fileName="MoodFailBerserking/MoodFailBerserking2.mp3" />
+		<soundFile fileName="MoodFailBerserking/MoodFailBerserking3.mp3" />
+		<soundFile fileName="MoodFailBerserking/MoodFailBerserking4.mp3" />
+		<soundFile fileName="MoodFailBerserking/MoodFailBerserking5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has gone stark raving mad!" playbackThreshhold="3" ansiFormat="&#27;[31m">
+		<soundFile fileName="MoodFailMad/MoodFailMad1.mp3" />
+		<soundFile fileName="MoodFailMad/MoodFailMad2.mp3" />
+		<soundFile fileName="MoodFailMad/MoodFailMad3.mp3" />
+		<soundFile fileName="MoodFailMad/MoodFailMad4.mp3" />
+		<soundFile fileName="MoodFailMad/MoodFailMad5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) is stricken by melancholy!" playbackThreshhold="3" ansiFormat="&#27;[31m">
+		<soundFile fileName="MoodFailMelancholy/MoodFailMelancholy1.mp3" />
+		<soundFile fileName="MoodFailMelancholy/MoodFailMelancholy2.mp3" />
+		<soundFile fileName="MoodFailMelancholy/MoodFailMelancholy3.mp3" />
+		<soundFile fileName="MoodFailMelancholy/MoodFailMelancholy4.mp3" />
+		<soundFile fileName="MoodFailMelancholy/MoodFailMelancholy5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has claimed a (.+)\." playbackThreshhold="2">
+		<soundFile fileName="WorkshopClaimed/WorkshopClaimed1.mp3" />
+		<soundFile fileName="WorkshopClaimed/WorkshopClaimed2.mp3" />
+		<soundFile fileName="WorkshopClaimed/WorkshopClaimed3.mp3" />
+		<soundFile fileName="WorkshopClaimed/WorkshopClaimed4.mp3" />
+		<soundFile fileName="WorkshopClaimed/WorkshopClaimed5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has created (.+), a (.+)!" playbackThreshhold="2">
+		<soundFile fileName="ArtifactCompleted/ArtifactCompleted1.mp3" />
+		<soundFile fileName="ArtifactCompleted/ArtifactCompleted2.mp3" />
+		<soundFile fileName="ArtifactCompleted/ArtifactCompleted3.mp3" />
+		<soundFile fileName="ArtifactCompleted/ArtifactCompleted4.mp3" />
+		<soundFile fileName="ArtifactCompleted/ArtifactCompleted5.mp3" />
+	</sound>
+	
+	<!-- weapon attachment and maning which is loosely connected to artifacts -->
+	
+	<sound logPattern="(.+) has grown attached to a (.+)!" playbackThreshhold="3">
+		<soundFile fileName="ItemAttached/ItemAttached1.mp3" />
+		<soundFile fileName="ItemAttached/ItemAttached2.mp3" />
+		<soundFile fileName="ItemAttached/ItemAttached3.mp3" />
+		<soundFile fileName="ItemAttached/ItemAttached4.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) has bestowed( ?) the name (.+) upon a (.+)!" playbackThreshhold="3">
+		<soundFile fileName="ItemNamed/ItemNamed1.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed2.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed3.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed4.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed5.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed6.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed7.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed8.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed9.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed10.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed11.mp3" />
+		<soundFile fileName="ItemNamed/ItemNamed12.mp3" />
+	</sound>
+	
+	<!-- depression -->
+	<sound logPattern="(.+) has slipped into depression\.\.\." playbackThreshhold="3">
+	</sound>
+	
+	<sound logPattern="(.+) is stumbling around obliviously!" playbackThreshhold="3">
+	</sound>
+	
+
+</sounds>

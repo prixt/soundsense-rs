@@ -1,0 +1,82 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sounds defaultAnsiFormat="&#27;[34;1m">
+	
+	<sound logPattern="A caravan from (.+) has arrived\." channel="trade" playbackThreshhold="1">
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=4248 -->
+	 	<soundFile fileName="4248__dobroide__horse.cart_cobbles.mp3" />
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=92656 -->
+	 	<soundFile fileName="92656__bourotte2__DoubleHorseCartGheorghieni.mp3" />
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=41491 -->
+	 	<soundFile fileName="41491__hanstimm__fiaker.mp3" />
+	</sound>
+	 
+	<sound logPattern="A (.+) caravan from (.+) has arrived\." channel="trade" playbackThreshhold="1">
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=4248 -->
+	 	<soundFile fileName="4248__dobroide__horse.cart_cobbles.mp3" />
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=92656 -->
+	 	<soundFile fileName="92656__bourotte2__DoubleHorseCartGheorghieni.mp3" />
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=41491 -->
+	 	<soundFile fileName="41491__hanstimm__fiaker.mp3" />
+	</sound> 
+	 		
+	<sound logPattern="The (([oO]utpost)|([vV]illage)|([mM]etropolis)) [lL]iaison (.+) from (.+) has arrived\.">
+	</sound>
+	
+	<sound logPattern="No outpost liaison\?  How curious\.\.\.">
+	</sound>
+	
+	<sound logPattern="A (.+) diplomat from (.+) has arrived\.">
+	</sound>
+	
+	<sound logPattern="The elf (.+) from (.+) has arrived\.">
+	</sound>
+	
+	<sound logPattern="The human (.+) from (.+) has arrived\." playbackThreshhold="3" >
+	 	<soundFile fileName="humans/humans1.mp3" />
+	 	<soundFile fileName="humans/humans2.mp3" />
+	 	<soundFile fileName="humans/humans3.mp3" />
+	 	<soundFile fileName="humans/humans4.mp3" />
+	 	<soundFile fileName="humans/humans5.mp3" />
+	</sound>
+	
+	<sound logPattern="The (.+) from (.+) has arrived\.">
+	</sound>
+	
+	<sound logPattern="Merchants have arrived and are unloading their goods\." channel="trade" playbackThreshhold="2" ansiFormat="&#27;[34m">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=77524 -->
+		<soundFile fileName="77524__Superex1110__cart_roll.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=79575 -->
+		<soundFile fileName="79575__Razzvio__Sifting_Through_Bolts.mp3" />
+	</sound>
+	
+	<sound logPattern="The merchants from (.+) will be leaving soon\." channel="trade" playbackThreshhold="2" ansiFormat="&#27;[31m">
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=85796 -->
+		<soundFile fileName="85796__sandyrb__TUBULAR_BELL_STRIKE_002.mp3" />
+		<!-- http://www.freesound.org/samplesViewSingle.php?id=85803 -->
+		<soundFile fileName="85803__sandyrb__TUBULAR_BELL_STRIKE_009.mp3" />
+	</sound>
+	
+	<sound logPattern="The merchants from (.+) have embarked on their journey\." channel="trade" playbackThreshhold="3">
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=4248 -->
+	 	<soundFile fileName="4248__dobroide__horse.cart_cobbles.mp3" />
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=92656 -->
+	 	<soundFile fileName="92656__bourotte2__DoubleHorseCartGheorghieni.mp3" />
+	 	<!-- http://www.freesound.org/samplesViewSingle.php?id=41491 -->
+	 	<soundFile fileName="41491__hanstimm__fiaker.mp3" />
+	</sound>
+
+	<sound logPattern="Their wagons have bypassed your inaccessible site\." channel="trade" loop="stop" ansiFormat="&#27;[31;1m">
+	</sound>
+
+	<sound logPattern="The merchants need a trade depot to unload their goods\." channel="trade" loop="stop" playbackThreshhold="1" ansiFormat="&#27;[31;1m">
+		<soundFile fileName="NoTradeDepot/NoTradeDepot1.mp3" />
+		<soundFile fileName="NoTradeDepot/NoTradeDepot2.mp3" />
+		<soundFile fileName="NoTradeDepot/NoTradeDepot3.mp3" />
+		<soundFile fileName="NoTradeDepot/NoTradeDepot4.mp3" />
+		<soundFile fileName="NoTradeDepot/NoTradeDepot5.mp3" />
+	</sound>
+	
+	<sound logPattern="(.+) cancels Trade at Depot: ((Not responsible for trade)|(Not broker))\.">
+	</sound>
+
+</sounds>
