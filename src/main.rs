@@ -2,60 +2,81 @@ extern crate tinyfiledialogs as tfd;
 extern crate notify;
 extern crate regex;
 extern crate rodio;
+extern crate xml;
+extern crate winit;
+extern crate conrod;
+extern crate rand;
 
 use std::env;
-use std::fs;
-use std::sync::mpsc::channel;
+use std::path;
 use std::time::Duration;
-use std::io::prelude::*;
-use std::io::SeekFrom;
 
-use notify::{Watcher, RecommendedWatcher, RecursiveMode, DebouncedEvent};
+use notify::{Watcher, RecommendedWatcher, RecursiveMode};
 
-fn watch(path: &str) -> notify::Result<()> {
-    let (tx, rx) = channel();
-    let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_secs(1))?;
-    watcher.watch(path, RecursiveMode::Recursive)?;
-
-    let file = &mut fs::File::open(path)?;
-    let mut cursor_pos = file.seek(SeekFrom::End(0))?;
-    let buffer = &mut Vec::new();
-    loop {
-        match rx.recv() {
-            Ok(event) => {
-                if let DebouncedEvent::Write(_) = event {
-                    file.seek(SeekFrom::Start(cursor_pos))?;
-                    file.read_to_end(buffer)?;
-                    cursor_pos = file.seek(SeekFrom::Current(0))?;
-                    let messages = String::from_utf8_lossy(&buffer);
-                    for line in messages.lines() {
-                        println!(
-                            ">> {}",
-                            line.trim()
-                        );
-                    }
-                    buffer.clear()
-                }
-            },
-            Err(e) => println!("watch error: {:?}", e),
-        }
-    }
-}
+mod sound;
+mod ui;
 
 fn main() {
-    let path_str = if let Some(path_str) = env::args().nth(1) {
-        Some(path_str)
+    // soundsense-rs.exe "(gamelog.exe file)" "(soundpacks directory)"
+    let mut args = env::args();
+    let first_arg = args.nth(1);
+    let second_arg = args.nth(0);
+
+    let gamelog_path = if let Some(path_str) = first_arg {
+        Some(path::PathBuf::from(&path_str))
     } else {
         tfd::open_file_dialog(
-            "Select gamelog.txt",
-            "./gamelog.txt",
-            Some(
-                (&["*.txt"], "*.txt")
-            )
-        )
+            "Select gamelog.txt file.",
+            "gamelog.txt",
+            Some( (&["*.txt"], "*.txt") )
+        ).map(|path_str| {
+            path::PathBuf::from(&path_str)
+        })
     };
 
-    if let Some(path) = path_str {
-        watch(&path).unwrap();
+    let sounds_path = if let Some(path_str) = second_arg {
+        path::PathBuf::from(path_str)
+    } else if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {
+        let mut p = path::PathBuf::from(manifest_dir);
+        p.push("soundpacks");
+        p
+    } else {
+        path::PathBuf::from("soundpacks")
+    };
+
+    if !sounds_path.is_dir()  {
+        println!("Invalid soundpacks directory!");
+        return
+    }
+    if gamelog_path.is_none() {
+        println!("No gamelog.txt path was provided!");
+        return
+    }
+
+    let gamelog_path = gamelog_path.unwrap();
+    let (tx, rx) = std::sync::mpsc::channel();
+    let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_millis(100)).unwrap();
+    watcher.watch(&gamelog_path, RecursiveMode::Recursive).unwrap();
+    let (a, b) = std::sync::mpsc::channel(); // main a->b sound
+    let (c, d) = std::sync::mpsc::channel(); // main d<-c sound
+
+    // Create sound loop thread.
+    std::thread::Builder::new()
+        .name("sound_thread".to_string())
+        .spawn(move ||
+            sound::sound_thread(
+                &gamelog_path,
+                &sounds_path,
+                rx,
+                b,
+                c
+            )
+        ).unwrap();
+    
+    // Main Loop
+    loop {
+        std::thread::sleep(
+            std::time::Duration::from_millis(100)
+        )
     }
 }
