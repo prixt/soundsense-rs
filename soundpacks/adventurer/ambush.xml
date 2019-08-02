@@ -56,19 +56,19 @@
 		<soundFile fileName="../production/12828__schluppipuppie__besteck_08.mp3" />
 	</sound>
 
-	<sound logPattern="\&quot;Tell them it was the (.+), if you live!\&quot;" channel="music">
+	<sound logPattern="Tell them it was the (.+), if you live!" channel="music">
 		<!-- http://opengameart.org/content/radakan-dramatic-event-2 -->	
 		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
 		<!-- http://opengameart.org/content/radakan-game-lost -->
 		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
 	</sound>
 	
-	<sound logPattern="\&quot;You will remember the (.+) when we're finished with you!\&quot;">
+	<sound logPattern="You will remember the (.+) when we're finished with you!">
 		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
 		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
 	</sound>
 	
-	<sound logPattern="\&quot;Halt in the name of the (.+)!\&quot;">
+	<sound logPattern="Halt in the name of the (.+)!">
 		<soundFile fileName="../intruders/Radakan - Dramatic event 2.mp3" />
 		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
 	</sound>
@@ -98,7 +98,4 @@
 		<soundFile fileName="../intruders/Radakan - Game Lost.mp3" />	
 	</sound>
 	
-	<sound logPattern="\&quot;(.+)\&quot;">
-	</sound>
-
 </sounds>

@@ -19,7 +19,7 @@
 		<soundFile fileName="goreRain/116730__benboncan__drips-in-mine.mp3" />
 	</sound>
 	
-	<sound logPattern="It is raining (.+)\!" channel="weather" playbackThreshhold="3">
+	<sound logPattern="It is raining (.+)!" channel="weather" playbackThreshhold="3">
 		<!-- http://www.freesound.org/people/Benboncan/sounds/116730/ -->
 		<soundFile fileName="goreRain/116730__benboncan__drips-in-mine.mp3" />
 	</sound>
