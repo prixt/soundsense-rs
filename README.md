@@ -14,6 +14,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 * [notify](https://github.com/passcod/notify)
 * [rodio](https://github.com/tomaka/rodio)
 * [regex](https://github.com/rust-lang/regex)
+* [xml-rs](https://github.com/netvl/xml-rs)
 * [rand](https://github.com/rust-random/rand)
 * [gtk-rs](https://gtk-rs.org/)
 

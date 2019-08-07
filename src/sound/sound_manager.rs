@@ -173,7 +173,7 @@ impl SoundManager {
 					},
 
 					XmlEvent::EndElement{name} => {
-						if name.local_name == "sound" {
+						if current_sound.is_some() && name.local_name == "sound" {
 							sounds.push( current_sound.take().unwrap() );
 						}
 					},
