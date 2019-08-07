@@ -2,6 +2,7 @@ use notify::{Watcher, RecursiveMode, DebouncedEvent};
 use rodio::*;
 use rand::prelude::*;
 use crate::message::*;
+use lazy_static::lazy_static;
 
 use std::sync::mpsc::Receiver;
 use std::time::Duration;
@@ -14,8 +15,14 @@ mod sound_manager; use sound_manager::SoundManager;
 mod sound_channel; use sound_channel::SoundChannel;
 
 #[derive(Clone)]
+pub enum SoundFileType {
+	IsPath(PathBuf),
+	IsPlaylist(Vec<PathBuf>)
+}
+
+#[derive(Clone)]
 pub struct SoundFile {
-	pub path: PathBuf,	// path to audio file with sound.
+	pub r#type: SoundFileType,	// path to audio file with sound. OR list or paths
 	pub weight: usize,	// controls likelihood of sound to be chosen. Default is 100.
 	pub volume: f32,	// adjusts volume of sample. Can range from -40 to +6 decibles, default 0.
 	pub random_balance: bool,	// if set to true will randomply distribute sound between stereo channels.

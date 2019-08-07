@@ -1,7 +1,0 @@
-Songs come from http://roguebard.eptalys.net
-
-roguebard.eptalys.net/song.php?id=20
-7_20.mp3
-
-roguebard.eptalys.net/song.php?id=22
-9_22.mp3
