@@ -19,8 +19,8 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 * [gtk-rs](https://gtk-rs.org/)
 
 ## Known problems
-* some regex expressions in the soundpacks don't parse using the 'regex' crate.
+* some regex expressions in the soundpacks don't have valid syntax valid for the 'regex' crate.
 * 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' cause 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
-* many sound and soundfile attributes are currently ignored. (etc. stereo balance, delay, timeout, weighted random balance)
+* many sound and soundfile attributes are currently ignored. (stereo balance, delay, timeout, weighted random balance, etc.)
 * having too many log entries at the same time causes the sound thread to stutter, and doesn't recover.
 * not properly tested in Adventure mode & Arena mode.
