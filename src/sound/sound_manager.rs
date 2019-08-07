@@ -120,6 +120,7 @@ impl SoundManager {
 
 							let mut path = PathBuf::from(file_path);
 							path.pop();
+							let mut is_playlist = false;
 							let mut weight: usize = 0;		
 							let mut volume: f32 = 0.0;	
 							let mut random_balance: bool = false;
@@ -147,12 +148,19 @@ impl SoundManager {
 									"delay" => {
 										delay = attr.value.parse().unwrap();
 									}
-									"playlist" => (),
+									"playlist" => {is_playlist = true;}
 									_ => println!("Unknown sound-file value: {}", attr_name)
 								}
 							}
+							let r#type = if is_playlist {
+								let path_vec = parse_playlist(&path);
+								SoundFileType::IsPlaylist(path_vec)
+							} else {
+								// test_file(&path);
+								SoundFileType::IsPath(path)
+							};
 							let sound_file = SoundFile {
-								path,
+								r#type,
 								weight,
 								volume,
 								random_balance,
@@ -194,7 +202,7 @@ impl SoundManager {
 	pub fn maintain(&mut self) {
 		self.concurency = 0;
 		for chn in self.channels.values_mut() {
-			chn.maintain(&self.device, Some(&self.ui_sender));
+			chn.maintain(&self.device, &mut self.rng, Some(&self.ui_sender));
 			self.concurency += chn.len();
 		}
 	}
@@ -238,23 +246,23 @@ impl SoundManager {
 						if let Some(is_loop_start) = sound.loop_attr {
 							if is_loop_start {
 								println!("----loop=start");
-								channel.change_loop(device, sound.files.as_slice());
+								channel.change_loop(device, sound.files.as_slice(), rng);
 							} else {
 								println!("----loop=stop");
-								channel.change_loop(device, &[]);
+								channel.change_loop(device, &[], rng);
 								if !sound.files.is_empty() {
-									channel.add_oneshot(device, files.choose(rng).unwrap());
+									channel.add_oneshot(device, files.choose(rng).unwrap(), rng);
 								}
 							}
 						}
 						else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
-							channel.add_oneshot(device, files.choose(rng).unwrap());
+							channel.add_oneshot(device, files.choose(rng).unwrap(), rng);
 						}
 					
 					} else if !sound.files.is_empty() {
 						let channel = self.channels.get_mut("misc").unwrap();
 						if channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
-							channel.add_oneshot(&self.device, (&sound.files).choose(rng).unwrap());
+							channel.add_oneshot(&self.device, (&sound.files).choose(rng).unwrap(), rng);
 						}
 					}
 				}
@@ -266,3 +274,69 @@ impl SoundManager {
 		}
 	}
 }
+
+fn parse_playlist(path: &Path) -> Vec<PathBuf> {
+	lazy_static! {
+		static ref M3U_PATTERN: regex::Regex = regex::Regex::new(
+				r"#EXT[A-Z]*"
+			).unwrap();
+		static ref PLS_PATTERN: regex::Regex = regex::Regex::new(
+				r"File.+=(.+)"
+			).unwrap();
+	}
+
+	let parent_path = path.parent().unwrap();
+
+	let mut path_vec = Vec::new();
+	let mut f = File::open(path).unwrap();
+	let buf = &mut String::new();
+	let extension = path.extension().unwrap();
+	if extension == "m3u" {
+		f.read_to_string(buf).unwrap();
+		for line in buf.lines() {
+			if !M3U_PATTERN.is_match(line) {
+				let mut path = PathBuf::from(parent_path);
+				path.push(line);
+				path_vec.push(path);
+			}
+		}
+	}
+	else if extension == "pls" {
+		f.read_to_string(buf).unwrap();
+		for line in buf.lines() {
+			if let Some(caps) = PLS_PATTERN.captures(line) {
+				let mut path = PathBuf::from(parent_path);
+				path.push(&caps[0]);
+				path_vec.push(path);
+			}
+		}
+	}
+	else {
+		unreachable!("Playlist {:?} is not valid!", path)
+	}
+
+	// for path in path_vec.iter() {
+	// 	test_file(path);
+	// }
+	path_vec
+}
+
+// fn test_file(path: &Path) {
+// 	let f = File::open(path).unwrap();
+// 	if let Err(e) = Decoder::new(f) {
+// 		println!("file: {}\nerror: {}", e, path.to_string_lossy());
+// 	}
+// }
+// file: Unrecognized format
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
+// file: Unrecognized format
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
+// file: Unrecognized format
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
+// file: Unrecognized format
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/push/push5.mp3
+// file: Unrecognized format
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
+// file: Unrecognized format
+// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3

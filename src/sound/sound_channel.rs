@@ -16,16 +16,13 @@ impl SoundChannel {
 		}
 	}
 
-	pub fn maintain(&mut self, device: &Device, _ui_sender: Option<&glib::Sender<UIMessage>>) {
+	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_sender: Option<&glib::Sender<UIMessage>>) {
 		self.one_shots.retain(|s| !s.empty());
 		if self.one_shots.is_empty() {
 			if self.looping.empty() && !self.files.is_empty() {
 				self.looping = Sink::new(device);
 				for file in self.files.iter() {
-					let f = fs::File::open(&file.path).unwrap();
-					let source = Decoder::new(f).unwrap()
-						.buffered().convert_samples::<f32>();
-					self.looping.append(source);
+					append_soundfile_to_sink(&self.looping, file, true, rng);
 				}
 			}
 			self.looping.play();
@@ -34,18 +31,16 @@ impl SoundChannel {
 		}
 	}
 
-	pub fn change_loop(&mut self, device: &Device, files: &[SoundFile]) {
+	pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], rng: &mut ThreadRng) {
 		self.looping.stop();
 		self.files.clear();
 		self.files.extend_from_slice(files);
-		self.maintain(device, None);
+		self.maintain(device, rng, None);
 	}
 
-	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile) {
-		let f = fs::File::open(&file.path).unwrap();
-		let source = Decoder::new(f).unwrap();
+	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, rng: &mut ThreadRng) {
 		let sink = Sink::new(device);
-		sink.append(source);
+		append_soundfile_to_sink(&sink, file, false, rng);
 		self.one_shots.push(sink);
 		self.looping.pause();
 	}
@@ -61,5 +56,35 @@ impl SoundChannel {
 	#[inline]
 	pub fn len(&self) -> usize {
 		self.one_shots.len() + !(self.files.is_empty() || self.looping.is_paused()) as usize
+	}
+}
+
+fn append_soundfile_to_sink(sink: &Sink, soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) {
+	match soundfile.r#type {
+		SoundFileType::IsPath(ref path) => {
+			assert_file(path, sink);
+		}
+		SoundFileType::IsPlaylist(ref paths) => {
+			if is_looping {
+				paths.iter().for_each(|p| {
+					assert_file(p, sink);
+				});
+			} else {
+				assert_file(&paths.choose(rng).unwrap(), sink);
+			}
+		}
+	}
+}
+
+fn assert_file(path: &Path, sink: &Sink) {
+	let f = fs::File::open(path).unwrap();
+	let source = Decoder::new(f);
+	match source {
+		Ok(source) => {
+			sink.append(source.buffered().convert_samples::<f32>());
+		},
+		Err(e) => {
+			println!("error: {}, path: {}", e, path.to_string_lossy());
+		}
 	}
 }
