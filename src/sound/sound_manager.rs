@@ -1,4 +1,5 @@
 use super::*;
+use regex::Regex;
 
 pub struct SoundManager {
 	sounds: Vec<SoundEntry>,
@@ -44,7 +45,7 @@ impl SoundManager {
 					XmlEvent::StartElement{name, attributes, ..} => {
 						if name.local_name == "sound" {
 
-							let mut pattern = String::new();
+							let mut pattern: Option<Regex> = None;
 							let mut channel: Option<String> = None;
 							let mut loop_attr: Option<bool> = None;
 							let mut concurency: Option<usize> = None;
@@ -58,7 +59,21 @@ impl SoundManager {
 							for attr in attributes {
 								let attribute_name = attr.name.local_name.as_str();
 								match attribute_name {
-									"logPattern" => pattern.clone_from(&attr.value),
+									"logPattern" => {
+										lazy_static! {
+											static ref FAULTY_ESCAPE: Regex = Regex::new(
+												r"(?:\\)([^\.\+\*\?\(\)\|\[\]\{\}\^\$])"
+											).unwrap();
+
+											static ref EMPTY_EXPR: Regex = Regex::new(
+												r"(\|\(\)\))"
+											).unwrap();
+										}
+										let mut processed = attr.value;
+										processed = FAULTY_ESCAPE.replace_all(&processed, "$1").into();
+										processed = EMPTY_EXPR.replace_all(&processed, ")?").into();
+										pattern = Some(Regex::new(&processed).unwrap());
+									},
 									"channel" => {
 										channels.entry(attr.value.clone())
 											.or_insert_with(|| SoundChannel::new(&device));
@@ -96,24 +111,20 @@ impl SoundManager {
 								}
 							}
 
-							if let Ok(pattern) = regex::Regex::new(&pattern) {
-								current_sound = Some(
-									SoundEntry{
-										pattern,
-										channel,
-										loop_attr,
-										concurency,
-										timeout,
-										probability,
-										delay,
-										halt_on_match,
-										random_balance,
-										files,
-									}
-								);
-							} else {
-								println!("Error parsing regex pattern: {}", &pattern);
-							}
+							current_sound = Some(
+								SoundEntry{
+									pattern: pattern.take().unwrap(),
+									channel,
+									loop_attr,
+									concurency,
+									timeout,
+									probability,
+									delay,
+									halt_on_match,
+									random_balance,
+									files,
+								}
+							);
 						}
 
 						else if current_sound.is_some() && name.local_name == "soundFile" {
@@ -277,10 +288,10 @@ impl SoundManager {
 
 fn parse_playlist(path: &Path) -> Vec<PathBuf> {
 	lazy_static! {
-		static ref M3U_PATTERN: regex::Regex = regex::Regex::new(
+		static ref M3U_PATTERN: Regex = Regex::new(
 				r"#EXT[A-Z]*"
 			).unwrap();
-		static ref PLS_PATTERN: regex::Regex = regex::Regex::new(
+		static ref PLS_PATTERN: Regex = Regex::new(
 				r"File.+=(.+)"
 			).unwrap();
 	}
