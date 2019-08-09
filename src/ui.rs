@@ -82,23 +82,23 @@ pub fn build_ui(
 	
 	rx.attach(None, move |message| {
 		match message {
-			UIMessage::ChannelNames(name) => {
+			UIMessage::ChannelNames(names) => {
 				let v_box = &v_box;
 				for widget in v_box.get_children() {
 					WidgetExt::get_name(&widget)
 						.and_then(|name| {
-							if name.as_str() != "menu_bar" {
+							if name != "menu_bar" {
 								v_box.remove(&widget);
 							};
 							Some(())
 						});
 				}
 
-				let all_scale = make_channel_scaler("all".to_string(), sound_tx.clone());
+				let all_scale = make_channel_scaler("all", sound_tx.clone());
 				v_box.pack_start(&all_scale, false, true, 0);
 
-				for name in name {
-					let channel_scale = make_channel_scaler(name, sound_tx.clone());
+				for name in names {
+					let channel_scale = make_channel_scaler(&name, sound_tx.clone());
 					v_box.pack_start(&channel_scale, false, true, 0);
 				}
 
@@ -117,7 +117,8 @@ fn make_menu_item(
 	mnemoic: &str,
 	accel_group: &gtk::AccelGroup,
 	modifier: gdk::ModifierType,
-	keys: &[char]) -> gtk::MenuItem {
+	keys: &[char]
+) -> gtk::MenuItem {
 	let item = gtk::MenuItem::new_with_mnemonic(mnemoic);
 	for key in keys {
 		item.add_accelerator("activate", accel_group, *key as u32, modifier, gtk::AccelFlags::VISIBLE);
@@ -144,12 +145,12 @@ fn make_soundpack_dialog() -> gtk::FileChooserDialog {
 }
 
 fn make_channel_scaler(
-	name: String,
+	name: &str,
 	sound_tx: std::sync::mpsc::Sender<SoundMessage>
 ) -> gtk::Box {
 	let box0 = gtk::Box::new(gtk::Orientation::Horizontal, 0);
 	let channel_name = gtk::LabelBuilder::new()
-		.label(&name)
+		.label(name)
 		.width_request(50)
 		.build();
 	let scaler = gtk::Scale::new_with_range(
@@ -159,9 +160,11 @@ fn make_channel_scaler(
 		0.01,
 	);
 	scaler.set_value(100.0);
+	let name = String::from(name);
 	scaler.connect_change_value(move |_,_,value| {
+		let name = name.clone().into_boxed_str();
 		sound_tx.send(
-			SoundMessage::VolumeChange(name.clone(), (value/100.0) as f32)
+			SoundMessage::VolumeChange(name, (value/100.0) as f32)
 		).unwrap();
 		gtk::Inhibit(false)
 	});

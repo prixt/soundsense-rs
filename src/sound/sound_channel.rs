@@ -39,10 +39,10 @@ impl SoundChannel {
 	}
 
 	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, rng: &mut ThreadRng) {
+		self.looping.pause();
 		let sink = Sink::new(device);
 		append_soundfile_to_sink(&sink, file, false, rng);
 		self.one_shots.push(sink);
-		self.looping.pause();
 	}
 
 	pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {
