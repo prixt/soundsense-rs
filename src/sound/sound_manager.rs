@@ -4,7 +4,7 @@ use regex::Regex;
 pub struct SoundManager {
 	sounds: Vec<SoundEntry>,
 	device: Device,
-	channels: HashMap<String, SoundChannel>,
+	channels: HashMap<Box<str>, SoundChannel>,
 	total_volume: f32,
 	concurency: usize,
 	ui_sender: glib::Sender<UIMessage>,
@@ -17,9 +17,12 @@ impl SoundManager {
 
 		let mut sounds = Vec::new();
 		let device = default_output_device().unwrap();
-		let mut channels = HashMap::new();
+		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
 
-		channels.insert("misc".to_string(), SoundChannel::new(&device));
+		channels.insert(
+			String::from("misc").into_boxed_str(),
+			SoundChannel::new(&device)
+		);
 
 		fn visit_dir(dir: &Path, func: &mut FnMut(&Path)) {
 			for entry in fs::read_dir(dir).unwrap() {
@@ -46,7 +49,7 @@ impl SoundManager {
 						if name.local_name == "sound" {
 
 							let mut pattern: Option<Regex> = None;
-							let mut channel: Option<String> = None;
+							let mut channel: Option<Box<str>> = None;
 							let mut loop_attr: Option<bool> = None;
 							let mut concurency: Option<usize> = None;
 							let mut timeout: Option<usize> = None;
@@ -62,7 +65,7 @@ impl SoundManager {
 									"logPattern" => {
 										lazy_static! {
 											static ref FAULTY_ESCAPE: Regex = Regex::new(
-												r"(?:\\)([^\.\+\*\?\(\)\|\[\]\{\}\^\$])"
+												r"\\([^\.\+\*\?\(\)\|\[\]\{\}\^\$])"
 											).unwrap();
 
 											static ref EMPTY_EXPR: Regex = Regex::new(
@@ -75,9 +78,11 @@ impl SoundManager {
 										pattern = Some(Regex::new(&processed).unwrap());
 									},
 									"channel" => {
-										channels.entry(attr.value.clone())
-											.or_insert_with(|| SoundChannel::new(&device));
-										channel.replace(attr.value.clone());
+										let channel_name : Box<str> = attr.value.into();
+										if !channels.contains_key(&channel_name) {
+											channels.insert(channel_name.clone(), SoundChannel::new(&device));
+										}
+										channel = Some(channel_name);
 									},
 									"loop" => if attr.value == "start" {
 										loop_attr.replace(true);
@@ -86,17 +91,17 @@ impl SoundManager {
 										loop_attr.replace(false);
 									},
 									"concurency" => {
-										concurency.replace( attr.value.parse().unwrap() );
+										concurency = Some( attr.value.parse().unwrap() );
 									},
 									"timeout" => {
-										timeout.replace( attr.value.parse().unwrap() );
+										timeout = Some( attr.value.parse().unwrap() );
 									},
 									// Probability was mispelled...
 									"propability" => {
-										probability.replace( attr.value.parse().unwrap() );
+										probability = Some( attr.value.parse().unwrap() );
 									},
 									"delay" => {
-										delay.replace( attr.value.parse().unwrap() );
+										delay = Some( attr.value.parse().unwrap() );
 									},
 									"haltOnMatch" => if attr.value == "true" {
 										halt_on_match = true;
@@ -113,7 +118,7 @@ impl SoundManager {
 
 							current_sound = Some(
 								SoundEntry{
-									pattern: pattern.take().unwrap(),
+									pattern: pattern.unwrap(),
 									channel,
 									loop_attr,
 									concurency,
@@ -195,7 +200,8 @@ impl SoundManager {
 		};
 
 		visit_dir(sound_dir, &mut func);
-		let channel_names = channels.keys().cloned().collect();
+		let channel_names = channels.keys().cloned()
+			.collect();
 		ui_sender.send(UIMessage::ChannelNames(channel_names)).unwrap();
 
 		println!("Finished loading!");

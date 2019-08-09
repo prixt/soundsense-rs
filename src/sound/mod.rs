@@ -32,7 +32,7 @@ pub struct SoundFile {
 
 pub struct SoundEntry {
 	pub pattern: regex::Regex,	// regular expression matching log line
-	pub channel: Option<String>,	// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
+	pub channel: Option<Box<str>>,	// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
 	pub loop_attr: Option<bool>,	// "start" - sound start loop on channel until different sound is played on channel (if it is non-looped sound, loop will resume when it is done playing) or sound with "stop" is triggered.
 	pub concurency: Option<usize>,	// number of councured sounds allowd to be played besides this sound. If currenty playing more than that, sound is ignored. In miliseconds, default unlimited.
 	pub timeout: Option<usize>,	// number, timeout during which is sound going to be prevented from playing again. In miliseconds default 0.
