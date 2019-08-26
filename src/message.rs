@@ -1,11 +1,12 @@
 pub enum SoundMessage {
-	GlibSender(glib::Sender<UIMessage>),
+	HandlerInit(crate::ui::UIHandle),
 	ChangeGamelog(std::path::PathBuf),
 	ChangeSoundpack(std::path::PathBuf),
 	VolumeChange(Box<str>, f32),
 }
 
-pub enum UIMessage {
-	ChannelNames(Vec<Box<str>>),
-	ChannelChangeSong(Box<str>, Box<str>),
+#[derive(Deserialize)]
+pub struct VolumeChange {
+	pub channel: Box<str>,
+	pub volume: f32
 }

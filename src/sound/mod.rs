@@ -1,15 +1,16 @@
-use notify::{Watcher, RecursiveMode, DebouncedEvent};
-use rodio::*;
-use rand::prelude::*;
-use crate::message::*;
-use lazy_static::lazy_static;
-
 use std::sync::mpsc::Receiver;
 use std::time::Duration;
 use std::fs::{self, File};
 use std::io::{self, Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::collections::HashMap;
+
+use crate::message::*;
+use crate::ui::UIHandle;
+use notify::{Watcher, RecursiveMode, DebouncedEvent};
+use rodio::*;
+use rand::prelude::*;
+use lazy_static::lazy_static;
 
 mod sound_manager; use sound_manager::SoundManager;
 mod sound_channel; use sound_channel::SoundChannel;
@@ -44,7 +45,7 @@ pub struct SoundEntry {
 }
 
 pub fn run(sound_rx: Receiver<SoundMessage>) {
-	let mut ui_sender : Option<glib::Sender<UIMessage>> = None;
+	let mut ui_handle : Option<UIHandle> = None;
 	let mut manager : Option<SoundManager> = None;
 	let mut file : Option<File> = None;
     let (notify_tx, notify_rx) = std::sync::mpsc::channel();
@@ -54,8 +55,8 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 		for message in sound_rx.try_iter() {
 			use SoundMessage::*;
 			match message {
-				GlibSender(tx) => {
-					ui_sender = Some(tx);
+				HandlerInit(handle) => {
+					ui_handle = Some(handle);
 				},
 
 				ChangeGamelog(path) => {
@@ -66,8 +67,8 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 				},
 
 				ChangeSoundpack(path) => {
-					let tx = ui_sender.as_ref().unwrap().clone();
-					manager = Some(SoundManager::new(&path, tx));
+					let handle = ui_handle.take().unwrap();
+					manager = Some(SoundManager::new(&path, handle));
 				},
 
 				VolumeChange(channel, volume) => {
