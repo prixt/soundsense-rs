@@ -10,14 +10,6 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 * Plays sound reactive to what happens in DF.
 * Minimalist. (not necessarily by choice).
 
-## Dependencies
-* [notify](https://github.com/passcod/notify)
-* [rodio](https://github.com/tomaka/rodio)
-* [regex](https://github.com/rust-lang/regex)
-* [xml-rs](https://github.com/netvl/xml-rs)
-* [rand](https://github.com/rust-random/rand)
-* [gtk-rs](https://gtk-rs.org/)
-
 ## Known problems
 * some regex expressions in the soundpacks don't have valid syntax valid for the 'regex' crate.
 * 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' cause 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
