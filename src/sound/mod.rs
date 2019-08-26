@@ -73,7 +73,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 
 				VolumeChange(channel, volume) => {
 					manager.as_mut().and_then(|manager| {
-						manager.set_volume(&channel, volume);
+						manager.set_volume(&channel, volume * 0.01);
 						Some(())
 					});
 				}
