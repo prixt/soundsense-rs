@@ -16,7 +16,7 @@ impl SoundChannel {
 		}
 	}
 
-	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_sender: Option<&glib::Sender<UIMessage>>) {
+	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
 		self.one_shots.retain(|s| !s.empty());
 		if self.one_shots.is_empty() {
 			if self.looping.empty() && !self.files.is_empty() {
@@ -26,8 +26,6 @@ impl SoundChannel {
 				}
 			}
 			self.looping.play();
-		} else {
-			self.looping.pause();
 		}
 	}
 

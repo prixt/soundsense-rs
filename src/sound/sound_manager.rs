@@ -7,24 +7,19 @@ pub struct SoundManager {
 	channels: HashMap<Box<str>, SoundChannel>,
 	total_volume: f32,
 	concurency: usize,
-	ui_sender: glib::Sender<UIMessage>,
+	ui_handle: UIHandle,
 	rng: ThreadRng,
 }
 
 impl SoundManager {
-	pub fn new(sound_dir: &Path, ui_sender: glib::Sender<UIMessage>) -> Self {
+	pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
 		use xml::reader::{EventReader, XmlEvent};
 
 		let mut sounds = Vec::new();
 		let device = default_output_device().unwrap();
 		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
 
-		channels.insert(
-			String::from("misc").into_boxed_str(),
-			SoundChannel::new(&device)
-		);
-
-		fn visit_dir(dir: &Path, func: &mut FnMut(&Path)) {
+		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
 			for entry in fs::read_dir(dir).unwrap() {
 				let entry = entry.unwrap();
 				let path = entry.path();
@@ -200,9 +195,15 @@ impl SoundManager {
 		};
 
 		visit_dir(sound_dir, &mut func);
-		let channel_names = channels.keys().cloned()
-			.collect();
-		ui_sender.send(UIMessage::ChannelNames(channel_names)).unwrap();
+		ui_handle.add_slider("all".to_string());
+		for channel in channels.keys() {
+			ui_handle.add_slider(channel.to_string());
+		}
+		channels.insert(
+			String::from("misc").into_boxed_str(),
+			SoundChannel::new(&device)
+		);
+		ui_handle.add_slider("misc".to_string());
 
 		println!("Finished loading!");
 		Self {
@@ -211,7 +212,7 @@ impl SoundManager {
 			channels,
 			total_volume: 1.0,
 			concurency: 0,
-			ui_sender,
+			ui_handle,
 			rng: thread_rng(),
 		}
 	}
@@ -219,7 +220,7 @@ impl SoundManager {
 	pub fn maintain(&mut self) {
 		self.concurency = 0;
 		for chn in self.channels.values_mut() {
-			chn.maintain(&self.device, &mut self.rng, Some(&self.ui_sender));
+			chn.maintain(&self.device, &mut self.rng, Some(&self.ui_handle));
 			self.concurency += chn.len();
 		}
 	}
@@ -247,7 +248,7 @@ impl SoundManager {
 
 				let mut can_play = true;
 				if let Some(probability) = sound.probability {
-					can_play &= probability < rng.next_u32() as usize;
+					can_play &= probability >= rng.next_u32() as usize;
 				}
 				if let Some(concurency) = sound.concurency {
 					can_play &= self.concurency <= concurency;
