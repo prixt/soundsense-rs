@@ -12,7 +12,7 @@ mod ui;
 mod message;
 
 fn main() {
-	let args: Vec<String> = std::env::args().collect();
+	let args: Vec<String> = env::args().collect();
 	let mut opts = getopts::Options::new();
 	opts.optopt("l", "gamelog", "Path to the gamelog.txt file.", "LOG_FILE");
 	opts.optopt("p", "soundpack", "Path to the soundpack directory.", "PACK_DIR");

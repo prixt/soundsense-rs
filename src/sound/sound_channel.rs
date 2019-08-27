@@ -5,6 +5,7 @@ pub struct SoundChannel {
 	pub files: Vec<SoundFile>,
 	pub one_shots: Vec<Sink>,
 	pub volume: f32,
+	pub delay: usize,
 }
 impl SoundChannel {
 	pub fn new(device: &Device) -> Self {
@@ -13,12 +14,22 @@ impl SoundChannel {
 			files : Vec::new(),
 			one_shots : Vec::new(),
 			volume : 1.0,
+			delay : 0,
 		}
 	}
 
 	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
-		self.one_shots.retain(|s| !s.empty());
-		if self.one_shots.is_empty() {
+		let delay = self.delay.checked_sub(100).unwrap_or(0);
+		self.delay = delay;
+		self.one_shots.retain(|s| {
+			if delay != 0 {
+				s.pause();
+			} else {
+				s.play();
+			}
+			!s.empty()
+		});
+		if self.one_shots.is_empty() && delay == 0 {
 			if self.looping.empty() && !self.files.is_empty() {
 				self.looping = Sink::new(device);
 				for file in self.files.iter() {
@@ -26,21 +37,25 @@ impl SoundChannel {
 				}
 			}
 			self.looping.play();
+		} else {
+			self.looping.pause();
 		}
 	}
 
-	pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], rng: &mut ThreadRng) {
+	pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
 		self.looping.stop();
 		self.files.clear();
 		self.files.extend_from_slice(files);
+		self.delay = delay;
 		self.maintain(device, rng, None);
 	}
 
-	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, rng: &mut ThreadRng) {
+	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
 		self.looping.pause();
 		let sink = Sink::new(device);
 		append_soundfile_to_sink(&sink, file, false, rng);
 		self.one_shots.push(sink);
+		self.delay = delay;
 	}
 
 	pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {

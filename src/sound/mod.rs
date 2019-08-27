@@ -42,6 +42,7 @@ pub struct SoundEntry {
 	pub halt_on_match: bool,	// boolean, if set to true, sound sense will stop processing long line after it was matched to this sound. Default false
 	pub random_balance: bool,	//boolean, if set to true will randomply distribute sound betweem stereo channels.
 	pub files: Vec<SoundFile>,
+	pub current_timeout: usize,
 }
 
 pub fn run(sound_rx: Receiver<SoundMessage>) {

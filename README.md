@@ -6,13 +6,20 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 2. Attempt to create a standalone application that doesn't require a Java runtime.
    * Ultimately, you should only need one executable, the soundpack folder, and DF.
 
+## Command line commands
+* -l / --gamelog [GAMELOG_FILE] : preload the gamelog
+* -p / --soundpack [PACK_DIR] : preload the soundpack
+
+ex) soundsense-rs.exe -l "path/to/gamelog.txt" -p "path/to/soundpack/folder"
+
 ## Current Features
 * Plays sound reactive to what happens in DF.
+* Adjust sound volumes realtime.
 * Minimalist. (not necessarily by choice).
 
 ## Known problems
 * some regex expressions in the soundpacks don't have valid syntax valid for the 'regex' crate.
 * 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' cause 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
-* many sound and soundfile attributes are currently ignored. (stereo balance, delay, timeout, weighted random balance, etc.)
+* many sound and soundfile attributes are currently ignored. (stereo balance, weighted random balance, etc.)
 * having too many log entries at the same time causes the sound thread to stutter, and doesn't recover.
 * not properly tested in Adventure mode & Arena mode.

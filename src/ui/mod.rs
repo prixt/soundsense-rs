@@ -81,34 +81,37 @@ pub struct UIHandle {
 impl UIHandle {
 	pub fn add_slider(&mut self, name: String) {
 		let name = name.into_boxed_str();
-		if self.channels.contains(&name) {
-			return
+		if !self.channels.contains(&name){
+			self.channels.push(name.clone());
+			self.handle.dispatch(
+				move |webview| {
+					let script = format!(r#"
+						var slidelabel = document.createElement("LABEL");
+						var textnode = document.createTextNode("{channel_name}");
+						slidelabel.appendChild(textnode);
+
+						var slider = document.createElement("INPUT");
+						slider.setAttribute("type", "range");
+						slider.setAttribute("step", "any");
+						slider.setAttribute("min", "0");
+						slider.setAttribute("max", "100");
+						slider.setAttribute("value", "100");
+						slider.addEventListener(
+							/MSIE|Trident|Edge/.test(window.navigator.userAgent) ? 'change' : 'input',
+							function() {{
+								external.invoke('{{"channel":"{channel_name}", "volume":'+this.value+'}}');
+							}},
+							false
+						);
+
+						var new_form = document.createElement("FORM");
+						new_form.appendChild(slidelabel); new_form.appendChild(slider);
+
+						document.getElementById("channels").appendChild(new_form);
+					"#, channel_name=&name);
+					webview.eval(&script)
+				}
+			).unwrap();
 		}
-		self.channels.push(name.clone());
-		self.handle.dispatch(
-			move |webview| {
-				let script = format!(r#"
-					var slidelabel = document.createElement("LABEL");
-					var textnode = document.createTextNode("{channel_name}");
-					slidelabel.appendChild(textnode);
-
-					var slider = document.createElement("INPUT");
-					slider.setAttribute("type", "range");
-					slider.setAttribute("step", "any");
-					slider.setAttribute("min", "0");
-					slider.setAttribute("max", "100");
-					slider.setAttribute("value", "100");
-					slider.addEventListener('change', function() {{
-						external.invoke('{{"channel":"{channel_name}", "volume":'+this.value+'}}');
-					}}, false);
-
-					var new_div = document.createElement("DIV");
-					new_div.appendChild(slidelabel); new_div.appendChild(slider);
-
-					document.getElementById("channels").appendChild(new_div);
-				"#, channel_name=&name);
-				webview.eval(&script)
-			}
-		).unwrap();
 	}
 }
