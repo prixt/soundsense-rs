@@ -1,7 +1,6 @@
 pub enum SoundMessage {
-	HandlerInit(crate::ui::UIHandle),
 	ChangeGamelog(std::path::PathBuf),
-	ChangeSoundpack(std::path::PathBuf),
+	ChangeSoundpack(std::path::PathBuf, crate::ui::UIHandle),
 	VolumeChange(Box<str>, f32),
 }
 
