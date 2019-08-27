@@ -201,6 +201,7 @@ impl SoundManager {
 		};
 
 		visit_dir(sound_dir, &mut func);
+		ui_handle.clear_sliders();
 		ui_handle.add_slider("all".to_string());
 		ui_handle.add_slider("music".to_string());
 		ui_handle.add_slider("weather".to_string());

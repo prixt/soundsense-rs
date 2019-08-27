@@ -41,7 +41,7 @@ pub fn run(
 				"load_soundpack" => if let Some(path) = webview.dialog()
 					.choose_directory("Choose soundpack directory", "")
 					.unwrap() {
-					tx.send(SoundMessage::ChangeSoundpack(path)).unwrap()
+					tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap()
 				}
 				"show_about" => {
 					webview.dialog().info("SoundSense-rs", "Created by prixt\nSource at :...").unwrap()
@@ -59,15 +59,11 @@ pub fn run(
         .build()
         .unwrap();
 	
-	tx.send(SoundMessage::HandlerInit(
-			UIHandle{handle:webview.handle(), channels: vec![]}
-		)).unwrap();
-	
 	if let Some(path) = gamelog_path {
 		tx.send(SoundMessage::ChangeGamelog(path)).unwrap();
 	}
 	if let Some(path) = soundpack_path {
-		tx.send(SoundMessage::ChangeSoundpack(path)).unwrap();
+		tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap();
 	}
 	
 	webview.run().unwrap();
@@ -79,6 +75,11 @@ pub struct UIHandle {
 }
 
 impl UIHandle {
+	pub fn new(handle: Handle<()>) -> Self {
+		Self {
+			handle, channels: vec![],
+		}
+	}
 	pub fn add_slider(&mut self, name: String) {
 		let name = name.into_boxed_str();
 		if !self.channels.contains(&name){
@@ -113,5 +114,17 @@ impl UIHandle {
 				}
 			).unwrap();
 		}
+	}
+	pub fn clear_sliders(&mut self) {
+		self.handle.dispatch(
+			|webview| {
+				webview.eval(r#"
+					var channels = document.getElementById("channels");
+					while (channels.firstChild) {
+						channels.removeChild(channels.firstChild);
+					}
+				"#)
+			}
+		).unwrap();
 	}
 }

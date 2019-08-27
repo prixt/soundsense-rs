@@ -46,7 +46,6 @@ pub struct SoundEntry {
 }
 
 pub fn run(sound_rx: Receiver<SoundMessage>) {
-	let mut ui_handle : Option<UIHandle> = None;
 	let mut manager : Option<SoundManager> = None;
 	let mut file : Option<File> = None;
     let (notify_tx, notify_rx) = std::sync::mpsc::channel();
@@ -56,10 +55,6 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 		for message in sound_rx.try_iter() {
 			use SoundMessage::*;
 			match message {
-				HandlerInit(handle) => {
-					ui_handle = Some(handle);
-				},
-
 				ChangeGamelog(path) => {
 					watcher.watch(&path, RecursiveMode::NonRecursive).unwrap();
 					let mut file0 = File::open(&path).unwrap();
@@ -67,8 +62,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 					file = Some(file0);
 				},
 
-				ChangeSoundpack(path) => {
-					let handle = ui_handle.take().unwrap();
+				ChangeSoundpack(path, handle) => {
 					manager = Some(SoundManager::new(&path, handle));
 				},
 
