@@ -17,10 +17,13 @@ env:
   global:
     - HOST=x86_64-unknown-linux-gnu
     - PROJECT_NAME=soundsense-rs
+
+before_install:
+  - if [[ $TRAVIS_OS_NAME = linux ]]; then sudo apt-get install -y alsa; fi
   
 install:
-  - if [[ $TRAVIS_OS_NAME = linux ]]; then sudo apt-get install alsa; fi
   - if [[ $TRAVIS_OS_NAME = linux && $HOST != $TARGET ]]; then rustup target add $TARGET; fi
+  - if [[ $TRAVIS_OS_NAME = windows ]]; then rustup target add $TRAGET; fi
 
 script:
   - cargo build --target $TARGET --verbose
