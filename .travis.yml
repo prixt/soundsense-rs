@@ -3,9 +3,9 @@ cache: cargo
 
 matrix:
   include:
-    - os: linux
-      rust: stable
-      env: TARGET=x86_64-unknown-linux-gnu
+    # - os: linux
+    #   rust: stable
+    #   env: TARGET=x86_64-unknown-linux-gnu
     - os: osx
       rust: stable
       env: TARGET=x86_64-apple-darwin
@@ -23,7 +23,7 @@ before_install:
   
 install:
   - if [[ $TRAVIS_OS_NAME = linux && $HOST != $TARGET ]]; then rustup target add $TARGET; fi
-  - if [[ $TRAVIS_OS_NAME = windows ]]; then rustup target add $TRAGET; fi
+  - if [[ $TRAVIS_OS_NAME = windows ]]; then rustup target add $TARGET; fi
 
 script:
   - cargo build --target $TARGET --verbose
