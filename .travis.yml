@@ -2,7 +2,7 @@ language: rust
 cache: cargo
 rust:
 - stable
-- nightly
+
 matrix:
   allow_failures:
   - rust: nightly
@@ -11,8 +11,12 @@ os:
 - linux
 - osx
 - windows
+
+script:
+  - cargo build --verbose --release
+
 before_deploy:
-- if [[ -f target/release/soundsense-rs]]; then mv target/release/soundsense-rs "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME"
+- if [[ -f target/release/soundsense-rs ]]; then mv target/release/soundsense-rs "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME"
 
 deploy:
 - provider: releases
