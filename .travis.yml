@@ -1,48 +1,27 @@
 language: rust
 cache: cargo
-
+rust:
+- stable
+- nightly
 matrix:
-  include:
-    # - os: linux
-    #   rust: stable
-    #   env: TARGET=x86_64-unknown-linux-gnu
-    - os: osx
-      rust: stable
-      env: TARGET=x86_64-apple-darwin
-    - os: windows
-      rust: stable
-      env: TARGET=x86_64-pc-windows-gnu
-
-env:
-  global:
-    - HOST=x86_64-unknown-linux-gnu
-    - PROJECT_NAME=soundsense-rs
-
-before_install:
-  - if [[ $TRAVIS_OS_NAME = linux ]]; then sudo apt-get install -y alsa; fi
-  
-install:
-  - if [[ $TRAVIS_OS_NAME = linux && $HOST != $TARGET ]]; then rustup target add $TARGET; fi
-  - if [[ $TRAVIS_OS_NAME = windows ]]; then rustup target add $TARGET; fi
-
-script:
-  - cargo build --target $TARGET --verbose
-
+  allow_failures:
+  - rust: nightly
+  fast_finish: true
+os:
+- linux
+- osx
+- windows
 before_deploy:
-  - bash ci/before_deploy.bash
+- if [[ -f target/release/soundsense-rs]]; then mv target/release/soundsense-rs "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME"
 
 deploy:
-  provider: releases
-  api_key: $GITHUB_OAUTH
-  file_glob: true
-  file:
-    -$PROJECT_NAME-$TRAVIS_TAG-$TARGET.*
-    -$PROJECT_NAME*.deb
+- provider: releases
   skip_cleanup: true
   on:
     tags: true
-    condition: $TRAVIS_RUST_VERSION = stable && $TARGET != ""
-
-notification:
-  email:
-    on_succes: never
+    condition: "$TRAVIS_RUST_VERSION = stable"
+    branch: release
+  file:
+  - target/release/soundsense-rs-*
+  api_key:
+    secure: dIgazBfesIuLdougBNRu/nNwpqc+/2FLkxKAVWmk5gY2E3PmjPbrq0OMc5MkqnmZodV+0vvatjzTJxqsGMNmw4WwWZie76z6e4sWcgNpM/Ce84u0gN6+FSClecE77saQpdgjA8KJxrRD3dQC/unFGQSCfuk6Omlk3ES3Ys7RFWeD1EPLvK8iybCKI42sQ9+ogZQ+3K9EqY3cjxynGcQr8Aqh6tBCx2xF2A5ZAybGJ3qlitgX7ZHOSuOnMWT5rDQrKDnzcPqMpzwZG3QYDiWOq8cF7mmrMVGJpsn4IqqmFMBYu8nxVNaoVXUgObKpr27DwscAI2dp+w0RWYmp9iN7DIGHYyYEkSukCFO1q/wJrg0+s/eicMX/fm/xH6FJZCM96ICSDG0tzvjESKW60RZbvd0dxDWsNx/pA3eSxYR1zKeVCI0ZJ5Z94TqAeQME6tXBcoSbB9IejH6FsN6ekzkgjfIoajmIabG/LJ1wSIleOtQ+sHdvyi7i26bp9clZIaaXf1ETWd0leRL+tESxvChf3mOzEjcDG85RGOaRfrcRAbAe/J/6E51m478kaWt+s3YAcVBEa/d8A7THrRZgkKsQCJsbT05s6l23NIeVpDiPL536tAcSwWMVabvdqXadoV7SkxIiGpyzYie0KbpulPapq0aspfTElmIYRnK4KvP7low=
