@@ -25,6 +25,7 @@ deploy:
   on:
     tags: true
     condition: "$TRAVIS_RUST_VERSION = stable"
+  file_glob: true
   file:
   - target/release/soundsense-rs-*
   api_key:
