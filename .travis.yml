@@ -8,7 +8,6 @@ matrix:
   - rust: nightly
   fast_finish: true
 os:
-- linux
 - osx
 - windows
 
