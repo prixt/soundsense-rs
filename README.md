@@ -1,4 +1,4 @@
-# SOUNDSENSE-RS : SoundSense, written in rust.
+# SOUNDSENSE-RS : SoundSense, written in rust. [![Build Status](https://travis-ci.org/prixt/soundsense-rs.svg?branch=master)](https://travis-ci.org/prixt/soundsense-rs)
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine tool for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 ## Why?
