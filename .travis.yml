@@ -13,7 +13,7 @@ os:
 - linux
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libasound2-dev ; sudo apt-get install -y webkit2gtk-4.0 ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libasound2-dev ; sudo apt-get install -y libwebkit2gtk-4.0 ; fi
 
 script:
   - cargo build --verbose --release
