@@ -10,7 +10,7 @@ matrix:
 os:
 - osx
 - windows
-# please build already
+- linux
 
 script:
   - cargo build --verbose --release
