@@ -16,8 +16,8 @@ script:
   - cargo build --verbose --release
 
 before_deploy:
-- if [[ -f target/release/soundsense-rs ]]; then mv target/release/soundsense-rs "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME" fi
-- if [[ -f target/release/soundsense-rs.exe ]]; then mv target/release/soundsense-rs.exe "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME.exe" fi
+- if [[ -f target/release/soundsense-rs ]]; then mv target/release/soundsense-rs target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME fi
+- if [[ -f target/release/soundsense-rs.exe ]]; then mv target/release/soundsense-rs.exe target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME.exe fi
 
 deploy:
 - provider: releases
