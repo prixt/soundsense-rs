@@ -211,7 +211,7 @@ impl SoundManager {
 			ui_handle.add_slider(channel.to_string());
 		}
 
-		println!("Finished loading!");
+		// println!("Finished loading!");
 		Self {
 			sounds,
 			timed_out: vec![],
@@ -254,7 +254,7 @@ impl SoundManager {
 	}
 
 	pub fn process_log(&mut self, log: &str) {
-		println!("log: {}", log);
+		// println!("log: {}", log);
 
 		let rng = &mut self.rng;
 
@@ -263,7 +263,7 @@ impl SoundManager {
 
 		for (i, sound) in sounds.iter_mut().enumerate() {
 			if sound.pattern.is_match(log) {
-				println!("--pattern: {}", sound.pattern.as_str());
+				// println!("--pattern: {}", sound.pattern.as_str());
 
 				let mut can_play = sound.current_timeout == 0;
 				if can_play {
@@ -281,17 +281,17 @@ impl SoundManager {
 						timed_out.push(i);
 					}
 					if let Some(chn) = &sound.channel {
-						println!("--channel: {}", chn);
+						// println!("--channel: {}", chn);
 						let device = &self.device;
 						let channel = self.channels.get_mut(chn).unwrap();
 						let files = &sound.files;
 						
 						if let Some(is_loop_start) = sound.loop_attr {
 							if is_loop_start {
-								println!("----loop=start");
+								// println!("----loop=start");
 								channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
 							} else {
-								println!("----loop=stop");
+								// println!("----loop=stop");
 								channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
 								if !sound.files.is_empty() {
 									channel.add_oneshot(device, files.choose(rng).unwrap(), sound.delay.unwrap_or(0), rng);
@@ -357,29 +357,6 @@ fn parse_playlist(path: &Path) -> Vec<PathBuf> {
 	else {
 		unreachable!("Playlist {:?} is not valid!", path)
 	}
-
-	// for path in path_vec.iter() {
-	// 	test_file(path);
-	// }
+	
 	path_vec
 }
-
-// fn test_file(path: &Path) {
-// 	let f = File::open(path).unwrap();
-// 	if let Err(e) = Decoder::new(f) {
-// 		println!("file: {}\nerror: {}", e, path.to_string_lossy());
-// 	}
-// }
-// file: Unrecognized format
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
-// file: Unrecognized format
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
-// file: Unrecognized format
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
-// file: Unrecognized format
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/push/push5.mp3
-// file: Unrecognized format
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
-// file: Unrecognized format
-// error: D:\MyProjects\Rust\soundsense-rs\soundpacks\battle\hit/punch/punch4.mp3
