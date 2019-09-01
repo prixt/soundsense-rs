@@ -5,7 +5,8 @@ use crate::message::{SoundMessage, VolumeChange};
 pub fn run(
 	tx: Sender<SoundMessage>,
 	gamelog_path: Option<std::path::PathBuf>,
-	soundpack_path: Option<std::path::PathBuf>
+	soundpack_path: Option<std::path::PathBuf>,
+	ignore_path: Option<std::path::PathBuf>,
 ) {
 	let html = format!(r#"
 		<!doctype html>
@@ -17,6 +18,7 @@ pub fn run(
 				<div id="header">
 					<button onclick="external.invoke('load_gamelog')">Load gamelog.txt</button>
 					<button onclick="external.invoke('load_soundpack')">Load soundpack</button>
+					<button onclick="external.invoke('load_ignore_list')">Load ignore.txt</button>
 					<button onclick="external.invoke('show_about')">About</button>
 				</div>
 				<div id="channels"/>
@@ -27,7 +29,7 @@ pub fn run(
 	let webview = builder()
 		.title("SoundSense-rs")
         .content(Content::Html(html))
-        .size(400, 600)
+        .size(500, 600)
         .resizable(true)
         .debug(true)
         .user_data(())
@@ -43,8 +45,13 @@ pub fn run(
 					.unwrap() {
 					tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap()
 				}
+				"load_ignore_list" => if let Some(path) = webview.dialog()
+					.open_file("Choose ignore.txt", "")
+					.unwrap() {
+					tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap()
+				}
 				"show_about" => {
-					webview.dialog().info("SoundSense-rs", "Created by prixt \nThe original SoundSense can be found at http://df.zweistein.cz/soundsense/ \nSource at: https://github.com/prixt/soundsense-rs").unwrap()
+					webview.dialog().info("SoundSense-rs", "Created by prixt\nThe original SoundSense can be found at:\n\thttp://df.zweistein.cz/soundsense/ \nSource at:\n\thttps://github.com/prixt/soundsense-rs").unwrap()
 				}
 				other => {
 					if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {
@@ -64,6 +71,9 @@ pub fn run(
 	}
 	if let Some(path) = soundpack_path {
 		tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap();
+	}
+	if let Some(path) = ignore_path {
+		tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap();
 	}
 	
 	webview.run().unwrap();

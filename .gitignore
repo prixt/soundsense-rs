@@ -2,3 +2,4 @@
 **/*.rs.bk
 /soundpack
 /soundpack_modified
+/ignore.txt
