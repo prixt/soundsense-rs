@@ -6,6 +6,8 @@ pub struct SoundChannel {
 	pub one_shots: Vec<SpatialSink>,
 	pub volume: f32,
 	pub delay: usize,
+	adaptive_timeout: usize,
+	allow_oneshot: bool,
 }
 impl SoundChannel {
 	pub fn new(device: &Device) -> Self {
@@ -15,10 +17,14 @@ impl SoundChannel {
 			one_shots : Vec::new(),
 			volume : 1.0,
 			delay : 0,
+			adaptive_timeout: 1,
+			allow_oneshot: true,
 		}
 	}
 
 	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
+		if self.adaptive_timeout != 1 {self.adaptive_timeout -= 1};
+		self.allow_oneshot = self.adaptive_timeout < 16usize;
 		let delay = self.delay.checked_sub(100).unwrap_or(0);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
@@ -29,6 +35,7 @@ impl SoundChannel {
 			}
 			!s.empty()
 		});
+		self.looping.play();
 		if self.one_shots.is_empty() && delay == 0 {
 			if self.looping.empty() && !self.files.is_empty() {
 				self.looping = SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
@@ -36,26 +43,28 @@ impl SoundChannel {
 					append_soundfile_to_sink(&self.looping, file, true, rng);
 				}
 			}
-			self.looping.play();
 		} else {
 			self.looping.pause();
 		}
 	}
 
-	pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
+	pub fn change_loop(&mut self, _device: &Device, files: &[SoundFile], delay: usize, _rng: &mut ThreadRng) {
 		self.looping.stop();
 		self.files.clear();
 		self.files.extend_from_slice(files);
 		self.delay = delay;
-		self.maintain(device, rng, None);
+		// self.maintain(device, rng, None);
 	}
 
 	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
-		self.looping.pause();
-		let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
-		append_soundfile_to_sink(&sink, file, false, rng);
-		self.one_shots.push(sink);
-		self.delay = delay;
+		if self.allow_oneshot {
+			self.adaptive_timeout = self.adaptive_timeout.checked_shl(1).unwrap_or(std::usize::MAX);
+			self.looping.pause();
+			let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
+			append_soundfile_to_sink(&sink, file, false, rng);
+			self.one_shots.push(sink);
+			self.delay = delay;
+		}
 	}
 
 	pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {
@@ -73,6 +82,7 @@ impl SoundChannel {
 }
 
 fn append_soundfile_to_sink(sink: &SpatialSink, soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) {
+	let volume = soundfile.volume;
 	let balance: f32 = if soundfile.random_balance {
 			rng.gen_range(-1.0, 1.0)
 		} else {
@@ -80,25 +90,26 @@ fn append_soundfile_to_sink(sink: &SpatialSink, soundfile: &SoundFile, is_loopin
 		};
 	match soundfile.r#type {
 		SoundFileType::IsPath(ref path) => {
-			assert_file(path, sink, balance);
+			assert_file(path, sink, volume, balance);
 		}
 		SoundFileType::IsPlaylist(ref paths) => {
 			if is_looping {
 				paths.iter().for_each(|p| {
-					assert_file(p, sink, balance);
+					assert_file(p, sink, volume, balance);
 				});
 			} else {
-				assert_file(&paths.choose(rng).unwrap(), sink, balance);
+				assert_file(&paths.choose(rng).unwrap(), sink, volume, balance);
 			}
 		}
 	}
 }
 
-fn assert_file(path: &Path, sink: &SpatialSink, balance: f32) {
+fn assert_file(path: &Path, sink: &SpatialSink, volume: f32, balance: f32) {
 	let f = fs::File::open(path).unwrap();
 	let source = Decoder::new(f);
 	match source {
 		Ok(source) => {
+			let source = source.amplify(volume);
 			sink.append(source.buffered().convert_samples::<f32>());
 			sink.set_emitter_position([balance, 1.0, 0.0]);
 		},
