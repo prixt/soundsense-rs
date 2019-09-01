@@ -6,9 +6,8 @@ pub struct SoundChannel {
 	pub one_shots: Vec<SpatialSink>,
 	pub volume: f32,
 	pub delay: usize,
-	adaptive_timeout: usize,
-	allow_oneshot: bool,
 }
+
 impl SoundChannel {
 	pub fn new(device: &Device) -> Self {
 		Self {
@@ -17,14 +16,10 @@ impl SoundChannel {
 			one_shots : Vec::new(),
 			volume : 1.0,
 			delay : 0,
-			adaptive_timeout: 1,
-			allow_oneshot: true,
 		}
 	}
 
 	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
-		if self.adaptive_timeout != 1 {self.adaptive_timeout -= 1};
-		self.allow_oneshot = self.adaptive_timeout < 16usize;
 		let delay = self.delay.checked_sub(100).unwrap_or(0);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
@@ -48,23 +43,20 @@ impl SoundChannel {
 		}
 	}
 
-	pub fn change_loop(&mut self, _device: &Device, files: &[SoundFile], delay: usize, _rng: &mut ThreadRng) {
+	pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
 		self.looping.stop();
 		self.files.clear();
 		self.files.extend_from_slice(files);
 		self.delay = delay;
-		// self.maintain(device, rng, None);
+		self.maintain(device, rng, None);
 	}
 
 	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
-		if self.allow_oneshot {
-			self.adaptive_timeout = self.adaptive_timeout.checked_shl(1).unwrap_or(std::usize::MAX);
-			self.looping.pause();
-			let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
-			append_soundfile_to_sink(&sink, file, false, rng);
-			self.one_shots.push(sink);
-			self.delay = delay;
-		}
+		self.looping.pause();
+		let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
+		append_soundfile_to_sink(&sink, file, false, rng);
+		self.one_shots.push(sink);
+		self.delay = delay;
 	}
 
 	pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {

@@ -3,7 +3,7 @@ use regex::Regex;
 
 pub struct SoundManager {
 	sounds: Vec<SoundEntry>,
-	timed_out: Vec<usize>,
+	recent: HashSet<usize>,
 	device: Device,
 	channels: HashMap<Box<str>, SoundChannel>,
 	total_volume: f32,
@@ -131,6 +131,7 @@ impl SoundManager {
 									files,
 									weights,
 									current_timeout: 0,
+									recent_call: 0,
 								}
 							);
 						}
@@ -220,7 +221,7 @@ impl SoundManager {
 		// println!("Finished loading!");
 		Self {
 			sounds,
-			timed_out: vec![],
+			recent: HashSet::new(),
 			device,
 			channels,
 			total_volume: 1.0,
@@ -234,10 +235,12 @@ impl SoundManager {
 		self.concurency = 0;
 		{
 			let sounds = &mut self.sounds;
-			let timed_out = &mut self.timed_out;
-			timed_out.retain(|&i| {
+			let recent = &mut self.recent;
+			recent.retain(|&i| {
 				let timeout = sounds[i].current_timeout.checked_sub(100).unwrap_or(0);
+				let recent_call = sounds[i].recent_call.checked_sub(1).unwrap_or(0);
 				sounds[i].current_timeout = timeout;
+				sounds[i].recent_call = recent_call;
 				timeout != 0
 			});
 		}
@@ -260,16 +263,18 @@ impl SoundManager {
 	}
 
 	pub fn process_log(&mut self, log: &str) {
-		println!("log: {}", log);
+		// println!("log: {}", log);
 
 		let rng = &mut self.rng;
 
 		let sounds = &mut self.sounds;
-		let timed_out = &mut self.timed_out;
+		let recent = &mut self.recent;
 
 		for (i, sound) in sounds.iter_mut().enumerate() {
 			if sound.pattern.is_match(log) {
-				println!("--pattern: {}", sound.pattern.as_str());
+				// println!("--pattern: {}", sound.pattern.as_str());
+				recent.insert(i);
+				sound.recent_call += 1;
 
 				let mut can_play = sound.current_timeout == 0;
 				if can_play {
@@ -290,19 +295,22 @@ impl SoundManager {
 					};
 					if let Some(timeout) = sound.timeout {
 						sound.current_timeout = timeout;
-						timed_out.push(i);
+					}
+					// Prevent repeated alerts from firing constantly.
+					if sound.recent_call >= sound.current_timeout + 5 {
+						sound.current_timeout = sound.recent_call * 100;
 					}
 					if let Some(chn) = &sound.channel {
-						// println!("--channel: {}", chn);
+						println!("--channel: {}", chn);
 						let device = &self.device;
 						let channel = self.channels.get_mut(chn).unwrap();
 						
 						if let Some(is_loop_start) = sound.loop_attr {
 							if is_loop_start {
-								// println!("----loop=start");
+								println!("----loop=start");
 								channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
 							} else {
-								// println!("----loop=stop");
+								println!("----loop=stop");
 								channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
 								if !sound.files.is_empty() {
 									channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
@@ -310,7 +318,7 @@ impl SoundManager {
 							}
 						}
 						else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
-							channel.add_oneshot(device, files.choose(rng).unwrap(), sound.delay.unwrap_or(0), rng);
+							channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
 						}
 					
 					} else if !sound.files.is_empty() {
