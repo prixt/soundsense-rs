@@ -1,16 +1,16 @@
 use super::*;
 
 pub struct SoundChannel {
-	pub looping: Sink,
+	pub looping: SpatialSink,
 	pub files: Vec<SoundFile>,
-	pub one_shots: Vec<Sink>,
+	pub one_shots: Vec<SpatialSink>,
 	pub volume: f32,
 	pub delay: usize,
 }
 impl SoundChannel {
 	pub fn new(device: &Device) -> Self {
 		Self {
-			looping : Sink::new(device),
+			looping : SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]),
 			files : Vec::new(),
 			one_shots : Vec::new(),
 			volume : 1.0,
@@ -31,7 +31,7 @@ impl SoundChannel {
 		});
 		if self.one_shots.is_empty() && delay == 0 {
 			if self.looping.empty() && !self.files.is_empty() {
-				self.looping = Sink::new(device);
+				self.looping = SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
 				for file in self.files.iter() {
 					append_soundfile_to_sink(&self.looping, file, true, rng);
 				}
@@ -52,7 +52,7 @@ impl SoundChannel {
 
 	pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
 		self.looping.pause();
-		let sink = Sink::new(device);
+		let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
 		append_soundfile_to_sink(&sink, file, false, rng);
 		self.one_shots.push(sink);
 		self.delay = delay;
@@ -72,29 +72,35 @@ impl SoundChannel {
 	}
 }
 
-fn append_soundfile_to_sink(sink: &Sink, soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) {
+fn append_soundfile_to_sink(sink: &SpatialSink, soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) {
+	let balance: f32 = if soundfile.random_balance {
+			rng.gen_range(-1.0, 1.0)
+		} else {
+			soundfile.balance
+		};
 	match soundfile.r#type {
 		SoundFileType::IsPath(ref path) => {
-			assert_file(path, sink);
+			assert_file(path, sink, balance);
 		}
 		SoundFileType::IsPlaylist(ref paths) => {
 			if is_looping {
 				paths.iter().for_each(|p| {
-					assert_file(p, sink);
+					assert_file(p, sink, balance);
 				});
 			} else {
-				assert_file(&paths.choose(rng).unwrap(), sink);
+				assert_file(&paths.choose(rng).unwrap(), sink, balance);
 			}
 		}
 	}
 }
 
-fn assert_file(path: &Path, sink: &Sink) {
+fn assert_file(path: &Path, sink: &SpatialSink, balance: f32) {
 	let f = fs::File::open(path).unwrap();
 	let source = Decoder::new(f);
 	match source {
 		Ok(source) => {
 			sink.append(source.buffered().convert_samples::<f32>());
+			sink.set_emitter_position([balance, 1.0, 0.0]);
 		},
 		Err(e) => {
 			println!("error: {}, path: {}", e, path.to_string_lossy());
