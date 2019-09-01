@@ -10,6 +10,7 @@ use crate::ui::UIHandle;
 use notify::{Watcher, RecursiveMode, DebouncedEvent};
 use rodio::*;
 use rand::prelude::*;
+use rand::distributions::weighted::WeightedIndex;
 use lazy_static::lazy_static;
 
 mod sound_manager; use sound_manager::SoundManager;
@@ -24,7 +25,7 @@ pub enum SoundFileType {
 #[derive(Clone)]
 pub struct SoundFile {
 	pub r#type: SoundFileType,	// path to audio file with sound. OR list of paths
-	pub weight: usize,	// controls likelihood of sound to be chosen. Default is 100.
+	pub weight: f32,	// controls likelihood of sound to be chosen. Default is 100.
 	pub volume: f32,	// adjusts volume of sample. Can range from -40 to +6 decibles, default 0.
 	pub random_balance: bool,	// if set to true will randomply distribute sound between stereo channels.
 	pub delay: usize,	// number, delay before sound is played. In miliseconds, default 0.
@@ -42,6 +43,7 @@ pub struct SoundEntry {
 	pub halt_on_match: bool,	// boolean, if set to true, sound sense will stop processing long line after it was matched to this sound. Default false
 	pub random_balance: bool,	// boolean, if set to true will randomply distribute sound betweem stereo channels.
 	pub files: Vec<SoundFile>,
+	pub weights: Vec<f32>,
 	pub current_timeout: usize,
 }
 

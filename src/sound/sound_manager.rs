@@ -58,6 +58,7 @@ impl SoundManager {
 							let mut halt_on_match: bool = false;
 							let mut random_balance: bool = false;
 							let files = Vec::new();
+							let weights = Vec::new();
 
 							for attr in attributes {
 								let attribute_name = attr.name.local_name.as_str();
@@ -128,6 +129,7 @@ impl SoundManager {
 									halt_on_match,
 									random_balance,
 									files,
+									weights,
 									current_timeout: 0,
 								}
 							);
@@ -138,8 +140,8 @@ impl SoundManager {
 							let mut path = PathBuf::from(file_path);
 							path.pop();
 							let mut is_playlist = false;
-							let mut weight: usize = 0;		
-							let mut volume: f32 = 0.0;	
+							let mut weight: f32 = 100.0;		
+							let mut volume: f32 = 1.0;	
 							let mut random_balance: bool = false;
 							let mut balance: f32 = 0.0;
 							let mut delay: usize = 0;
@@ -152,7 +154,8 @@ impl SoundManager {
 										weight = attr.value.parse().unwrap();
 									}
 									"volumeAdjustment" => {
-										volume = attr.value.parse().unwrap();
+										// TODO: check if linear conversion from decibel to normal volume does work
+										volume = (attr.value.parse::<f32>().unwrap() + 40.0) / 40.0;
 									}
 									"randomBalance" => {
 										if attr.value == "true" { 
@@ -165,7 +168,9 @@ impl SoundManager {
 									"delay" => {
 										delay = attr.value.parse().unwrap();
 									}
-									"playlist" => {is_playlist = true;}
+									"playlist" => {
+										is_playlist = true;
+									}
 									_ => println!("Unknown sound-file value: {}", attr_name)
 								}
 							}
@@ -184,8 +189,9 @@ impl SoundManager {
 								delay,
 								balance,
 							};
-							current_sound.as_mut().unwrap()
-								.files.push(sound_file);
+							let sound = current_sound.as_mut().unwrap();
+							sound.files.push(sound_file);
+							sound.weights.push(weight);
 						}
 					},
 
@@ -276,6 +282,12 @@ impl SoundManager {
 				}
 
 				if can_play {
+					let files = &sound.files;
+					let idx : usize = if files.len() > 1 && !sound.loop_attr.unwrap_or(false) {
+						WeightedIndex::new(&sound.weights).unwrap().sample(rng)
+					} else {
+						0
+					};
 					if let Some(timeout) = sound.timeout {
 						sound.current_timeout = timeout;
 						timed_out.push(i);
@@ -284,7 +296,6 @@ impl SoundManager {
 						// println!("--channel: {}", chn);
 						let device = &self.device;
 						let channel = self.channels.get_mut(chn).unwrap();
-						let files = &sound.files;
 						
 						if let Some(is_loop_start) = sound.loop_attr {
 							if is_loop_start {
@@ -294,7 +305,7 @@ impl SoundManager {
 								// println!("----loop=stop");
 								channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
 								if !sound.files.is_empty() {
-									channel.add_oneshot(device, files.choose(rng).unwrap(), sound.delay.unwrap_or(0), rng);
+									channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
 								}
 							}
 						}
@@ -305,7 +316,7 @@ impl SoundManager {
 					} else if !sound.files.is_empty() {
 						let channel = self.channels.get_mut("misc").unwrap();
 						if channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
-							channel.add_oneshot(&self.device, (&sound.files).choose(rng).unwrap(), sound.delay.unwrap_or(0), rng);
+							channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
 						}
 					}
 				}
