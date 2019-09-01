@@ -1,6 +1,6 @@
 [package]
 name = "soundsense-rs"
-version = "1.1.0"
+version = "1.1.1"
 authors = ["pc <paraxite@naver.com>"]
 edition = "2018"
 
