@@ -12,6 +12,7 @@ use rodio::*;
 use rand::prelude::*;
 use rand::distributions::weighted::WeightedIndex;
 use lazy_static::lazy_static;
+use regex::Regex;
 
 mod sound_manager; use sound_manager::SoundManager;
 mod sound_channel; use sound_channel::SoundChannel;
@@ -69,12 +70,25 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 					manager = Some(SoundManager::new(&path, handle));
 				},
 
+				ChangeIgnoreList(path) => {
+					manager.as_mut().and_then(|manager| {
+						let file = &mut File::open(&path).unwrap();
+						let buf = &mut Vec::new();
+						file.read_to_end(buf).unwrap();
+						let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
+							Regex::new(expr).ok()
+						}).collect();
+						manager.set_ignore_list(list);
+						Some(())
+					});
+				},
+
 				VolumeChange(channel, volume) => {
 					manager.as_mut().and_then(|manager| {
 						manager.set_volume(&channel, volume * 0.01);
 						Some(())
 					});
-				}
+				},
 			}
 		}
 

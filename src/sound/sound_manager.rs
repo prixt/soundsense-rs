@@ -1,9 +1,9 @@
 use super::*;
-use regex::Regex;
 
 pub struct SoundManager {
 	sounds: Vec<SoundEntry>,
 	recent: HashSet<usize>,
+	ignore_list: Vec<Regex>,
 	device: Device,
 	channels: HashMap<Box<str>, SoundChannel>,
 	total_volume: f32,
@@ -222,6 +222,7 @@ impl SoundManager {
 		Self {
 			sounds,
 			recent: HashSet::new(),
+			ignore_list: Vec::new(),
 			device,
 			channels,
 			total_volume: 1.0,
@@ -262,11 +263,20 @@ impl SoundManager {
 		}
 	}
 
+	pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) {
+		std::mem::replace(&mut self.ignore_list, ignore_list);
+	}
+
 	pub fn process_log(&mut self, log: &str) {
 		// println!("log: {}", log);
 
-		let rng = &mut self.rng;
+		for pattern in self.ignore_list.iter() {
+			if pattern.is_match(log) {
+				return
+			}
+		}
 
+		let rng = &mut self.rng;
 		let sounds = &mut self.sounds;
 		let recent = &mut self.recent;
 
