@@ -90,9 +90,12 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 						manager.process_log(log);
 					});
 				}
-				manager.maintain();
 			}
 		}
+		manager.as_mut().and_then(|manager| {
+			manager.maintain();
+			Some(())
+		});
 		
 		std::thread::sleep(Duration::from_millis(100));
 	}

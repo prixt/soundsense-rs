@@ -263,7 +263,7 @@ impl SoundManager {
 	}
 
 	pub fn process_log(&mut self, log: &str) {
-		println!("log: {}", log);
+		// println!("log: {}", log);
 
 		let rng = &mut self.rng;
 
