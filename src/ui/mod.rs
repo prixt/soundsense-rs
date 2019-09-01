@@ -44,7 +44,7 @@ pub fn run(
 					tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap()
 				}
 				"show_about" => {
-					webview.dialog().info("SoundSense-rs", "Created by prixt\nSource at :...").unwrap()
+					webview.dialog().info("SoundSense-rs", "Created by prixt \nThe original SoundSense can be found at http://df.zweistein.cz/soundsense/ \nSource at: https://github.com/prixt/soundsense-rs").unwrap()
 				}
 				other => {
 					if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {
