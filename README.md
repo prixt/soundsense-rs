@@ -18,11 +18,9 @@ ex) soundsense-rs.exe -l "path/to/gamelog.txt" -p "path/to/soundpack/folder"
 * Minimalist. (not necessarily by choice).
 
 ## Known problems
-* some regex expressions in the soundpacks don't have valid syntax valid for the 'regex' crate.
 * 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' cause 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
-* many sound and soundfile attributes are currently ignored. (stereo balance, weighted random balance, etc.)
-* having too many log entries at the same time causes the sound thread to stutter, and doesn't recover.
 * not properly tested in Adventure mode & Arena mode.
+* weather and music loops sometimes don't restart playing after finishing.
 
 ## [License](./LICENSE)
 
