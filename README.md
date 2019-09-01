@@ -1,4 +1,4 @@
-# SOUNDSENSE-RS : SoundSense, written in rust. [![Build Status](https://travis-ci.org/prixt/soundsense-rs.svg?branch=master)](https://travis-ci.org/prixt/soundsense-rs)
+# SOUNDSENSE-RS : SoundSense, written in Rust. [![Build Status](https://travis-ci.org/prixt/soundsense-rs.svg?branch=master)](https://travis-ci.org/prixt/soundsense-rs)
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine tool for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 ## Why?
@@ -6,23 +6,31 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 2. Attempt to create a standalone application that doesn't require a Java runtime.
    * Ultimately, you should only need one executable, the soundpack folder, and DF.
 
-## Command line commands
-* -l / --gamelog [GAMELOG_FILE] : preload the gamelog
-* -p / --soundpack [PACK_DIR] : preload the soundpack
-
-ex) soundsense-rs.exe -l "path/to/gamelog.txt" -p "path/to/soundpack/folder"
-
 ## Current Features
 * Plays sound reactive to what happens in DF.
 * Adjust sound volumes realtime.
-* Minimalist. (not necessarily by choice).
+* Major sound parameters from the original (stereo balance, random balance, etc.)
+* Custom ignore list, allowing user to customize which log patterns to ignore.
+* Minimalist. (Though not necessarily by choice).
+
+## Command line commands
+* __-l / --gamelog [GAMELOG_FILE] :__ preload the gamelog _(default: ".\gamelog.txt")_
+* __-p / --soundpack [PACK_DIR] :__ preload the soundpack _(default: ".\soundpack")_
+* __-i / --ignore [IGNORE_FILE] :__ preload the ignore list _(default: ".\ignore.txt")_
+    * The ignore list is a simple text file, with each line being a regular expression. Any gamelog entries that match an expression in the ignore list will not be parsed.
+    * Warning: the regex must follow the [regex crate syntax](https://docs.rs/regex/#syntax).
+
+
+Example:
+
+    soundsense-rs.exe -l "path/to/gamelog.txt" -p "path/to/soundpack/folder"
+This will make soundsense-rs check if there is a file named "ignore.txt" in the binary directory, and will use that file to make the ignore list.
 
 ## Known problems
 * 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' cause 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
 * not properly tested in Adventure mode & Arena mode.
-* weather and music loops sometimes don't restart playing after finishing.
 
-## [License](./LICENSE)
+## [MIT License](./LICENSE)
 
 Copyright (c) prixt
 
