@@ -3,7 +3,7 @@ use std::time::Duration;
 use std::fs::{self, File};
 use std::io::{self, Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::message::*;
 use crate::ui::UIHandle;
@@ -45,6 +45,7 @@ pub struct SoundEntry {
 	pub files: Vec<SoundFile>,
 	pub weights: Vec<f32>,
 	pub current_timeout: usize,
+	pub recent_call: usize,
 }
 
 pub fn run(sound_rx: Receiver<SoundMessage>) {
