@@ -254,7 +254,7 @@ impl SoundManager {
 	}
 
 	pub fn process_log(&mut self, log: &str) {
-		// println!("log: {}", log);
+		println!("log: {}", log);
 
 		let rng = &mut self.rng;
 
@@ -263,7 +263,7 @@ impl SoundManager {
 
 		for (i, sound) in sounds.iter_mut().enumerate() {
 			if sound.pattern.is_match(log) {
-				// println!("--pattern: {}", sound.pattern.as_str());
+				println!("--pattern: {}", sound.pattern.as_str());
 
 				let mut can_play = sound.current_timeout == 0;
 				if can_play {
