@@ -1,7 +1,7 @@
 use std::sync::mpsc::Receiver;
 use std::time::Duration;
 use std::fs::{self, File};
-use std::io::{self, Read, Seek, SeekFrom};
+use std::io::{Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::collections::{HashMap, HashSet};
 

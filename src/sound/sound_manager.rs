@@ -14,7 +14,7 @@ pub struct SoundManager {
 
 impl SoundManager {
 	pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
-		use xml::reader::{EventReader, XmlEvent};
+		use quick_xml::{Reader, events::Event};
 
 		let mut sounds = Vec::new();
 		let device = default_output_device().unwrap();
@@ -37,16 +37,16 @@ impl SoundManager {
 		}
 
 		let mut func = |file_path: &Path| {
-			let file = fs::File::open(file_path).unwrap();
-			let file = io::BufReader::new(file);
-			let parser = EventReader::new(file);
+			let mut reader = Reader::from_file(file_path).unwrap();
+			reader.trim_text(true);
 
 			let mut current_sound : Option<SoundEntry> = None;
 
-			for e in parser {
-				match e.unwrap() {
-					XmlEvent::StartElement{name, attributes, ..} => {
-						if name.local_name == "sound" {
+			let buf = &mut Vec::new();
+			loop {
+				match reader.read_event(buf).unwrap() {
+					Event::Start(ref data) => {
+						if data.local_name() == b"sound" {
 
 							let mut pattern: Option<Regex> = None;
 							let mut channel: Option<Box<str>> = None;
@@ -60,9 +60,16 @@ impl SoundManager {
 							let files = Vec::new();
 							let weights = Vec::new();
 
-							for attr in attributes {
-								let attribute_name = attr.name.local_name.as_str();
-								match attribute_name {
+							for attr in data.attributes().with_checks(false) {
+								if attr.is_err() {continue}
+								let attr = attr.unwrap();
+								let attr_name = unsafe {
+									std::str::from_utf8_unchecked(attr.key)
+								};
+								let attr_value = unsafe {
+									std::str::from_utf8_unchecked(&attr.value)
+								};
+								match attr_name {
 									"logPattern" => {
 										lazy_static! {
 											static ref FAULTY_ESCAPE: Regex = Regex::new(
@@ -73,47 +80,47 @@ impl SoundManager {
 												r"(\|\(\)\))"
 											).unwrap();
 										}
-										let mut processed = attr.value;
+										let mut processed = String::from(attr_value);
 										processed = FAULTY_ESCAPE.replace_all(&processed, "$1").into();
 										processed = EMPTY_EXPR.replace_all(&processed, ")?").into();
 										pattern = Some(Regex::new(&processed).unwrap());
 									},
 									"channel" => {
-										let channel_name : Box<str> = attr.value.into();
+										let channel_name : Box<str> = attr_value.into();
 										if !channels.contains_key(&channel_name) {
 											channels.insert(channel_name.clone(), SoundChannel::new(&device));
 										}
 										channel = Some(channel_name);
 									},
-									"loop" => if attr.value == "start" {
+									"loop" => if attr_value == "start" {
 										loop_attr.replace(true);
 									}
 									else {
 										loop_attr.replace(false);
 									},
 									"concurency" => {
-										concurency = Some( attr.value.parse().unwrap() );
+										concurency = Some( attr_value.parse().unwrap() );
 									},
 									"timeout" => {
-										timeout = Some( attr.value.parse().unwrap() );
+										timeout = Some( attr_value.parse().unwrap() );
 									},
 									// Probability was mispelled...
 									"propability" => {
-										probability = Some( attr.value.parse().unwrap() );
+										probability = Some( attr_value.parse().unwrap() );
 									},
 									"delay" => {
-										delay = Some( attr.value.parse().unwrap() );
+										delay = Some( attr_value.parse().unwrap() );
 									},
-									"haltOnMatch" => if attr.value == "true" {
+									"haltOnMatch" => if attr_value == "true" {
 										halt_on_match = true;
 									},
-									"randomBalance" => if attr.value == "true" {
+									"randomBalance" => if attr_value == "true" {
 										random_balance = true;
 									}
 									"ansiFormat" => (),
 									"ansiPattern" => (),
 									"playbackThreshhold" => (),
-									_ => println!("Unknown sound value: {}", attribute_name)
+									_ => println!("Unknown sound value: {}", attr_name)
 								}
 							}
 
@@ -136,7 +143,7 @@ impl SoundManager {
 							);
 						}
 
-						else if current_sound.is_some() && name.local_name == "soundFile" {
+						else if current_sound.is_some() && data.local_name() == b"soundFile" {
 
 							let mut path = PathBuf::from(file_path);
 							path.pop();
@@ -147,27 +154,35 @@ impl SoundManager {
 							let mut balance: f32 = 0.0;
 							let mut delay: usize = 0;
 
-							for attr in attributes {
-								let attr_name = attr.name.local_name.as_str();
+							for attr in data.attributes() {
+								if attr.is_err() {continue}
+								let attr = attr.unwrap();
+								let attr_name = unsafe {
+									std::str::from_utf8_unchecked(attr.key)
+								};
+								let attr_value = unsafe {
+									std::str::from_utf8_unchecked(&attr.value)
+								};
+
 								match attr_name {
-									"fileName" => path.push(attr.value),
+									"fileName" => path.push(attr_value),
 									"weight" => {
-										weight = attr.value.parse().unwrap();
+										weight = attr_value.parse().unwrap();
 									}
 									"volumeAdjustment" => {
 										// TODO: check if linear conversion from decibel to normal volume does work
-										volume = (attr.value.parse::<f32>().unwrap() + 40.0) / 40.0;
+										volume = (attr_value.parse::<f32>().unwrap() + 40.0) / 40.0;
 									}
 									"randomBalance" => {
-										if attr.value == "true" { 
+										if attr_value == "true" { 
 											random_balance = true;
 										}
 									}
 									"balanceAdjustment" => {
-										balance = attr.value.parse().unwrap();
+										balance = attr_value.parse().unwrap();
 									}
 									"delay" => {
-										delay = attr.value.parse().unwrap();
+										delay = attr_value.parse().unwrap();
 									}
 									"playlist" => {
 										is_playlist = true;
@@ -196,11 +211,13 @@ impl SoundManager {
 						}
 					},
 
-					XmlEvent::EndElement{name} => {
-						if current_sound.is_some() && name.local_name == "sound" {
+					Event::End(data) => {
+						if current_sound.is_some() && data.local_name() == b"sound" {
 							sounds.push( current_sound.take().unwrap() );
 						}
 					},
+
+					Event::Eof => break,
 
 					_ => ()
 				}
