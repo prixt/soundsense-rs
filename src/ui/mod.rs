@@ -97,11 +97,11 @@ impl UIHandle {
 			self.handle.dispatch(
 				move |webview| {
 					let script = format!(r#"
-						var slidelabel = document.createElement("LABEL");
-						var textnode = document.createTextNode("{channel_name}");
+						let slidelabel = document.createElement("LABEL");
+						let textnode = document.createTextNode("{channel_name}");
 						slidelabel.appendChild(textnode);
 
-						var slider = document.createElement("INPUT");
+						let slider = document.createElement("INPUT");
 						slider.setAttribute("type", "range");
 						slider.setAttribute("step", "any");
 						slider.setAttribute("min", "0");
@@ -115,7 +115,7 @@ impl UIHandle {
 							false
 						);
 
-						var new_form = document.createElement("FORM");
+						let new_form = document.createElement("FORM");
 						new_form.appendChild(slidelabel); new_form.appendChild(slider);
 
 						document.getElementById("channels").appendChild(new_form);
@@ -129,7 +129,7 @@ impl UIHandle {
 		self.handle.dispatch(
 			|webview| {
 				webview.eval(r#"
-					var channels = document.getElementById("channels");
+					let channels = document.getElementById("channels");
 					while (channels.firstChild) {
 						channels.removeChild(channels.firstChild);
 					}
