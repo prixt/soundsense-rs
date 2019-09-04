@@ -13,7 +13,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 * Custom ignore list, allowing user to customize which log patterns to ignore.
 * Minimalist. (Though not necessarily by choice).
 
-## Command line commands
+## Command line parameters
 * __-l / --gamelog [GAMELOG_FILE] :__ preload the gamelog _(default: ".\gamelog.txt")_
 * __-p / --soundpack [PACK_DIR] :__ preload the soundpack _(default: ".\soundpack")_
 * __-i / --ignore [IGNORE_FILE] :__ preload the ignore list _(default: ".\ignore.txt")_
