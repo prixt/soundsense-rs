@@ -38,15 +38,15 @@ impl SoundManager {
 
 		let mut func = |file_path: &Path| {
 			let mut reader = Reader::from_file(file_path).unwrap();
-			reader.trim_text(true);
 
 			let mut current_sound : Option<SoundEntry> = None;
 
 			let buf = &mut Vec::new();
 			loop {
-				match reader.read_event(buf).unwrap() {
-					Event::Start(ref data) => {
-						if data.local_name() == b"sound" {
+				match reader.read_event(buf) {
+					Ok(Event::Start(ref data)) | Ok(Event::Empty(ref data)) => {
+						let local_name = data.local_name();
+						if local_name == b"sound" {
 
 							let mut pattern: Option<Regex> = None;
 							let mut channel: Option<Box<str>> = None;
@@ -61,7 +61,6 @@ impl SoundManager {
 							let weights = Vec::new();
 
 							for attr in data.attributes().with_checks(false) {
-								if attr.is_err() {continue}
 								let attr = attr.unwrap();
 								let attr_name = unsafe {
 									std::str::from_utf8_unchecked(attr.key)
@@ -143,7 +142,7 @@ impl SoundManager {
 							);
 						}
 
-						else if current_sound.is_some() && data.local_name() == b"soundFile" {
+						else if current_sound.is_some() && local_name == b"soundFile" {
 
 							let mut path = PathBuf::from(file_path);
 							path.pop();
@@ -155,7 +154,6 @@ impl SoundManager {
 							let mut delay: usize = 0;
 
 							for attr in data.attributes() {
-								if attr.is_err() {continue}
 								let attr = attr.unwrap();
 								let attr_name = unsafe {
 									std::str::from_utf8_unchecked(attr.key)
@@ -163,7 +161,6 @@ impl SoundManager {
 								let attr_value = unsafe {
 									std::str::from_utf8_unchecked(&attr.value)
 								};
-
 								match attr_name {
 									"fileName" => path.push(attr_value),
 									"weight" => {
@@ -211,13 +208,15 @@ impl SoundManager {
 						}
 					},
 
-					Event::End(data) => {
+					Ok(Event::End(data)) => {
 						if current_sound.is_some() && data.local_name() == b"sound" {
 							sounds.push( current_sound.take().unwrap() );
 						}
 					},
 
-					Event::Eof => break,
+					Ok(Event::Eof) => break,
+
+					Err(e) => panic!("Error parsing xml at position {}: {:?}", reader.buffer_position(), e),
 
 					_ => ()
 				}
@@ -285,7 +284,7 @@ impl SoundManager {
 	}
 
 	pub fn process_log(&mut self, log: &str) {
-		// println!("log: {}", log);
+		println!("log: {}", log);
 
 		for pattern in self.ignore_list.iter() {
 			if pattern.is_match(log) {
@@ -299,7 +298,7 @@ impl SoundManager {
 
 		for (i, sound) in sounds.iter_mut().enumerate() {
 			if sound.pattern.is_match(log) {
-				// println!("--pattern: {}", sound.pattern.as_str());
+				println!("--pattern: {}", sound.pattern.as_str());
 				recent.insert(i);
 				sound.recent_call += 1;
 
