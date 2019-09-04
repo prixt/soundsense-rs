@@ -14,8 +14,6 @@ pub struct SoundManager {
 
 impl SoundManager {
 	pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
-		use quick_xml::{Reader, events::Event};
-
 		let mut sounds = Vec::new();
 		let device = default_output_device().unwrap();
 		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
@@ -37,6 +35,7 @@ impl SoundManager {
 		}
 
 		let mut func = |file_path: &Path| {
+			use quick_xml::{Reader, events::Event};
 			let mut reader = Reader::from_file(file_path).unwrap();
 
 			let mut current_sound : Option<SoundEntry> = None;
@@ -62,64 +61,51 @@ impl SoundManager {
 
 							for attr in data.attributes().with_checks(false) {
 								let attr = attr.unwrap();
-								let attr_name = unsafe {
-									std::str::from_utf8_unchecked(attr.key)
-								};
-								let attr_value = unsafe {
-									std::str::from_utf8_unchecked(&attr.value)
-								};
-								match attr_name {
-									"logPattern" => {
-										lazy_static! {
-											static ref FAULTY_ESCAPE: Regex = Regex::new(
-												r"\\([^\.\+\*\?\(\)\|\[\]\{\}\^\$])"
-											).unwrap();
-
-											static ref EMPTY_EXPR: Regex = Regex::new(
-												r"(\|\(\)\))"
-											).unwrap();
-										}
-										let mut processed = String::from(attr_value);
-										processed = FAULTY_ESCAPE.replace_all(&processed, "$1").into();
-										processed = EMPTY_EXPR.replace_all(&processed, ")?").into();
+								let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
+								match attr.key {
+									b"logPattern" => {
+										let processed = FAULTY_ESCAPE.replace_all(&attr_value, "$1");
+										let processed = EMPTY_EXPR.replace_all(&processed, ")?");
 										pattern = Some(Regex::new(&processed).unwrap());
-									},
-									"channel" => {
+									}
+									b"channel" => {
 										let channel_name : Box<str> = attr_value.into();
 										if !channels.contains_key(&channel_name) {
 											channels.insert(channel_name.clone(), SoundChannel::new(&device));
 										}
 										channel = Some(channel_name);
-									},
-									"loop" => if attr_value == "start" {
-										loop_attr.replace(true);
 									}
-									else {
-										loop_attr.replace(false);
-									},
-									"concurency" => {
+									b"loop" => {
+										loop_attr.replace(attr_value == "start");
+									}
+									b"concurency" => {
 										concurency = Some( attr_value.parse().unwrap() );
-									},
-									"timeout" => {
-										timeout = Some( attr_value.parse().unwrap() );
-									},
-									// Probability was mispelled...
-									"propability" => {
-										probability = Some( attr_value.parse().unwrap() );
-									},
-									"delay" => {
-										delay = Some( attr_value.parse().unwrap() );
-									},
-									"haltOnMatch" => if attr_value == "true" {
-										halt_on_match = true;
-									},
-									"randomBalance" => if attr_value == "true" {
-										random_balance = true;
 									}
-									"ansiFormat" => (),
-									"ansiPattern" => (),
-									"playbackThreshhold" => (),
-									_ => println!("Unknown sound value: {}", attr_name)
+									b"timeout" => {
+										timeout = Some( attr_value.parse().unwrap() );
+									}
+									// Probability was mispelled...
+									b"propability" => {
+										probability = Some( attr_value.parse().unwrap() );
+									}
+									b"delay" => {
+										delay = Some( attr_value.parse().unwrap() );
+									}
+									b"haltOnMatch" => {
+										halt_on_match = attr_value == "true";
+									}
+									b"randomBalance" => {
+										random_balance = attr_value == "true" ;
+									}
+									b"ansiFormat" => (),
+									b"ansiPattern" => (),
+									b"playbackThreshhold" => (),
+									_ => {
+										println!(
+											"Unknown sound value: {}",
+											unsafe {std::str::from_utf8_unchecked(attr.key)}
+										);
+									}
 								}
 							}
 
@@ -155,36 +141,36 @@ impl SoundManager {
 
 							for attr in data.attributes() {
 								let attr = attr.unwrap();
-								let attr_name = unsafe {
-									std::str::from_utf8_unchecked(attr.key)
-								};
 								let attr_value = unsafe {
 									std::str::from_utf8_unchecked(&attr.value)
 								};
-								match attr_name {
-									"fileName" => path.push(attr_value),
-									"weight" => {
+								match attr.key {
+									b"fileName" => path.push(attr_value),
+									b"weight" => {
 										weight = attr_value.parse().unwrap();
 									}
-									"volumeAdjustment" => {
+									b"volumeAdjustment" => {
 										// TODO: check if linear conversion from decibel to normal volume does work
 										volume = (attr_value.parse::<f32>().unwrap() + 40.0) / 40.0;
 									}
-									"randomBalance" => {
-										if attr_value == "true" { 
-											random_balance = true;
-										}
+									b"randomBalance" => {
+										random_balance = attr_value == "true";
 									}
-									"balanceAdjustment" => {
+									b"balanceAdjustment" => {
 										balance = attr_value.parse().unwrap();
 									}
-									"delay" => {
+									b"delay" => {
 										delay = attr_value.parse().unwrap();
 									}
-									"playlist" => {
+									b"playlist" => {
 										is_playlist = true;
 									}
-									_ => println!("Unknown sound-file value: {}", attr_name)
+									_ => {
+										println!(
+											"Unknown sound value: {}",
+											unsafe {std::str::from_utf8_unchecked(attr.key)}
+										);
+									}
 								}
 							}
 							let r#type = if is_playlist {
@@ -364,15 +350,6 @@ impl SoundManager {
 }
 
 fn parse_playlist(path: &Path) -> Vec<PathBuf> {
-	lazy_static! {
-		static ref M3U_PATTERN: Regex = Regex::new(
-				r"#EXT[A-Z]*"
-			).unwrap();
-		static ref PLS_PATTERN: Regex = Regex::new(
-				r"File.+=(.+)"
-			).unwrap();
-	}
-
 	let parent_path = path.parent().unwrap();
 
 	let mut path_vec = Vec::new();
@@ -382,6 +359,12 @@ fn parse_playlist(path: &Path) -> Vec<PathBuf> {
 	if extension == "m3u" {
 		f.read_to_string(buf).unwrap();
 		for line in buf.lines() {
+			lazy_static! {
+				static ref M3U_PATTERN: Regex = Regex::new(
+						r"#EXT[A-Z]*"
+					).unwrap();
+			}
+
 			if !M3U_PATTERN.is_match(line) {
 				let mut path = PathBuf::from(parent_path);
 				path.push(line);
@@ -392,6 +375,12 @@ fn parse_playlist(path: &Path) -> Vec<PathBuf> {
 	else if extension == "pls" {
 		f.read_to_string(buf).unwrap();
 		for line in buf.lines() {
+			lazy_static! {
+				static ref PLS_PATTERN: Regex = Regex::new(
+						r"File.+=(.+)"
+					).unwrap();
+			}
+			
 			if let Some(caps) = PLS_PATTERN.captures(line) {
 				let mut path = PathBuf::from(parent_path);
 				path.push(&caps[0]);
