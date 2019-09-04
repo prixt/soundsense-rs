@@ -1,7 +1,7 @@
 use std::sync::mpsc::Receiver;
 use std::time::Duration;
 use std::fs::{self, File};
-use std::io::{self, Read, Seek, SeekFrom};
+use std::io::{Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::collections::{HashMap, HashSet};
 
@@ -16,6 +16,16 @@ use regex::Regex;
 
 mod sound_manager; use sound_manager::SoundManager;
 mod sound_channel; use sound_channel::SoundChannel;
+
+lazy_static! {
+	static ref FAULTY_ESCAPE: Regex = Regex::new(
+		r"\\([^\.\+\*\?\(\)\|\[\]\{\}\^\$])"
+	).unwrap();
+
+	static ref EMPTY_EXPR: Regex = Regex::new(
+		r"(\|\(\)\))"
+	).unwrap();
+}
 
 #[derive(Clone)]
 pub enum SoundFileType {
@@ -64,31 +74,27 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 					let mut file0 = File::open(&path).unwrap();
 					file0.seek(SeekFrom::End(0)).unwrap();
 					file = Some(file0);
-				},
+				}
 
 				ChangeSoundpack(path, handle) => {
 					manager = Some(SoundManager::new(&path, handle));
-				},
+				}
 
-				ChangeIgnoreList(path) => {
-					manager.as_mut().and_then(|manager| {
-						let file = &mut File::open(&path).unwrap();
-						let buf = &mut Vec::new();
-						file.read_to_end(buf).unwrap();
-						let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
-							Regex::new(expr).ok()
-						}).collect();
-						manager.set_ignore_list(list);
-						Some(())
-					});
-				},
+				ChangeIgnoreList(path) => if let Some(manager) = manager.as_mut() {
+					let file = &mut File::open(&path).unwrap();
+					let buf = &mut Vec::new();
+					file.read_to_end(buf).unwrap();
+					let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
+						let processed = FAULTY_ESCAPE.replace_all(expr, "$1");
+						let processed = EMPTY_EXPR.replace_all(&processed, ")?");
+						Regex::new(&processed).ok()
+					}).collect();
+					manager.set_ignore_list(list);
+				}
 
-				VolumeChange(channel, volume) => {
-					manager.as_mut().and_then(|manager| {
-						manager.set_volume(&channel, volume * 0.01);
-						Some(())
-					});
-				},
+				VolumeChange(channel, volume) => if let Some(manager) = manager.as_mut() {
+					manager.set_volume(&channel, volume * 0.01);
+				}
 			}
 		}
 
@@ -106,10 +112,9 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
 				}
 			}
 		}
-		manager.as_mut().and_then(|manager| {
+		if let Some(manager) = manager.as_mut() {
 			manager.maintain();
-			Some(())
-		});
+		};
 		
 		std::thread::sleep(Duration::from_millis(100));
 	}
