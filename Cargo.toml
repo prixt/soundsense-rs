@@ -1,6 +1,6 @@
 [package]
 name = "soundsense-rs"
-version = "1.2.2"
+version = "1.2.3"
 authors = ["pc <paraxite@naver.com>"]
 edition = "2018"
 
@@ -13,7 +13,7 @@ rodio = "0.9"
 quick-xml = "0.16"
 rand = "0.7"
 lazy_static = "1.4"
-web-view = "0.4.2"
+web-view = "0.4"
 serde = "1.0.99"
 serde_derive = "1.0.99"
 serde_json = "1.0.40"
