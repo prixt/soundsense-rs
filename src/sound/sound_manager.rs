@@ -215,6 +215,7 @@ impl SoundManager {
 		ui_handle.add_slider("music".to_string());
 		ui_handle.add_slider("weather".to_string());
 		ui_handle.add_slider("trade".to_string());
+		ui_handle.add_slider("swords".to_string());
 		ui_handle.add_slider("misc".to_string());
 		for channel in channels.keys() {
 			ui_handle.add_slider(channel.to_string());
