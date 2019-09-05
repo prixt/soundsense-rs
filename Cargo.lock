@@ -867,7 +867,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "soundsense-rs"
-version = "1.3.0"
+version = "1.2.2"
 dependencies = [
  "getopts 0.2.21 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -879,7 +879,7 @@ dependencies = [
  "serde 1.0.99 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.99 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.40 (registry+https://github.com/rust-lang/crates.io-index)",
- "web-view 0.4.1 (git+https://github.com/Freaky/web-view?rev=ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9)",
+ "web-view 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -970,18 +970,18 @@ dependencies = [
 
 [[package]]
 name = "web-view"
-version = "0.4.1"
-source = "git+https://github.com/Freaky/web-view?rev=ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9#ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "boxfnonce 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "urlencoding 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "webview-sys 0.1.2 (git+https://github.com/Freaky/web-view?rev=ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9)",
+ "webview-sys 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "webview-sys"
 version = "0.1.2"
-source = "git+https://github.com/Freaky/web-view?rev=ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9#ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bitflags 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cc 1.0.38 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1160,8 +1160,8 @@ dependencies = [
 "checksum utf8-ranges 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "9d50aa7650df78abf942826607c62468ce18d9019673d4a2ebe1865dbb96ffde"
 "checksum vec_map 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "05c78687fb1a80548ae3250346c3db86a80a7cdd77bda190189f2d0a0987c81a"
 "checksum walkdir 2.2.9 (registry+https://github.com/rust-lang/crates.io-index)" = "9658c94fa8b940eab2250bd5a457f9c48b748420d71293b165c8cdbe2f55f71e"
-"checksum web-view 0.4.1 (git+https://github.com/Freaky/web-view?rev=ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9)" = "<none>"
-"checksum webview-sys 0.1.2 (git+https://github.com/Freaky/web-view?rev=ef1a967dbfad6ba24c54e3eedd16f3a2d533bac9)" = "<none>"
+"checksum web-view 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "ffdbdebc3862cd252e9edf1db42c43c6083c1cf6f5001924e3911ae17a1b1a43"
+"checksum webview-sys 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "db7ae5bc4fd671b1e5916fcf2ae72b2f265356c4b2f16ecce6361bdae5c5d037"
 "checksum which 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)" = "e84a603e7e0b1ce1aa1ee2b109c7be00155ce52df5081590d1ffb93f4f515cb2"
 "checksum winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
 "checksum winapi 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)" = "f10e386af2b13e47c89e7236a7a14a086791a2b88ebad6df9bf42040195cf770"
