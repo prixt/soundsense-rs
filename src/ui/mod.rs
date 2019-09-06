@@ -8,34 +8,46 @@ pub fn run(
 	soundpack_path: Option<std::path::PathBuf>,
 	ignore_path: Option<std::path::PathBuf>,
 ) {
-	let html = format!(r#"
+	let html = format!(
+		r#"
 		<!doctype html>
 		<html>
 			<head>
-				<style type="text/css"> {w3} </style>
-				<style type="text/css"> {range} </style>
+				<style type="text/css">{w3}</style>
+				<style type="text/css">{range}</style>
 			</head>
 			<body>
 				<div class="w3-bar w3-border w3-light-grey w3-small">
-					<a href="\#" class="w3-bar-item w3-button"
-						onclick="external.invoke('load_gamelog')">Load gamelog.txt</a>
-					<a href="\#" class="w3-bar-item w3-button" 
-						onclick="external.invoke('load_soundpack')">Load soundpack</a>
-					<a href="\#" class="w3-bar-item w3-button"
-						onclick="external.invoke('load_ignore_list')">Load ignore.txt</a>
-					<a href="\#" class="w3-bar-item w3-button"
-						onclick="external.invoke('show_about')">About</a>
+					<button class='w3-bar-item w3-button'
+						onclick="external.invoke('load_gamelog')">Load gamelog.txt</button>
+					<button class='w3-bar-item w3-button'
+						onclick="external.invoke('load_soundpack')">Load soundpack</button>
+					<button class='w3-bar-item w3-button'
+						onclick="external.invoke('load_ignore_list')">Load ignore.txt</button>
+					<div class='w3-dropdown-hover w3-right'>
+						<a ref ='#' class='w3-button'>Options</a>
+						<div class='w3-dropdown-content w3-bar-block' style='right:0'>
+							<button class='w3-bar-item w3-button w3-disabled'><s>Download Original's Soundpack</s></button>
+							<button class='w3-bar-item w3-button w3-disabled'><s>Set current paths as default</s></button>
+							<button class='w3-bar-item w3-button w3-disabled'><s>Set current volumes as default</s></button>
+							<button class="w3-bar-item w3-button"
+								onclick="external.invoke('show_about')">About</button>
+						</div>
+					</div>
 				</div>
-				<ul class="w3-ul" id="channels"></ul>
+				<div class="w3-container">
+					<table class="w3-table w3-bordered" id="channels"></table>
+				</div>
 			</body>
-		</html>"#,
+		</html>
+		"#,
 		w3 = include_str!("w3.css"),
 		range = include_str!("range.css"),
 	);
 	let webview = builder()
 		.title("SoundSense-rs")
         .content(Content::Html(html))
-        .size(500, 600)
+        .size(500, 550)
         .resizable(true)
         .debug(true)
         .user_data(())
@@ -57,7 +69,14 @@ pub fn run(
 					tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap()
 				}
 				"show_about" => {
-					webview.dialog().info("SoundSense-rs", "Created by prixt\nThe original SoundSense can be found at:\n\thttp://df.zweistein.cz/soundsense/ \nSource at:\n\thttps://github.com/prixt/soundsense-rs").unwrap()
+					webview.dialog()
+						.info("SoundSense-rs",
+r"Created by prixt
+The original SoundSense can be found at:
+  http://df.zweistein.cz/soundsense/
+Source at:
+  https://github.com/prixt/soundsense-rs"
+						).unwrap()
 				}
 				other => {
 					if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {
@@ -102,31 +121,35 @@ impl UIHandle {
 			self.channels.push(name.clone());
 			self.handle.dispatch(
 				move |webview| {
-					let script = format!(r#"
-						let channels = document.getElementById('channels');
-						channels.insertAdjacentHTML(
-							'beforeend',
-							"<li class='w3-container'> \
-								{channel_name} \
+					let script = format!(
+					r#"
+					let channels = document.getElementById('channels');
+					channels.insertAdjacentHTML(
+						'beforeend',
+						"<tr class='w3-row'> \
+							<td class='w3-center' style='width:50px'><h4>{channel_name}</h4></td> \
+							<td class='w3-rest'> \
 								<input type='range' \
-										name='{channel_name}_slider' \
-										id='{channel_name}_slider' \
-										min='0' \
-										max='100' \
-										value='100' \
-									/> \
-							</li>"
-						);
+									name='{channel_name}_slider' \
+									id='{channel_name}_slider' \
+									min='0' \
+									max='100' \
+									value='100' \
+								/> \
+							</td> \
+						</tr>"
+					);
 
-						let slider = document.getElementById("{channel_name}_slider");
-						slider.addEventListener(
-							/MSIE|Trident|Edge/.test(window.navigator.userAgent) ? 'change' : 'input',
-							function() {{
-								external.invoke('{{"channel":"{channel_name}", "volume":'+this.value+'}}');
-							}},
-							false
-						);
-					"#, channel_name=&name);
+					let slider = document.getElementById("{channel_name}_slider");
+					slider.addEventListener(
+						/MSIE|Trident|Edge/.test(window.navigator.userAgent) ? 'change' : 'input',
+						function() {{
+							external.invoke('{{"channel":"{channel_name}", "volume":'+this.value+'}}');
+						}},
+						false
+					);
+					"#,
+					channel_name=&name);
 					webview.eval(&script)
 				}
 			).unwrap();
@@ -135,12 +158,14 @@ impl UIHandle {
 	pub fn clear_sliders(&mut self) {
 		self.handle.dispatch(
 			|webview| {
-				webview.eval(r#"
+				webview.eval(
+					r#"
 					let channels = document.getElementById("channels");
 					while (channels.firstChild) {
 						channels.removeChild(channels.firstChild);
 					}
-				"#)
+					"#
+				)
 			}
 		).unwrap();
 	}

@@ -3,23 +3,21 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 
 ## Why?
 1. To see if I could do it.
-2. Attempt to create a standalone application that doesn't require a Java runtime.
+2. Attempt to create a standalone application that doesn't require bloat (Java VM, C# VM, gtk, etc...).
    * Ultimately, you should only need one executable, the soundpack folder, and DF.
 
 ## Current Features
 * Plays sound reactive to what happens in DF.
-* Adjust sound volumes realtime.
-* Major sound parameters from the original (stereo balance, random balance, etc.)
+* Can adjust sound volumes realtime, by channel.
+* Most sound parameters from the original (stereo balance, random balance, etc.)
 * Custom ignore list, allowing user to customize which log patterns to ignore.
-* Minimalist. (Though not necessarily by choice).
+* Simple and Clean GUI.
 
 ## Command line parameters
 * __-l / --gamelog [GAMELOG_FILE] :__ preload the gamelog _(default: ".\gamelog.txt")_
 * __-p / --soundpack [PACK_DIR] :__ preload the soundpack _(default: ".\soundpack")_
 * __-i / --ignore [IGNORE_FILE] :__ preload the ignore list _(default: ".\ignore.txt")_
     * The ignore list is a simple text file, with each line being a regular expression. Any gamelog entries that match an expression in the ignore list will not be parsed.
-    * Warning: the regex must follow the [regex crate syntax](https://docs.rs/regex/#syntax).
-
 
 Example:
 
@@ -27,7 +25,8 @@ Example:
 This will make soundsense-rs check if there is a file named "ignore.txt" in the binary directory, and will use that file to make the ignore list.
 
 ## Known problems
-* 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' cause 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
+* 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' causes 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
+* not properly test on Linux and Mac.
 * not properly tested in Adventure mode & Arena mode.
 
 ## [MIT License](./LICENSE)
@@ -51,3 +50,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## CSS Resources
+* [W3.CSS](https://www.w3schools.com/w3css/)
+* [range.css](https://www.w3schools.com/w3css/)
