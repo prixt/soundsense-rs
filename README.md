@@ -1,6 +1,10 @@
 # SOUNDSENSE-RS : SoundSense, written in Rust. [![Build Status](https://travis-ci.org/prixt/soundsense-rs.svg?branch=master)](https://travis-ci.org/prixt/soundsense-rs)
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine tool for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
+<p align='center'>
+    <img src="./windows-screenshot.png" title='Windows screenshot' width='50%'>
+</p>
+
 ## Why?
 1. To see if I could do it.
 2. Attempt to create a standalone application that doesn't require bloat (Java VM, C# VM, gtk, etc...).
