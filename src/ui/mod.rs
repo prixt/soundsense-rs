@@ -12,19 +12,25 @@ pub fn run(
 		<!doctype html>
 		<html>
 			<head>
-				<style type="text/css"> {style} </style>
+				<style type="text/css"> {w3} </style>
+				<style type="text/css"> {range} </style>
 			</head>
 			<body>
-				<div id="header">
-					<button onclick="external.invoke('load_gamelog')">Load gamelog.txt</button>
-					<button onclick="external.invoke('load_soundpack')">Load soundpack</button>
-					<button onclick="external.invoke('load_ignore_list')">Load ignore.txt</button>
-					<button onclick="external.invoke('show_about')">About</button>
+				<div class="w3-bar w3-border w3-light-grey w3-small">
+					<a href="\#" class="w3-bar-item w3-button"
+						onclick="external.invoke('load_gamelog')">Load gamelog.txt</a>
+					<a href="\#" class="w3-bar-item w3-button" 
+						onclick="external.invoke('load_soundpack')">Load soundpack</a>
+					<a href="\#" class="w3-bar-item w3-button"
+						onclick="external.invoke('load_ignore_list')">Load ignore.txt</a>
+					<a href="\#" class="w3-bar-item w3-button"
+						onclick="external.invoke('show_about')">About</a>
 				</div>
-				<div id="channels"/>
+				<ul class="w3-ul" id="channels"></ul>
 			</body>
 		</html>"#,
-		style = include_str!("style.css")
+		w3 = include_str!("w3.css"),
+		range = include_str!("range.css"),
 	);
 	let webview = builder()
 		.title("SoundSense-rs")
@@ -97,16 +103,22 @@ impl UIHandle {
 			self.handle.dispatch(
 				move |webview| {
 					let script = format!(r#"
-						let slidelabel = document.createElement("LABEL");
-						let textnode = document.createTextNode("{channel_name}");
-						slidelabel.appendChild(textnode);
+						let channels = document.getElementById('channels');
+						channels.insertAdjacentHTML(
+							'beforeend',
+							"<li class='w3-container'> \
+								{channel_name} \
+								<input type='range' \
+										name='{channel_name}_slider' \
+										id='{channel_name}_slider' \
+										min='0' \
+										max='100' \
+										value='100' \
+									/> \
+							</li>"
+						);
 
-						let slider = document.createElement("INPUT");
-						slider.setAttribute("type", "range");
-						slider.setAttribute("step", "any");
-						slider.setAttribute("min", "0");
-						slider.setAttribute("max", "100");
-						slider.setAttribute("value", "100");
+						let slider = document.getElementById("{channel_name}_slider");
 						slider.addEventListener(
 							/MSIE|Trident|Edge/.test(window.navigator.userAgent) ? 'change' : 'input',
 							function() {{
@@ -114,11 +126,6 @@ impl UIHandle {
 							}},
 							false
 						);
-
-						let new_form = document.createElement("FORM");
-						new_form.appendChild(slidelabel); new_form.appendChild(slider);
-
-						document.getElementById("channels").appendChild(new_form);
 					"#, channel_name=&name);
 					webview.eval(&script)
 				}
