@@ -53,4 +53,4 @@ SOFTWARE.
 
 ## CSS Resources
 * [W3.CSS](https://www.w3schools.com/w3css/)
-* [range.css](https://www.w3schools.com/w3css/)
+* [range.css](http://danielstern.ca/range.css/#/)
