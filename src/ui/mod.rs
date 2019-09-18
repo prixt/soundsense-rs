@@ -1,6 +1,7 @@
 use std::sync::mpsc::Sender;
 use web_view::*;
 use crate::message::{SoundMessage, VolumeChange};
+use crate::download;
 
 static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
 
@@ -44,6 +45,12 @@ The original SoundSense can be found at:
 Source at:
     https://github.com/prixt/soundsense-rs",
                         ).unwrap()
+                }
+                "download_soundpack" => {
+                    std::thread::Builder::new()
+                        .name("download_thread".into())
+                        .spawn(|| download::run(1<<5))
+                        .unwrap();
                 }
                 other => {
                     if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {

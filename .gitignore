@@ -2,4 +2,6 @@
 **/*.rs.bk
 /soundpack
 /soundpack_modified
+/soundpack.zip
+/soundpack_tmp
 /ignore.txt

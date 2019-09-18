@@ -1,4 +1,4 @@
-#![windows_subsystem = "windows"]
+// #![windows_subsystem = "windows"]
 
 #[macro_use]
 extern crate serde_derive;
@@ -10,6 +10,7 @@ use std::path::PathBuf;
 mod sound;
 mod ui;
 mod message;
+mod download;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
