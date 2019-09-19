@@ -1,6 +1,6 @@
 use std::fs::{File, OpenOptions};
 use std::io::{copy, Seek, SeekFrom};
-use std::sync::{Arc, atomic::{Ordering, AtomicUsize}};
+use std::sync::{Arc, Mutex, atomic::{Ordering, AtomicUsize}};
 use reqwest::header::{CONTENT_LENGTH, RANGE};
 use reqwest::StatusCode;
 
@@ -13,56 +13,61 @@ pub fn run(thread_count: usize) {
         .get(CONTENT_LENGTH).unwrap()
         .to_str().unwrap()
         .parse::<u64>().unwrap();
-    // let mut initial_thread_count = 0;
-    let chunk_size = length / thread_count as u64;
+    let mut chunk_count = 0;
+    let chunk_size = length as usize / thread_count;
 
-    let output_file = File::create("./soundpack_tmp").unwrap();
-    output_file.set_len(length).unwrap();
+    let file = File::create("./soundpack_tmp").unwrap();
+    file.set_len(length).unwrap();
+
+    let chunks: Vec<_> = (0..length).step_by(chunk_size)
+        .map(|range_start| {
+            chunk_count += 1;
+            let range_end = std::cmp::min(range_start + chunk_size as u64, length)-1;
+            (range_start, range_end)
+        })
+        .collect();
     
-    let thread_count = Arc::new(AtomicUsize::new(0));
     let client = Arc::new(client);
-    for range_start in (0..length).step_by(chunk_size as usize) {
-        let thread_count = thread_count.clone();
+    let chunks = Arc::new(Mutex::new(chunks));
+    let cleared_chunks = Arc::new(AtomicUsize::new(0));
+    (0..thread_count).for_each(|_| {
         let client = client.clone();
-        
-        // initial_thread_count += 1;
-        thread_count.fetch_add(1, Ordering::SeqCst);
-
-        let range_end = std::cmp::min(range_start+chunk_size, length);
+        let chunks = chunks.clone();
+        let cleared_chunks = cleared_chunks.clone();
         std::thread::spawn(move || {
-            loop {
-                let request = client.get(URL).header(RANGE, format!("bytes={}-{}", range_start, range_end-1));
-                let mut response = request.send().unwrap();
-                match response.status() {
-                    StatusCode::OK | StatusCode::PARTIAL_CONTENT => {
-                        let mut file = OpenOptions::new()
-                            .write(true)
-                            .open("./soundpack_tmp")
-                            .unwrap();
-                        file.seek(SeekFrom::Start(range_start)).unwrap();
-                        copy(&mut response, &mut file).unwrap();
-                        thread_count.fetch_sub(1, Ordering::SeqCst);
-                        break
-                    },
-                    StatusCode::REQUEST_TIMEOUT | StatusCode::GATEWAY_TIMEOUT => continue,
-                    other => {
-                        panic!("Encountered error: StatusCode::{}", other)
+            while let Some((range_start, range_end)) = chunks.lock().unwrap().pop() {
+                let mut file = OpenOptions::new()
+                    .write(true)
+                    .open("./soundpack_tmp")
+                    .unwrap();
+                file.seek(SeekFrom::Start(range_start)).unwrap();
+                loop {
+                    let mut response = client.get(URL)
+                        .header(RANGE, format!("bytes={}-{}", range_start, range_end))
+                        .send().unwrap();
+                    match response.status() {
+                        StatusCode::OK | StatusCode::PARTIAL_CONTENT => {
+                            copy(&mut response, &mut file).unwrap();
+                            cleared_chunks.fetch_add(1, Ordering::AcqRel);
+                            break
+                        },
+                        StatusCode::REQUEST_TIMEOUT | StatusCode::GATEWAY_TIMEOUT => continue,
+                        other => panic!("Unexpected response status: StatusCode::{}", other),
                     }
                 }
             }
         });
-    }
+    });
 
     loop {
-        let current_thread_count = thread_count.load(Ordering::Relaxed);
-        println!("{}", current_thread_count);
-        if current_thread_count == 0 {
+        let cleared_chunks = cleared_chunks.load(Ordering::Relaxed);
+        if cleared_chunks == chunk_count {
             break
         }
-        std::thread::sleep(
-            std::time::Duration::from_secs(2)
-        );
+        println!("{:.2}%", (cleared_chunks * 100) as f32 / chunk_count as f32);
+        std::thread::sleep(std::time::Duration::from_secs(1));
     }
 
+    println!("Download Complete!");
     std::fs::rename("./soundpack_tmp", "./soundpack.zip").unwrap();
 }
