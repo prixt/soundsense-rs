@@ -49,7 +49,7 @@ Source at:
                 "download_soundpack" => {
                     std::thread::Builder::new()
                         .name("download_thread".into())
-                        .spawn(|| download::run(1<<5))
+                        .spawn(|| download::run(16))
                         .unwrap();
                 }
                 other => {
