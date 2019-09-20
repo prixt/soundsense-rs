@@ -1,7 +1,9 @@
 use std::sync::mpsc::Sender;
+use std::sync::atomic::{AtomicBool, Ordering};
 use web_view::*;
 use crate::message::{SoundMessage, VolumeChange};
 use crate::download;
+use lazy_static::*;
 
 pub fn run(
     tx: Sender<SoundMessage>,
@@ -47,10 +49,22 @@ Source at:
                         ).unwrap()
                 }
                 "download_soundpack" => {
-                    std::thread::Builder::new()
-                        .name("download_thread".into())
-                        .spawn(|| download::run(16))
-                        .unwrap();
+                    lazy_static! {
+                        static ref IS_DOWNLOADING: AtomicBool = AtomicBool::new(false); 
+                    }
+                    if dbg!(!IS_DOWNLOADING.swap(true, Ordering::SeqCst)) {
+                        let handle1 = webview.handle();
+                        let handle2 = webview.handle();
+                        std::thread::Builder::new()
+                            .name("download_thread".into())
+                            .spawn(move || download::run(&IS_DOWNLOADING, handle1, handle2))
+                            .unwrap();
+                    } else {
+                        webview.dialog().warning(
+                            "Already downloading!",
+                            "SoundSense-rs is currently already downloading the soundpack."
+                        ).unwrap()
+                    }
                 }
                 other => {
                     if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {
