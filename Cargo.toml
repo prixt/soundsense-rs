@@ -25,3 +25,5 @@ hyper = "0.12"
 lto = true
 codegen-units = 1
 opt-level = "z"
+incremental = false
+panic = "abort"

@@ -4,13 +4,14 @@ use hyper::{Client, Request, Body};
 use hyper::rt::{self, Future, Stream};
 
 pub fn run(_thread_count: usize) {
+    static SOUNDSENSE_URL: &str = "http://df.zweistein.cz/soundsense/soundpack.zip";
     rt::run(rt::lazy(|| {
         let client = Client::new();
-        let head_req = Request::head("http://df.zweistein.cz/soundsense/soundpack.zip")
+        let head_req = Request::head(SOUNDSENSE_URL)
             .body(Body::from(r#"{"library":"soundsense-rs"}"#))
             .expect("Failed to build HEAD request.");
         
-        let get_req = Request::get("http://df.zweistein.cz/soundsense/soundpack.zip")
+        let get_req = Request::get(SOUNDSENSE_URL)
             .body(Body::from(r#"{"library":"soundsense-rs"}"#))
             .expect("Failed to build GET request.");
         
