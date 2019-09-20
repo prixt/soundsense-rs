@@ -80,20 +80,21 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
                     manager = Some(SoundManager::new(&path, handle));
                 }
 
-                ChangeIgnoreList(path) => if let Some(manager) = manager.as_mut() {
-                    let file = &mut File::open(&path).unwrap();
-                    let buf = &mut Vec::new();
-                    file.read_to_end(buf).unwrap();
-                    let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
-                        let processed = FAULTY_ESCAPE.replace_all(expr, "$1");
-                        let processed = EMPTY_EXPR.replace_all(&processed, ")?");
-                        Regex::new(&processed).ok()
-                    }).collect();
-                    manager.set_ignore_list(list);
-                }
-
-                VolumeChange(channel, volume) => if let Some(manager) = manager.as_mut() {
-                    manager.set_volume(&channel, volume * 0.01);
+                message => if let Some(manager) = manager.as_mut() {
+                    if let ChangeIgnoreList(path) = message {
+                        let file = &mut File::open(&path).unwrap();
+                        let buf = &mut Vec::new();
+                        file.read_to_end(buf).unwrap();
+                        let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
+                            let processed = FAULTY_ESCAPE.replace_all(expr, "$1");
+                            let processed = EMPTY_EXPR.replace_all(&processed, ")?");
+                            Regex::new(&processed).ok()
+                        }).collect();
+                        manager.set_ignore_list(list);
+                    }
+                    else if let VolumeChange(channel,volume) = message {
+                        manager.set_volume(&channel, volume * 0.01);
+                    }
                 }
             }
         }
@@ -114,7 +115,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
         }
         if let Some(manager) = manager.as_mut() {
             manager.maintain();
-        };
+        }
         
         std::thread::sleep(Duration::from_millis(100));
     }

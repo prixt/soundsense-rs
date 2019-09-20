@@ -35,6 +35,12 @@ r#"
 				</div>
 			</div>
 		</div>
+		<div id="download_bar" class="w3-bar w3-border w3-bottom w3-light-gray w3-hide">
+			<div id="download_progress_bar" class="w3-small w3-red w3-center"
+				style="height:24px;width:50%">
+				50%
+			</div>
+		</div>
 		<div class="w3-container">
 			<table class="w3-table w3-bordered" id="channels"></table>
 		</div>
