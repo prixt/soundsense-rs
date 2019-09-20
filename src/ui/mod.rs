@@ -3,14 +3,14 @@ use web_view::*;
 use crate::message::{SoundMessage, VolumeChange};
 use crate::download;
 
-static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
-
 pub fn run(
     tx: Sender<SoundMessage>,
     gamelog_path: Option<std::path::PathBuf>,
     soundpack_path: Option<std::path::PathBuf>,
     ignore_path: Option<std::path::PathBuf>,
 ) {
+    static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
+    
     let webview = builder()
         .title("SoundSense-rs")
         .content(Content::Html(HTML))
