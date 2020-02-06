@@ -3,6 +3,8 @@ pub enum SoundMessage {
     ChangeSoundpack(std::path::PathBuf, crate::ui::UIHandle),
     ChangeIgnoreList(std::path::PathBuf),
     VolumeChange(Box<str>, f32),
+    SetCurrentPathsAsDefault,
+    SetCurrentVolumesAsDefault,
 }
 
 #[derive(Deserialize)]

@@ -28,8 +28,10 @@ r#"
 				<div class='w3-dropdown-content w3-bar-block' style='right:0'>
 					<button class='w3-bar-item w3-button'
 						onclick="external.invoke('download_soundpack')">Download Original's Soundpack</button>
-					<button class='w3-bar-item w3-button w3-disabled'><s>Set current paths as default</s></button>
-					<button class='w3-bar-item w3-button w3-disabled'><s>Set current volumes as default</s></button>
+					<button class='w3-bar-item w3-button'
+						onclick="external.invoke('set_current_paths_as_default')">Set current paths as default</button>
+					<button class='w3-bar-item w3-button'
+						onclick="external.invoke('set_current_volumes_as_default')">Set current volumes as default</button>
 					<button class="w3-bar-item w3-button"
 						onclick="external.invoke('show_about')">About</button>
 				</div>
