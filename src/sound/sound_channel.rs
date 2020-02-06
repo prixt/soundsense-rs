@@ -20,7 +20,7 @@ impl SoundChannel {
 	}
 
 	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
-		let delay = self.delay.checked_sub(100).unwrap_or(0);
+		let delay = self.delay.saturating_sub(100);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
 			if delay != 0 {

@@ -15,7 +15,7 @@ pub struct SoundManager {
 impl SoundManager {
 	pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
 		let mut sounds = Vec::new();
-		let device = default_output_device().unwrap();
+		let device = default_output_device().expect("Failed to get default audio output device.");
 		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
@@ -28,7 +28,7 @@ impl SoundManager {
 				let path = entry.path();
 				if path.is_dir() {
 					visit_dir(&path, func);
-				} else if path.is_file() && path.extension().unwrap() == "xml" {
+				} else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
 					func(&path);
 				}
 			}
@@ -241,8 +241,8 @@ impl SoundManager {
 			let sounds = &mut self.sounds;
 			let recent = &mut self.recent;
 			recent.retain(|&i| {
-				let timeout = sounds[i].current_timeout.checked_sub(100).unwrap_or(0);
-				let recent_call = sounds[i].recent_call.checked_sub(1).unwrap_or(0);
+				let timeout = sounds[i].current_timeout.saturating_sub(100);
+				let recent_call = sounds[i].recent_call.saturating_sub(1);
 				sounds[i].current_timeout = timeout;
 				sounds[i].recent_call = recent_call;
 				timeout != 0
