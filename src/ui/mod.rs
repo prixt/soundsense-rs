@@ -66,6 +66,12 @@ Source at:
                         ).unwrap()
                     }
                 }
+                "set_current_paths_as_default" => {
+                    tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
+                }
+                "set_current_volumes_as_default" => {
+                    tx.send(SoundMessage::SetCurrentVolumesAsDefault).unwrap()
+                }
                 other => {
                     if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {
                         tx.send(SoundMessage::VolumeChange(channel, volume)).unwrap()
