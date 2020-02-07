@@ -10,7 +10,7 @@ use std::path::PathBuf;
 mod sound;
 mod ui;
 mod message;
-mod download;
+//mod download;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

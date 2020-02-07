@@ -13,28 +13,6 @@ pub struct SoundManager {
 }
 
 impl SoundManager {
-<<<<<<< HEAD
-    pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
-        let mut sounds = Vec::new();
-        let device = default_output_device().unwrap();
-        let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
-        channels.insert(
-            String::from("misc").into_boxed_str(),
-            SoundChannel::new(&device)
-        );
-
-        fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
-            for entry in fs::read_dir(dir).unwrap() {
-                let entry = entry.unwrap();
-                let path = entry.path();
-                if path.is_dir() {
-                    visit_dir(&path, func);
-                } else if path.is_file() && path.extension().unwrap() == "xml" {
-                    func(&path);
-                }
-            }
-        }
-=======
 	pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
@@ -55,7 +33,6 @@ impl SoundManager {
 				}
 			}
 		}
->>>>>>> release
 
         let mut func = |file_path: &Path| {
             use quick_xml::{Reader, events::Event};
@@ -258,26 +235,6 @@ impl SoundManager {
         }
     }
 
-<<<<<<< HEAD
-    pub fn maintain(&mut self) {
-        self.concurency = 0;
-        {
-            let sounds = &mut self.sounds;
-            let recent = &mut self.recent;
-            recent.retain(|&i| {
-                let timeout = sounds[i].current_timeout.checked_sub(100).unwrap_or(0);
-                let recent_call = sounds[i].recent_call.checked_sub(1).unwrap_or(0);
-                sounds[i].current_timeout = timeout;
-                sounds[i].recent_call = recent_call;
-                timeout != 0
-            });
-        }
-        for chn in self.channels.values_mut() {
-            chn.maintain(&self.device, &mut self.rng, Some(&self.ui_handle));
-            self.concurency += chn.len();
-        }
-    }
-=======
 	pub fn maintain(&mut self) {
 		self.concurency = 0;
 		{
@@ -296,7 +253,6 @@ impl SoundManager {
 			self.concurency += chn.len();
 		}
 	}
->>>>>>> release
 
     pub fn set_volume(&mut self, channel_name: &str, volume: f32) {
         if channel_name == "all" {
