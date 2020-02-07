@@ -3,7 +3,7 @@ cache: cargo
 rust:
 - stable
 
-matrix:
+jobs:
   allow_failures:
   - rust: nightly
   fast_finish: true
@@ -24,7 +24,7 @@ before_deploy:
 
 deploy:
 - provider: releases
-  skip_cleanup: true
+  cleanup: false
   on:
     tags: true
     condition: "$TRAVIS_RUST_VERSION = stable"
@@ -32,5 +32,5 @@ deploy:
   file_glob: true
   file:
   - target/release/soundsense-rs-*
-  api_key:
+  token:
     secure: IRdsT0enLWr2qaa63GPnITLaYdar4vDKcKfo9Fm1PlDoWi1gigTZ2elegApdBQmWzcgdHEtiEayg9KtQw76R/l7bH2Yst3kvZPyd635g6Cwj9XUp70opApLeKdVGQhnvGA2fMehYXNfcLi8wn65th3katabvJhuU26C1ICAFt1ExVu2iDbIjUYPmg5O4f3BAvHYlGe5BNyA3C20sakD25ocp+Z/KaI1gfRdYvm3cwVuci63N2O0c+j2IHkaUg/bfA7XHRUqzxO1U4MNrRyYAwRRiIJ+wgKVh9qISt4N0Uw8IZR8ZmBkeK4OPkh+ggb05ONoOpCuOVDGKqMzbEG0SNKbDpwXdxfCkmbtNeXrORX6ZSlNPJOGaPhrD36WYZdRGOZMNC4lSgev/O2lZ/TfJc1Qj9kXlD7kbmG/vKrSkQYs4i/5p4a93E0zgBfyWiK1wiUYCc01PF5YKjbc0n7aymSO3z3CzGijwykH6MKFnInk1JtJ2aUjBM722oKVuCaW/JDikN4wMgPrlIMUY+dLrXBJZLXra89B/RS6un1NsTO0IPyMDQYKRgp6yTkvWJHux0m0Gwexnc+S/dPhb9Z023UDA0pb504XNc7ggpo9xtb5sUa/z/xQRoX3fKFSUEOoNLI3Kw/DE4QwHmnvVSdOGF4+s3Kj2JqnKSZusq3yycnw=
