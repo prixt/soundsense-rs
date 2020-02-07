@@ -19,6 +19,7 @@ impl SoundChannel {
         }
     }
 
+<<<<<<< HEAD
     pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
         let delay = self.delay.checked_sub(100).unwrap_or(0);
         self.delay = delay;
@@ -42,6 +43,31 @@ impl SoundChannel {
             self.looping.pause();
         }
     }
+=======
+	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
+		let delay = self.delay.saturating_sub(100);
+		self.delay = delay;
+		self.one_shots.retain(|s| {
+			if delay != 0 {
+				s.pause();
+			} else {
+				s.play();
+			}
+			!s.empty()
+		});
+		self.looping.play();
+		if self.one_shots.is_empty() && delay == 0 {
+			if self.looping.empty() && !self.files.is_empty() {
+				self.looping = SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
+				for file in self.files.iter() {
+					append_soundfile_to_sink(&self.looping, file, true, rng);
+				}
+			}
+		} else {
+			self.looping.pause();
+		}
+	}
+>>>>>>> release
 
     pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
         self.looping.stop();
