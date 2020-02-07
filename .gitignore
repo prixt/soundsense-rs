@@ -2,6 +2,11 @@
 **/*.rs.bk
 /soundpack
 /soundpack_modified
+<<<<<<< HEAD
 /soundpack.zip
 /soundpack_tmp
 /ignore.txt
+=======
+/ignore.txt
+soundpack.zip
+>>>>>>> release
