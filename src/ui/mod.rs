@@ -1,9 +1,9 @@
 use std::sync::mpsc::Sender;
-use std::sync::atomic::{AtomicBool, Ordering};
+// use std::sync::atomic::{AtomicBool, Ordering};
 use web_view::*;
 use crate::message::{SoundMessage, VolumeChange};
-use crate::download;
-use lazy_static::*;
+// use lazy_static::*;
+// use crate::download;
 
 pub fn run(
     tx: Sender<SoundMessage>,
@@ -48,24 +48,24 @@ Source at:
     https://github.com/prixt/soundsense-rs",
                         ).unwrap()
                 }
-                "download_soundpack" => {
-                    lazy_static! {
-                        static ref IS_DOWNLOADING: AtomicBool = AtomicBool::new(false); 
-                    }
-                    if dbg!(!IS_DOWNLOADING.swap(true, Ordering::SeqCst)) {
-                        let handle1 = webview.handle();
-                        let handle2 = webview.handle();
-                        std::thread::Builder::new()
-                            .name("download_thread".into())
-                            .spawn(move || download::run(&IS_DOWNLOADING, handle1, handle2))
-                            .unwrap();
-                    } else {
-                        webview.dialog().warning(
-                            "Already downloading!",
-                            "SoundSense-rs is currently already downloading the soundpack."
-                        ).unwrap()
-                    }
-                }
+                // "download_soundpack" => {
+                    // lazy_static! {
+                    //     static ref IS_DOWNLOADING: AtomicBool = AtomicBool::new(false); 
+                    // }
+                    // if dbg!(!IS_DOWNLOADING.swap(true, Ordering::SeqCst)) {
+                    //     let handle1 = webview.handle();
+                    //     let handle2 = webview.handle();
+                    //     std::thread::Builder::new()
+                    //         .name("download_thread".into())
+                    //         .spawn(move || download::run(&IS_DOWNLOADING, handle1, handle2))
+                    //         .unwrap();
+                    // } else {
+                    //     webview.dialog().warning(
+                    //         "Already downloading!",
+                    //         "SoundSense-rs is currently already downloading the soundpack."
+                    //     ).unwrap()
+                    // }
+                // }
                 "set_current_paths_as_default" => {
                     tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
                 }
