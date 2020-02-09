@@ -1,4 +1,4 @@
-use std::sync::mpsc::Receiver;
+use std::sync::mpsc::{Sender, Receiver};
 use std::time::Duration;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
@@ -6,7 +6,6 @@ use std::path::{Path, PathBuf};
 use std::collections::{HashMap, HashSet};
 
 use crate::message::*;
-use crate::ui::UIHandle;
 use notify::{Watcher, RecursiveMode, DebouncedEvent};
 use rodio::*;
 use rand::prelude::*;
@@ -59,14 +58,17 @@ pub struct SoundEntry {
     pub recent_call: usize,
 }
 
-pub fn run(sound_rx: Receiver<SoundMessage>) {
+pub fn run(
+    sound_receiver: Receiver<SoundMessage>,
+    ui_sender: Sender<Vec<String>>
+) {
     let mut manager : Option<SoundManager> = None;
     let mut file : Option<File> = None;
     let (notify_tx, notify_rx) = std::sync::mpsc::channel();
     let mut watcher = notify::watcher(notify_tx, Duration::from_millis(100)).unwrap();
 
     loop {
-        for message in sound_rx.try_iter() {
+        for message in sound_receiver.try_iter() {
             use SoundMessage::*;
             match message {
                 ChangeGamelog(path) => {
@@ -76,8 +78,8 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
                     file = Some(file0);
                 }
 
-                ChangeSoundpack(path, handle) => {
-                    manager = Some(SoundManager::new(&path, handle));
+                ChangeSoundpack(path) => {
+                    manager = Some(SoundManager::new(&path, ui_sender.clone()));
                 }
 
                 message => if let Some(manager) = manager.as_mut() {

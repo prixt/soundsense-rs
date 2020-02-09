@@ -19,7 +19,7 @@ impl SoundChannel {
         }
     }
 
-	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, _ui_handle: Option<&UIHandle>) {
+	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng) {
 		let delay = self.delay.saturating_sub(100);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
@@ -48,7 +48,7 @@ impl SoundChannel {
         self.files.clear();
         self.files.extend_from_slice(files);
         self.delay = delay;
-        self.maintain(device, rng, None);
+        self.maintain(device, rng);
     }
 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {

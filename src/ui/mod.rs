@@ -1,166 +1,330 @@
-use std::sync::mpsc::Sender;
-// use std::sync::atomic::{AtomicBool, Ordering};
-use web_view::*;
-use crate::message::{SoundMessage, VolumeChange};
-// use lazy_static::*;
-// use crate::download;
+use std::env;
+use std::path::PathBuf;
+use std::sync::mpsc::{channel, Sender, Receiver};
+use iced::*;
+use tinyfiledialogs as tfd;
+use crate::message::*;
 
-pub fn run(
-    tx: Sender<SoundMessage>,
-    gamelog_path: Option<std::path::PathBuf>,
-    soundpack_path: Option<std::path::PathBuf>,
-    ignore_path: Option<std::path::PathBuf>,
-) {
-    static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
+pub fn run() {
+    let mut setting = Settings::default();
+    setting.window = window::Settings {
+        size: (600, 400),
+        resizable: true,
+        decorations: true,
+    };
+    UIStruct::run(setting)
+}
+
+struct ChannelSlider {
+    channel_name: String,
+    channel_volume: f32,
+    channel_slider: slider::State,
+}
+
+struct UIStruct {
+    gamelog_button: button::State,
+    soundpack_button: button::State,
+    ignore_button: button::State,
+    about_button: button::State,
+    scroll_state: scrollable::State,
+
+    volumes: Vec<ChannelSlider>,
+    sound_sender: Sender<SoundMessage>,
+    ui_receiver: Receiver<Vec<String>>,
+}
+
+impl Application for UIStruct {
+    type Message = UIMessage;
+    type Executor = executor::Default;
+
+    fn new() -> (Self, Command<Self::Message>) {
+        use UIMessage::*;
+
+        let (sound_sender, sound_receiver) = channel();
+        let (ui_sender, ui_receiver) = channel();
+        std::thread::Builder::new()
+            .name("sound_thread".to_string())
+            .spawn(move || crate::sound::run(sound_receiver, ui_sender)).unwrap();
+
+        let args: Vec<String> = env::args().collect();
+        let mut opts = getopts::Options::new();
+        opts.optopt("l", "gamelog", "Path to the gamelog.txt file.", "LOG_FILE");
+        opts.optopt("p", "soundpack", "Path to the soundpack directory.", "PACK_DIR");
+        opts.optopt("i", "ignore", "Path to the ignore.txt file.", "IGNORE_FILE");
     
-    let webview = builder()
-        .title("SoundSense-rs")
-        .content(Content::Html(HTML))
-        .size(500, 550)
-        .resizable(true)
-        .debug(true)
-        .user_data(())
-        .invoke_handler(|webview, arg| {
-            match arg {
-                "load_gamelog" => if let Some(path) = webview.dialog()
-                    .open_file("Choose gamelog.txt", "")
-                    .unwrap() {
-                    tx.send(SoundMessage::ChangeGamelog(path)).unwrap()
+        let matches = opts.parse(&args[1..]).unwrap();
+        let mut init_commands = vec!();
+        if let Some(path) = matches.opt_str("l")
+            .and_then(|path| {
+                let path = PathBuf::from(path);
+                if path.is_file() {
+                    Some(path)
+                } else {
+                    None
                 }
-                "load_soundpack" => if let Some(path) = webview.dialog()
-                    .choose_directory("Choose soundpack directory", "")
-                    .unwrap() {
-                    tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap()
+            })
+            .or_else(|| {
+                let path = PathBuf::from("./gamelog.txt");
+                if path.is_file() {
+                    Some(path)
+                } else {
+                    None
                 }
-                "load_ignore_list" => if let Some(path) = webview.dialog()
-                    .open_file("Choose ignore.txt", "")
-                    .unwrap() {
-                    tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap()
+            })
+        {
+            let tx = sound_sender.clone();
+            init_commands.push(
+                Command::perform(
+                    async move {
+                        tx.send(
+                            SoundMessage::ChangeGamelog(path)
+                        ).unwrap();
+                    },
+                    |()| Resolved
+                )
+            )
+        }
+
+        if let Some(path) = matches.opt_str("p")
+            .and_then(|path| {
+                let path = PathBuf::from(path);
+                if path.is_dir() {
+                    Some(path)
+                } else {
+                    None
                 }
-                "show_about" => {
-                    webview.dialog()
-                        .info(
-"SoundSense-rs",
-r"Created by prixt
+            })
+            .or_else(|| {
+                let path = PathBuf::from("./soundpack");
+                if path.is_dir() {
+                    Some(path)
+                } else {
+                    None
+                }
+            })
+        {
+            let tx = sound_sender.clone();
+            init_commands.push(
+                Command::perform(
+                    async move {
+                        tx.send(
+                            SoundMessage::ChangeSoundpack(path)
+                        ).unwrap();
+                    },
+                    |()| SoundpackLoaded
+                )
+            )
+        }
+
+        if let Some(path) = matches.opt_str("i")
+            .and_then(|path| {
+                let path = PathBuf::from(path);
+                if path.is_file() {
+                    Some(path)
+                } else {
+                    None
+                }
+            })
+            .or_else(|| {
+                let path = PathBuf::from("./ignore.txt");
+                if path.is_file() {
+                    Some(path)
+                } else {
+                    None
+                }
+            })
+        {
+            let tx = sound_sender.clone();
+            init_commands.push(
+                Command::perform(
+                    async move {
+                        tx.send(
+                            SoundMessage::ChangeIgnoreList(path)
+                        ).unwrap();
+                    },
+                    |()| Resolved
+                )
+            )
+        }
+
+        let app = UIStruct {
+            gamelog_button: button::State::default(),
+            soundpack_button: button::State::default(),
+            ignore_button: button::State::default(),
+            about_button: button::State::default(),
+            scroll_state: scrollable::State::default(),
+
+            volumes: Vec::new(),
+            sound_sender,
+            ui_receiver
+        };
+
+        (
+            app,
+            Command::batch(init_commands)
+        )
+    }
+
+    fn title(&self) -> String {
+        String::from("SoundSense-rs")
+    }
+
+    fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
+        use UIMessage::*;
+
+        match message {
+            GamelogPressed => {
+                let sound_sender = self.sound_sender.clone();
+                Command::perform(
+                    async move {
+                        if let Some(file_path) = tfd::open_file_dialog(
+                            "Open gamelog.txt",
+                            "gamelog.txt",
+                            Some((&["*.txt"], ".txt"))
+                        ) {
+                            sound_sender.send(SoundMessage::ChangeGamelog(file_path.into()))
+                                .expect("Failed to send SoundMessage::ChangeGamelog");
+                        }
+                    },
+                    |()| Resolved
+                )
+            }
+
+            SoundpackPressed => {
+                let sound_sender = self.sound_sender.clone();
+                Command::perform(
+                    async move {
+                        if let Some(file_path) = tfd::select_folder_dialog(
+                            "Select soundpack directory",
+                            "soundpack"
+                        ) {
+                            sound_sender.send(SoundMessage::ChangeSoundpack(file_path.into()))
+                                .expect("Failed to send SoundMessage::ChangeSoundpack");
+                            true
+                        } else {
+                            false
+                        }
+                    },
+                    |path_found| if path_found {
+                        SoundpackLoaded
+                    } else {
+                        Resolved
+                    }
+                )
+            } 
+            SoundpackLoaded => {
+                let channels = self.ui_receiver.recv().unwrap();
+                self.volumes = channels
+                    .into_iter()
+                    .map(|channel_name| {
+                        ChannelSlider {
+                            channel_name,
+                            channel_volume: 100.0,
+                            channel_slider: slider::State::default(),
+                        }
+                    })
+                    .collect();
+                Command::none()
+            }
+
+            IgnorePressed => {
+                let sound_sender = self.sound_sender.clone();
+                Command::perform(
+                    async move {
+                        if let Some(file_path) = tfd::open_file_dialog(
+                            "Open ignore.txt",
+                            "ignore.txt",
+                            Some((&["*.txt"], ".txt"))
+                        ) {
+                            sound_sender.send(SoundMessage::ChangeIgnoreList(file_path.into()))
+                                .expect("Failed to send SoundMessage::ChangeIgnoreList");
+                        }
+                    },
+                    |()| Resolved
+                )
+            }
+
+            AboutPressed => Command::perform(
+                async {
+                    tfd::message_box_ok(
+                        "About",
+                        r"Created by prixt
 The original SoundSense can be found at:
     http://df.zweistein.cz/soundsense/
 Source at:
     https://github.com/prixt/soundsense-rs",
-                        ).unwrap()
-                }
-                // "download_soundpack" => {
-                    // lazy_static! {
-                    //     static ref IS_DOWNLOADING: AtomicBool = AtomicBool::new(false); 
-                    // }
-                    // if dbg!(!IS_DOWNLOADING.swap(true, Ordering::SeqCst)) {
-                    //     let handle1 = webview.handle();
-                    //     let handle2 = webview.handle();
-                    //     std::thread::Builder::new()
-                    //         .name("download_thread".into())
-                    //         .spawn(move || download::run(&IS_DOWNLOADING, handle1, handle2))
-                    //         .unwrap();
-                    // } else {
-                    //     webview.dialog().warning(
-                    //         "Already downloading!",
-                    //         "SoundSense-rs is currently already downloading the soundpack."
-                    //     ).unwrap()
-                    // }
-                // }
-                "set_current_paths_as_default" => {
-                    tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
-                }
-                "set_current_volumes_as_default" => {
-                    tx.send(SoundMessage::SetCurrentVolumesAsDefault).unwrap()
-                }
-                other => {
-                    if let Ok(VolumeChange{channel, volume}) = serde_json::from_str(other) {
-                        tx.send(SoundMessage::VolumeChange(channel, volume)).unwrap()
-                    } else {
-                        unreachable!("Unrecognized argument: {}", other)
-                    }
-                }
+                        tfd::MessageBoxIcon::Info
+                    )
+                },
+                |()| Resolved
+            ),
+
+            ChannelVolumeChanged(idx, volume) => {
+                let mut volume_slider = unsafe {self.volumes.get_unchecked_mut(idx)};
+                volume_slider.channel_volume = volume;
+                self.sound_sender.send(
+                    SoundMessage::VolumeChange(volume_slider.channel_name.clone(), volume)
+                ).unwrap();
+                Command::none()
             }
-            Ok(())
-        })
-        .build()
-        .unwrap();
-    
-    if let Some(path) = gamelog_path {
-        tx.send(SoundMessage::ChangeGamelog(path)).unwrap();
-    }
-    if let Some(path) = soundpack_path {
-        tx.send(SoundMessage::ChangeSoundpack(path, UIHandle::new(webview.handle()))).unwrap();
-    }
-    if let Some(path) = ignore_path {
-        tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap();
-    }
-    
-    webview.run().unwrap();
-}
-
-pub struct UIHandle {
-    handle: Handle<()>,
-    channels: Vec<Box<str>>,
-}
-
-impl UIHandle {
-    pub fn new(handle: Handle<()>) -> Self {
-        Self {
-            handle, channels: vec![],
+            
+            _ => Command::none()
         }
     }
-    pub fn add_slider(&mut self, name: String) {
-        let name = name.into_boxed_str();
-        if !self.channels.contains(&name){
-            self.channels.push(name.clone());
-            self.handle.dispatch(
-                move |webview| {
-                    let script = format!(
-r#"
-let channels = document.getElementById('channels');
-channels.insertAdjacentHTML(
-    'beforeend',
-    "<tr class='w3-row'> \
-        <td class='w3-center' style='width:50px'><h4>{channel_name}</h4></td> \
-        <td class='w3-rest'> \
-            <input type='range' \
-                name='{channel_name}_slider' \
-                id='{channel_name}_slider' \
-                min='0' \
-                max='100' \
-                value='100' \
-            /> \
-        </td> \
-    </tr>"
-);
 
-let slider = document.getElementById("{channel_name}_slider");
-slider.addEventListener(
-    /MSIE|Trident|Edge/.test(window.navigator.userAgent) ? 'change' : 'input',
-    function() {{
-        external.invoke('{{"channel":"{channel_name}", "volume":'+this.value+'}}');
-    }},
-    false
-);
-"#,
-                    channel_name=&name);
-                    webview.eval(&script)
-                }
-            ).unwrap();
-        }
-    }
-    pub fn clear_sliders(&mut self) {
-        self.handle.dispatch(
-            |webview| {
-                webview.eval(
-r#"
-let channels = document.getElementById("channels");
-while (channels.firstChild) {
-    channels.removeChild(channels.firstChild);
-}
-"#
+    fn view(&mut self) -> Element<Self::Message> {
+        let button_tray = Row::new()
+                .align_items(Align::Start)
+                .spacing(5)
+                .push(
+                    Button::new(&mut self.gamelog_button, Text::new("Load gamelog.txt").size(16))
+                        .on_press(UIMessage::GamelogPressed),
                 )
-            }
-        ).unwrap();
+                .push(
+                    Button::new(&mut self.soundpack_button, Text::new("Load soundpack").size(16))
+                        .on_press(UIMessage::SoundpackPressed),
+                )
+                .push(
+                    Button::new(&mut self.ignore_button, Text::new("Load ignore.txt").size(16))
+                        .on_press(UIMessage::IgnorePressed),
+                )
+                .push(Row::new().width(Length::Fill))
+                .push(
+                    Button::new(&mut self.about_button, Text::new("About").size(16))
+                        .on_press(UIMessage::AboutPressed),
+                );
+            let scroll = Scrollable::new(&mut self.scroll_state).padding(15).spacing(5);
+            let volume_sliders_scroll = self.volumes
+                .iter_mut()
+                .enumerate()
+                .fold(scroll, |scroll, (idx, channel)| {
+                    let row = Row::new()
+                        .push(
+                            Text::new(format!("{}\n{}", channel.channel_name, channel.channel_volume as u32))
+                                .size(16)
+                                .horizontal_alignment(iced::HorizontalAlignment::Center)
+                                .width(Length::Units(60))
+                        )
+                        .push(
+                            Slider::new(
+                                &mut channel.channel_slider,
+                                0.0..=100.0,
+                                channel.channel_volume,
+                                move |new_volume| UIMessage::ChannelVolumeChanged(idx, new_volume)
+                            )
+                        );
+                    
+                    scroll.push(row)
+                });
+            let contents = Column::new()
+                .padding(5)
+                .align_items(Align::Start)
+                .push(button_tray)
+                .push(volume_sliders_scroll);
+            
+            Container::new(contents)
+                .width(Length::Fill)
+                .height(Length::Fill)
+                .into()
     }
 }
