@@ -8,12 +8,12 @@ pub struct SoundManager {
     channels: HashMap<Box<str>, SoundChannel>,
     total_volume: f32,
     concurency: usize,
-    ui_handle: UIHandle,
+    // ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
 }
 
 impl SoundManager {
-	pub fn new(sound_dir: &Path, mut ui_handle: UIHandle) -> Self {
+	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Self {
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
 		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
@@ -210,16 +210,21 @@ impl SoundManager {
         };
 
         visit_dir(sound_dir, &mut func);
-        ui_handle.clear_sliders();
-        ui_handle.add_slider("all".to_string());
-        ui_handle.add_slider("music".to_string());
-        ui_handle.add_slider("weather".to_string());
-        ui_handle.add_slider("trade".to_string());
-        ui_handle.add_slider("swords".to_string());
-        ui_handle.add_slider("misc".to_string());
-        for channel in channels.keys() {
-            ui_handle.add_slider(channel.to_string());
+
+        let mut channel_names: Vec<Box<str>> = vec![
+            "all".into(),
+            "music".into(),
+            "weather".into(),
+            "trade".into(),
+            "swords".into(),
+            "misc".into(),
+        ];
+        for channel_name in channels.keys() {
+            if !channel_names.contains(channel_name) {
+                channel_names.push(channel_name.clone());
+            }
         }
+        ui_sender.send(UIMessage::LoadedSoundpack(channel_names)).unwrap();
 
         // println!("Finished loading!");
         Self {
@@ -230,7 +235,7 @@ impl SoundManager {
             channels,
             total_volume: 1.0,
             concurency: 0,
-            ui_handle,
+            // ui_sender,
             rng: thread_rng(),
         }
     }
@@ -249,7 +254,7 @@ impl SoundManager {
 			});
 		}
 		for chn in self.channels.values_mut() {
-			chn.maintain(&self.device, &mut self.rng, Some(&self.ui_handle));
+			chn.maintain(&self.device, &mut self.rng);
 			self.concurency += chn.len();
 		}
 	}

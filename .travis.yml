@@ -13,14 +13,14 @@ os:
 - linux
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libasound2-dev ; sudo apt-get install -y libwebkit2gtk-4.0 ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev ; fi
 
 script:
   - cargo build --verbose --release
 
 before_deploy:
-- if [[ -f target/release/soundsense-rs ]]; then mv target/release/soundsense-rs "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME"; fi
 - if [[ -f target/release/soundsense-rs.exe ]]; then mv target/release/soundsense-rs.exe "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME.exe"; fi
+- if [[ -f target/release/soundsense-rs ]]; then mv target/release/soundsense-rs "target/release/soundsense-rs-$TRAVIS_TAG-$TRAVIS_OS_NAME"; fi
 
 deploy:
 - provider: releases
