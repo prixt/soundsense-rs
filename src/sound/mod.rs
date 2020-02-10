@@ -6,7 +6,6 @@ use std::path::{Path, PathBuf};
 use std::collections::{HashMap, HashSet};
 
 use crate::message::*;
-use crate::ui::UIHandle;
 use notify::{Watcher, RecursiveMode, DebouncedEvent};
 use rodio::*;
 use rand::prelude::*;
