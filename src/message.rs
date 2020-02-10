@@ -7,6 +7,7 @@ pub enum SoundMessage {
     SetCurrentVolumesAsDefault,
 }
 
+#[allow(dead_code)]
 pub enum UIMessage {
     LoadedGamelog,
     LoadedSoundpack(Vec<Box<str>>),

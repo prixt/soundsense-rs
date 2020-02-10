@@ -8,7 +8,7 @@ pub struct SoundManager {
     channels: HashMap<Box<str>, SoundChannel>,
     total_volume: f32,
     concurency: usize,
-    ui_sender: Sender<UIMessage>,
+    // ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
 }
 
@@ -235,7 +235,7 @@ impl SoundManager {
             channels,
             total_volume: 1.0,
             concurency: 0,
-            ui_sender,
+            // ui_sender,
             rng: thread_rng(),
         }
     }
