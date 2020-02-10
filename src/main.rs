@@ -1,8 +1,4 @@
 #![windows_subsystem = "windows"]
-
-#[macro_use]
-extern crate serde_derive;
-
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
@@ -66,9 +62,10 @@ fn main() {
         }
     });
 
-    let (tx, rx) = channel();
+    let (sound_tx, sound_rx) = channel();
+    let (ui_tx, ui_rx) = channel();
     std::thread::Builder::new()
         .name("sound_thread".to_string())
-        .spawn(move || sound::run(rx)).unwrap();
-    ui::run(tx, gamelog_path, soundpack_path, ignore_path);
+        .spawn(move || sound::run(sound_rx, ui_tx)).unwrap();
+    ui::run(sound_tx, ui_rx, gamelog_path, soundpack_path, ignore_path);
 }
