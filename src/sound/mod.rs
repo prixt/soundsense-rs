@@ -1,4 +1,4 @@
-use std::sync::mpsc::Receiver;
+use std::sync::mpsc::{Sender, Receiver};
 use std::time::Duration;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
@@ -59,7 +59,7 @@ pub struct SoundEntry {
     pub recent_call: usize,
 }
 
-pub fn run(sound_rx: Receiver<SoundMessage>) {
+pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
     let mut manager : Option<SoundManager> = None;
     let mut file : Option<File> = None;
     let (notify_tx, notify_rx) = std::sync::mpsc::channel();
@@ -76,8 +76,8 @@ pub fn run(sound_rx: Receiver<SoundMessage>) {
                     file = Some(file0);
                 }
 
-                ChangeSoundpack(path, handle) => {
-                    manager = Some(SoundManager::new(&path, handle));
+                ChangeSoundpack(path) => {
+                    manager = Some(SoundManager::new(&path, ui_tx.clone()));
                 }
 
                 message => if let Some(manager) = manager.as_mut() {
