@@ -1,9 +1,6 @@
 name: Build
 
-on:
-  push:
-    tags-ignore:
-      - v*
+on: push
 
 jobs:
   build:
@@ -13,9 +10,6 @@ jobs:
     name: Build
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-      
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
         run: sudo apt-get install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev
