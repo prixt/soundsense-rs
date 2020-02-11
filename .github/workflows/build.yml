@@ -1,6 +1,9 @@
 name: Build
 
-on: push
+on:
+  push:
+    tags-ignore:
+      - v*
 
 jobs:
   build:
@@ -15,10 +18,7 @@ jobs:
       
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libasound2-dev libgtk-3-dev libwebket2gtk-4.0-dev
+        run: sudo apt-get install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev
       
       - name: Cargo Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release
+        run: cargo build --release
