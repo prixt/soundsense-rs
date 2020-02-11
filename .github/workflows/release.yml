@@ -18,7 +18,7 @@ jobs:
         uses: olegtarasov/get-tag@v1
       
       - name: Echo Tag
-        run: echo ${{steps.tag_name.output.tag }}
+        run: echo ${{steps.tag_name.outputs.tag }}
       
       - name: Create Release
         id: create_release
@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: upload_url
-          path: upload_url
+          path: .
 
   build-linux:
     needs: prepare-release
