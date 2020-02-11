@@ -1,9 +1,9 @@
+name: Build
+
 on:
   push:
     tags-ignore:
       - 'v*'
-
-name: Build
 
 jobs:
   build:
