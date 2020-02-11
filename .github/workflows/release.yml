@@ -53,8 +53,12 @@ jobs:
         with:
           name: upload_url
       
+      - name: Get URL
+        id: get_url
+        run: echo ::set-output name=url::$( cat upload_url/upload_url )
+      
       - name: Echo URL
-        run: echo $( cat upload_url/upload_url )
+        run: echo ${{steps.get_url.outputs.url}}
       
       - name: Install dependencies
         run: |
@@ -76,10 +80,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: $( cat upload_url/upload_url )
+          upload_url: ${{steps.get_url.outputs.url}}
           asset_path: ./target/release/soundsense-rs
           asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-linux
-          asset_type: application/octet-stream  
+          asset_content_type: application/octet-stream  
 
   build-macos:
     needs: prepare-release
@@ -94,8 +98,12 @@ jobs:
         with:
           name: upload_url
       
+      - name: Get URL
+        id: get_url
+        run: echo ::set-output name=url::$( cat upload_url/upload_url )
+      
       - name: Echo URL
-        run: echo $( cat upload_url/upload_url )
+        run: echo ${{steps.get_url.outputs.url}}
       
       - name: Get Tag
         id: tag_name
@@ -112,10 +120,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: $( cat upload_url/upload_url )
+          upload_url: ${{steps.get_url.outputs.url}}
           asset_path: ./target/release/soundsense-rs
           asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-osx
-          asset_type: application/octet-stream
+          asset_content_type: application/octet-stream
   
   build-windows:
     needs: prepare-release
@@ -130,8 +138,12 @@ jobs:
         with:
           name: upload_url
       
+      - name: Get URL
+        id: get_url
+        run: echo ::set-output name=url::$( cat upload_url/upload_url )
+      
       - name: Echo URL
-        run: echo $( cat upload_url/upload_url )
+        run: echo ${{steps.get_url.outputs.url}}
       
       - name: Get Tag
         id: tag_name
@@ -148,7 +160,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: $( cat upload_url/upload_url )
+          upload_url: ${{steps.get_url.outputs.url}}
           asset_path: ./target/release/soundsense-rs.exe
           asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-windows.exe
           asset_content_type: application/octet-stream
