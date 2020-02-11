@@ -1,0 +1,91 @@
+on:
+  push:
+    branch: release
+    tags:
+      - 'v*'
+
+name: Release
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  build-linux:
+    needs: prepare-release
+    name: Build Release (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ jobs.prepare-release.steps.create_release.output.upload_url }}
+          asset_path: ./target/release/soundsense-rs
+          asset_name: soundsense-rs-${{github.ref}}-linux
+          asset_type: application/octet-stream  
+
+  build-macos:
+    needs: prepare-release
+    name: Build Release (MacOS)
+    runs-on: macos-latest
+    steps:
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ jobs.prepare-release.steps.create_release.output.upload_url }}
+          asset_path: ./target/release/soundsense-rs
+          asset_name: soundsense-rs-${{github.ref}}-osx
+          asset_type: application/octet-stream
+  
+  build-windows:
+    needs: prepare-release
+    name: Build Release (Windows)
+    runs-on: windows-latest
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install -y libasound2-dev libgtk-3-dev libwebket2gtk-4.0-dev
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ jobs.prepare-release.steps.create_release.output.upload_url }}
+          asset_path: ./target/release/soundsense-rs.exe
+          asset_name: soundsense-rs-${{github.ref}}-windows.exe
+          asset_type: application/octet-stream
