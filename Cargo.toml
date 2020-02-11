@@ -16,11 +16,9 @@ rand = "0.7"
 lazy_static = "1.4"
 web-view = "0.6"
 getopts = "0.2"
-# hyper = "0.13"
 
 [profile.release]
 lto = true
 codegen-units = 1
 opt-level = "z"
 incremental = false
-# panic = "abort"
