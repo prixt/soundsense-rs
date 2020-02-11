@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+on:
+  push:
+    tags-ignore:
+      - v*
+
+>>>>>>> fixed tag trigger [travis skip]
 name: Build
 
 on: push
