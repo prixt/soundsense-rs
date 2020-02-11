@@ -151,4 +151,4 @@ jobs:
           upload_url: $( cat upload_url/upload_url )
           asset_path: ./target/release/soundsense-rs.exe
           asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-windows.exe
-          asset_type: application/octet-stream
+          asset_content_type: application/octet-stream
