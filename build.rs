@@ -14,6 +14,7 @@ r#"
 	<head>
 		<style type="text/css">{w3}</style>
 		<style type="text/css">{range}</style>
+		<script type="text/javascript">{js}</script>
 	</head>
 	<body>
 		<div class="w3-bar w3-border w3-light-grey w3-small">
@@ -48,6 +49,7 @@ r#"
 "#,
 		w3=include_str!("src/ui/w3.css"),
 		range=include_str!("src/ui/range.css"),
+		js=include_str!("src/ui/script.js")
 	)?;
 
 	Ok(())
