@@ -29,8 +29,6 @@ jobs:
     name: Build Release (Linux)
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
@@ -52,8 +50,6 @@ jobs:
     name: Build Release (MacOS)
     runs-on: macos-latest
     steps:
-      - name: Install dependencies
-      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
