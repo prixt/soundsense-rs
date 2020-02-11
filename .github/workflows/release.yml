@@ -8,11 +8,15 @@ on:
       - 'v*'
 jobs:
   prepare-release:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: Prepare Release
     steps:
       - name: Checkout code
         uses: actions/checkout@master
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
       
       - name: Create Release
         id: create_release
@@ -20,26 +24,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ steps.tag_name.output.tag }}
+          release_name: ${{ steps.tag_name.output.tag }}
           draft: false
           prerelease: false
       
       - name: Write Down URL
-        run: |
-          echo ${{steps.create_release.outputs.upload_url}} > upload_url
+        run: echo "${{steps.create_release.outputs.upload_url}}" > ./upload_url
       
       - name: Upload URL
         uses: actions/upload-artifact@v1
         with:
           name: upload_url
-          path: upload_url
+          path: ./upload_url
 
   build-linux:
     needs: prepare-release
     name: Build Release (Linux)
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
@@ -52,16 +58,21 @@ jobs:
           name: upload_url
       
       - name: Set URL as environment variable
-        run: echo "::env-set name=upload_url::$( <upload_url )"
+        id: get_upload_url
+        run: echo "::env-output name=url::$( <upload_url )"
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
       
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ job.env.upload_url }}
+          upload_url: ${{ steps.get_upload_url.output.url }}
           asset_path: ./target/release/soundsense-rs
-          asset_name: soundsense-rs-${{github.ref}}-linux
+          asset_name: soundsense-rs-${{steps.tag_name.output.tag}}-linux
           asset_type: application/octet-stream  
 
   build-macos:
@@ -69,6 +80,9 @@ jobs:
     name: Build Release (MacOS)
     runs-on: macos-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
@@ -81,16 +95,21 @@ jobs:
           name: upload_url
       
       - name: Set URL as environment variable
-        run: echo "::env-set name=upload_url::$( <upload_url )"
+        id: get_upload_url
+        run: echo "::env-output name=url::$( <upload_url )"
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
       
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ job.env.upload_url }}
+          upload_url: ${{ steps.get_upload_url.output.url }}
           asset_path: ./target/release/soundsense-rs
-          asset_name: soundsense-rs-${{github.ref}}-osx
+          asset_name: soundsense-rs-${{steps.tag_name.output.tag}}-osx
           asset_type: application/octet-stream
   
   build-windows:
@@ -98,6 +117,9 @@ jobs:
     name: Build Release (Windows)
     runs-on: windows-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
       - name: Install dependencies
         run: |
           sudo apt update
@@ -115,14 +137,19 @@ jobs:
           name: upload_url
       
       - name: Set URL as environment variable
-        run: echo "::env-set name=upload_url::$( <upload_url )"
+        id: get_upload_url
+        run: echo "::env-output name=url::$( <upload_url )"
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
       
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ job.env.upload_url }}
+          upload_url: ${{ steps.get_upload_url.output.url }}
           asset_path: ./target/release/soundsense-rs.exe
-          asset_name: soundsense-rs-${{github.ref}}-windows.exe
+          asset_name: soundsense-rs-${{steps.tag_name.output.tag}}-windows.exe
           asset_type: application/octet-stream
