@@ -55,7 +55,10 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( cat upload_url/upload_url )"
+        run: echo "::env-output name=url::\"$( cat upload_url/upload_url )\"""
+      
+      - name: Echo URL
+        run: echo "${{ get_upload_url.outputs.url }}""
       
       - name: Install dependencies
         run: |
@@ -97,7 +100,10 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( cat upload_url/upload_url )"
+        run: echo "::env-output name=url::\"$( cat upload_url/upload_url )\"""
+      
+      - name: Echo URL
+        run: echo "${{ get_upload_url.outputs.url }}""
       
       - name: Get Tag
         id: tag_name
@@ -134,7 +140,10 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( cat upload_url/upload_url )"
+        run: echo "::env-output name=url::\"$( cat upload_url/upload_url )\"""
+      
+      - name: Echo URL
+        run: echo "${{ get_upload_url.outputs.url }}""
       
       - name: Get Tag
         id: tag_name
