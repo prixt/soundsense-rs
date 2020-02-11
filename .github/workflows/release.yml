@@ -24,8 +24,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag_name.outputs.tag }}
-          release_name: ${{ steps.tag_name.outputs.tag }}
+          tag_name: ${{ GITHUB_TAG_NAME }}
+          release_name: ${{ GITHUB_TAG_NAME }}
           draft: false
           prerelease: false
       
@@ -72,7 +72,7 @@ jobs:
         with:
           upload_url: ${{ steps.get_upload_url.outputs.url }}
           asset_path: ./target/release/soundsense-rs
-          asset_name: soundsense-rs-${{steps.tag_name.outputs.tag}}-linux
+          asset_name: soundsense-rs-${{GITHUB_TAG_NAME}}-linux
           asset_type: application/octet-stream  
 
   build-macos:
@@ -109,7 +109,7 @@ jobs:
         with:
           upload_url: ${{ steps.get_upload_url.outputs.url }}
           asset_path: ./target/release/soundsense-rs
-          asset_name: soundsense-rs-${{steps.tag_name.outputs.tag}}-osx
+          asset_name: soundsense-rs-${{GITHUB_TAG_NAME}}-osx
           asset_type: application/octet-stream
   
   build-windows:
@@ -151,5 +151,5 @@ jobs:
         with:
           upload_url: ${{ steps.get_upload_url.outputs.url }}
           asset_path: ./target/release/soundsense-rs.exe
-          asset_name: soundsense-rs-${{steps.tag_name.outputs.tag}}-windows.exe
+          asset_name: soundsense-rs-${{GITHUB_TAG_NAME}}-windows.exe
           asset_type: application/octet-stream
