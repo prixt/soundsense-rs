@@ -2,7 +2,7 @@ on:
   push:
     branch: release
     tags:
-      - 'v*'
+      - v*
 
 name: Release
 
