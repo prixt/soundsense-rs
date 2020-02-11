@@ -20,12 +20,6 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get install -y libasound2-dev libgtk-3-dev libwebket2gtk-4.0-dev
       
-      # - name: Install dependencies (MacOS)
-      #   if: runner.os == 'macOS'
-      
-      # - name: Install dependencies (Windows)
-      #   if: runner.os == 'Windows'
-      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
