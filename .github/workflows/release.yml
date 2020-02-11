@@ -143,7 +143,7 @@ jobs:
         run: echo "::set-output name=url::$( cat upload_url/upload_url )"
       
       - name: Echo URL
-        run: echo ${{steps.get_url.outputs.url}}
+        run: echo "${{steps.get_url.outputs.url}}"
       
       - name: Get Tag
         id: tag_name
