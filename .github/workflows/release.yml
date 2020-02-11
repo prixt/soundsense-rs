@@ -1,5 +1,4 @@
 name: Release
-# Releases on semver tag
 
 on:
   push:
