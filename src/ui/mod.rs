@@ -14,7 +14,7 @@ pub fn run(
     static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
     
     let mut webview = builder()
-        .title("Will This trigger?")
+        .title("SoundSense-RS")
         .content(Content::Html(HTML))
         .size(500, 550)
         .resizable(true)
