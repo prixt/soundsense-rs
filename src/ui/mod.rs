@@ -140,36 +140,9 @@ impl UIHandle {
             self.channels.push(name.clone());
             self.handle.dispatch(
                 move |webview| {
-                    let script = format!(
-r#"
-let channels = document.getElementById('channels');
-channels.insertAdjacentHTML(
-    'beforeend',
-    "<tr class='w3-row'> \
-        <td class='w3-center' style='width:50px'><h4>{channel_name}</h4></td> \
-        <td class='w3-rest'> \
-            <input type='range' \
-                name='{channel_name}_slider' \
-                id='{channel_name}_slider' \
-                min='0' \
-                max='100' \
-                value='100' \
-            /> \
-        </td> \
-    </tr>"
-);
-
-let slider = document.getElementById("{channel_name}_slider");
-slider.addEventListener(
-    /MSIE|Trident|Edge/.test(window.navigator.userAgent) ? 'change' : 'input',
-    function() {{
-        external.invoke('change_volume:{channel_name}:'+this.value);
-    }},
-    false
-);
-"#,
-                    channel_name=&name);
-                    webview.eval(&script)
+                    webview.eval(
+                        &format!(r#"addSlider("{channel_name}")"#, channel_name=&name)
+                    )
                 }
             ).unwrap();
         }
@@ -178,14 +151,7 @@ slider.addEventListener(
         self.channels.clear();
         self.handle.dispatch(
             |webview| {
-                webview.eval(
-r#"
-let channels = document.getElementById("channels");
-while (channels.firstChild) {
-    channels.removeChild(channels.firstChild);
-}
-"#
-                )
+                webview.eval("clearSliders()")
             }
         ).unwrap();
     }
