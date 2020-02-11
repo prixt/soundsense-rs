@@ -24,7 +24,7 @@ before_deploy:
 
 deploy:
 - provider: releases
-  cleanup: false
+  skip_cleanup: true
   on:
     tags: true
     condition: "$TRAVIS_RUST_VERSION = stable"
