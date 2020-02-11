@@ -46,14 +46,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
       
-      - name: Get URL
+      - name: Download URL
         uses: actions/download-artifact@v1
         with:
           name: upload_url.txt
       
-      - name: Set URL as environment variable
+      - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( <upload_url.txt )"
+        run: echo "::env-output name=url::$( cat upload_url.txt )"
       
       - name: Install dependencies
         run: |
@@ -95,7 +95,7 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( <upload_url.txt )"
+        run: echo "::env-output name=url::$( cat upload_url.txt )"
       
       - name: Get Tag
         id: tag_name
@@ -132,7 +132,7 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( <upload_url.txt )"
+        run: echo "::env-output name=url::$( cat upload_url.txt )"
       
       - name: Get Tag
         id: tag_name
