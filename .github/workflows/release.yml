@@ -30,13 +30,13 @@ jobs:
           prerelease: false
       
       - name: Write Down URL
-        run: echo "${{steps.create_release.outputs.upload_url}}" > ./upload_url
+        run: echo "${{steps.create_release.outputs.upload_url}}" > ./upload_url.txt
       
       - name: Upload URL
         uses: actions/upload-artifact@v1
         with:
-          name: upload_url
-          path: ./upload_url
+          name: upload_url.txt
+          path: ./upload_url.txt
 
   build-linux:
     needs: prepare-release
@@ -53,7 +53,7 @@ jobs:
       
       - name: Set URL as environment variable
         id: get_upload_url
-        run: echo "::env-output name=url::$( <upload_url )"
+        run: echo "::env-output name=url::$( <upload_url.txt )"
       
       - name: Install dependencies
         run: |
@@ -95,7 +95,7 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( <upload_url )"
+        run: echo "::env-output name=url::$( <upload_url.txt )"
       
       - name: Get Tag
         id: tag_name
@@ -132,7 +132,7 @@ jobs:
       
       - name: Get URL
         id: get_upload_url
-        run: echo "::env-output name=url::$( <upload_url )"
+        run: echo "::env-output name=url::$( <upload_url.txt )"
       
       - name: Get Tag
         id: tag_name
