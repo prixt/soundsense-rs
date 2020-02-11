@@ -49,7 +49,7 @@ jobs:
       - name: Get URL
         uses: actions/download-artifact@v1
         with:
-          name: upload_url
+          name: upload_url.txt
       
       - name: Set URL as environment variable
         id: get_upload_url
@@ -91,7 +91,7 @@ jobs:
       - name: Download URL
         uses: actions/download-artifact@v1
         with:
-          name: upload_url
+          name: upload_url.txt
       
       - name: Get URL
         id: get_upload_url
@@ -128,7 +128,7 @@ jobs:
       - name: Download URL
         uses: actions/download-artifact@v1
         with:
-          name: upload_url
+          name: upload_url.txt
       
       - name: Get URL
         id: get_upload_url
