@@ -2,12 +2,13 @@ name: Release
 
 on:
   push:
-    branch: release
+    branches: release
     tags:
       - v*
 
 jobs:
   prepare-release:
+    runs-on: linux
     name: Prepare Release
     steps:
       - name: Checkout code
