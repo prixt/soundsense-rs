@@ -1,10 +1,10 @@
+name: Release
+
 on:
   push:
     branch: release
     tags:
-      - 'v*'
-
-name: Release
+      - v*
 
 jobs:
   prepare-release:
