@@ -46,6 +46,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
       
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev
+      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
@@ -119,11 +124,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-      
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev
       
       - name: Cargo Build
         uses: actions-rs/cargo@v1
