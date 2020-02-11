@@ -1,7 +1,7 @@
 on:
   push:
     tags-ignore:
-      - 'v*'
+      - v*
 
 name: Build
 
