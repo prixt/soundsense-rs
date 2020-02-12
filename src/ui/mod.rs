@@ -8,7 +8,6 @@ pub fn run(
     gamelog_path: Option<std::path::PathBuf>,
     soundpack_path: Option<std::path::PathBuf>,
     ignore_path: Option<std::path::PathBuf>,
-    conf_path: std::path::PathBuf,
 ) {
     static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
     
@@ -142,6 +141,13 @@ Source at:
     }
 
     use std::io::Write;
+    let mut conf_path = dirs::config_dir().unwrap();
+    conf_path.push("soundsense-rs");
+    if !conf_path.is_dir() {
+        std::fs::create_dir(&conf_path)
+            .expect("Failed to create soundsense-rs config directory.");
+    }
+    conf_path.push("conf.ini");
     let mut conf_file = std::fs::File::create(conf_path)
         .expect("Failed to create conf.ini file.");
     if let Some(path) = gamelog_path.lock().unwrap().as_ref() {

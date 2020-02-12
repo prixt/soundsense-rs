@@ -1,4 +1,4 @@
-#![windows_subsystem = "windows"]
+// #![windows_subsystem = "windows"]
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
@@ -16,10 +16,11 @@ fn main() {
     opts.optopt("p", "soundpack", "Path to the soundpack directory.", "PACK_DIR");
     opts.optopt("i", "ignore", "Path to the ignore.txt file.", "IGNORE_FILE");
 
-    let mut conf_path = env::current_exe().expect("Failed to get executable path.");
-    conf_path.pop(); conf_path.push("conf.ini");
-    let conf = std::fs::read_to_string(&conf_path).ok();
-    let conf = conf.as_ref();
+    let conf = dirs::config_dir()
+        .and_then(|mut p| {
+            p.push("soundsense-rs/conf.ini");
+            std::fs::read_to_string(p).ok()
+        });
 
     let matches = opts.parse(&args[1..]).unwrap();
     let gamelog_path = matches.opt_str("l").and_then(|path| {
@@ -30,12 +31,14 @@ fn main() {
             None
         }
     })
-    .or_else(|| conf.map(|conf_txt| {
+    .or_else(|| if let Some(conf_txt) = &conf {
         Regex::new("gamelog=(.+)").unwrap()
             .captures(&conf_txt)
             .and_then(|c| c.get(1))
             .map(|m| PathBuf::from(m.as_str()))
-    }).flatten())
+    } else {
+        None
+    })
     .or_else(|| {
         let path = PathBuf::from("./gamelog.txt");
         if path.is_file() {
@@ -52,12 +55,14 @@ fn main() {
             None
         }
     })
-    .or_else(|| conf.map(|conf_txt| {
+    .or_else(|| if let Some(conf_txt) = &conf {
         Regex::new("soundpack=(.+)").unwrap()
             .captures(&conf_txt)
             .and_then(|c| c.get(1))
             .map(|m| PathBuf::from(m.as_str()))
-    }).flatten())
+    } else {
+        None
+    })
     .or_else(|| {
         let path = PathBuf::from("./soundpack");
         if path.is_dir() {
@@ -74,12 +79,14 @@ fn main() {
             None
         }
     })
-    .or_else(|| conf.map(|conf_txt| {
-        Regex::new("gamelog=(.+)").unwrap()
+    .or_else(|| if let Some(conf_txt) = &conf {
+        Regex::new("ignore=(.+)").unwrap()
             .captures(&conf_txt)
             .and_then(|c| c.get(1))
             .map(|m| PathBuf::from(m.as_str()))
-    }).flatten())
+    } else {
+        None
+    })
     .or_else(|| {
         let path = PathBuf::from("./ignore.txt");
         if path.is_file() {
@@ -94,5 +101,5 @@ fn main() {
     std::thread::Builder::new()
         .name("sound_thread".to_string())
         .spawn(move || sound::run(sound_rx, ui_tx)).unwrap();
-    ui::run(sound_tx, ui_rx, gamelog_path, soundpack_path, ignore_path, conf_path);
+    ui::run(sound_tx, ui_rx, gamelog_path, soundpack_path, ignore_path);
 }
