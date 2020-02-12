@@ -7,7 +7,6 @@ use regex::Regex;
 mod sound;
 mod ui;
 mod message;
-//mod download;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
