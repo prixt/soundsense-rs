@@ -97,14 +97,14 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                             manager.set_volume(&channel, volume * 0.01);
                         }
 
-                        SetCurrentPathsAsDefault => {
-                            println!("SetCurrentPathAsDefault");
-                        }
+                        // SetCurrentPathsAsDefault => {
+                        //     println!("SetCurrentPathAsDefault");
+                        // }
 
-                        SetCurrentVolumesAsDefault => {
-                            println!("SetCurrentVolumesAsDefault");
+                        // SetCurrentVolumesAsDefault => {
+                        //     println!("SetCurrentVolumesAsDefault");
 
-                        }
+                        // }
                         _ => (),
                     }
                 }

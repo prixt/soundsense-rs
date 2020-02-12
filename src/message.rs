@@ -3,8 +3,8 @@ pub enum SoundMessage {
     ChangeSoundpack(std::path::PathBuf),
     ChangeIgnoreList(std::path::PathBuf),
     VolumeChange(Box<str>, f32),
-    SetCurrentPathsAsDefault,
-    SetCurrentVolumesAsDefault,
+    // SetCurrentPathsAsDefault,
+    // SetCurrentVolumesAsDefault,
 }
 
 #[allow(dead_code)]

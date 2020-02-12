@@ -10,6 +10,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 1. To see if I could do it.
 2. Attempt to create a standalone application that doesn't require bloat (Java VM, C# VM, gtk, etc...).
    * Ultimately, you should only need one executable, the soundpack folder, and DF.
+   * Recommended soundpack fork: https://github.com/jecowa/soundsensepack
 
 ## Current Features
 * Plays sound reactive to what happens in DF.
