@@ -1,8 +1,9 @@
-# SOUNDSENSE-RS : SoundSense, written in Rust. ![Release](https://github.com/prixt/soundsense-rs/workflows/Release/badge.svg?branch=release) ![Build](https://github.com/prixt/soundsense-rs/workflows/Build/badge.svg)
+# SOUNDSENSE-RS : SoundSense, written in Rust.</br>![Release](https://github.com/prixt/soundsense-rs/workflows/Release/badge.svg?branch=release) ![Build](https://github.com/prixt/soundsense-rs/workflows/Build/badge.svg)
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine tool for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 <p align='center'>
-    <img src="./screenshots/windows-screenshot.png" title='Windows screenshot' width='50%'>
+    <img src="./screenshots/windows-screenshot.png" title='Windows screenshot' width='40%'>
+    <img src="./screenshots/macos-screenshot.png" title='MacOs screenshot by jecowa' width='40%'>
 </p>
 
 ## Why?
@@ -16,6 +17,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 * Most sound parameters from the original (stereo balance, random balance, etc.)
 * Custom ignore list, allowing user to customize which log patterns to ignore.
 * Simple and Clean GUI.
+* Low memory requirement.
 
 ## Command line parameters
 * __-l / --gamelog [GAMELOG_FILE] :__ preload the gamelog _(default: ".\gamelog.txt")_
@@ -27,9 +29,6 @@ Example:
 
     soundsense-rs.exe -l "path/to/gamelog.txt" -p "path/to/soundpack/folder"
 This will make soundsense-rs check if there is a file named "ignore.txt" in the binary directory, and will use that file to make the ignore list.
-
-## Known problems
-* not properly tested in Adventure mode & Arena mode.
 
 ## [MIT License](./LICENSE)
 
