@@ -1,7 +1,7 @@
-"use strict";
-var channelschannels = document.getElementById("channels");
+'use strict';
 
 function addSlider(channel_name) {
+    let channels = document.getElementById("channels");
     channels.insertAdjacentElement(
         'beforeend',
         createSlider(channel_name)
@@ -30,11 +30,11 @@ function createSlider(channel_name) {
             value='100' \
         /> \
     </td>"
-    
     return slider;
 }
 
 function clearSliders() {
+    let channels = document.getElementById("channels");
     while (channels.firstChild) {
         channels.removeChild(channels.firstChild);
     }
