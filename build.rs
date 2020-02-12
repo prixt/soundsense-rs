@@ -27,9 +27,10 @@ r#"
 			<div class='w3-dropdown-hover w3-right'>
 				<a ref ='#' class='w3-button'>Options</a>
 				<div class='w3-dropdown-content w3-bar-block' style='right:0'>
-					<button class='w3-bar-item w3-button'"><s>Download Original's Soundpack</s></button>
-					<button class='w3-bar-item w3-button'"><s>Set current paths as default</s></button>
-					<button class='w3-bar-item w3-button'"><s>Set current volumes as default</s></button>
+					<button class='w3-bar-item w3-button'"
+						onclick="external.invoke('link_original')">Link: zwei's original SoundSense & soundpack</button>
+					<button class='w3-bar-item w3-button'"
+						onclick="external.invoke('link_fork')">Link: jecowa's soundpack fork</button>
 					<button class="w3-bar-item w3-button"
 						onclick="external.invoke('show_about')">About</button>
 				</div>

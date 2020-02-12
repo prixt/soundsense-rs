@@ -1,8 +1,6 @@
 use std::sync::mpsc::{Sender, Receiver};
-// use std::sync::atomic::{AtomicBool, Ordering};
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
-// use lazy_static::*;
 // use crate::download;
 
 pub fn run(
@@ -66,11 +64,21 @@ Source at:
                     //     ).unwrap()
                     // }
                 // }
-                "set_current_paths_as_default" => {
-                    sound_tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
+                // "set_current_paths_as_default" => {
+                //     sound_tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
+                // }
+                // "set_current_volumes_as_default" => {
+                //     sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault).unwrap()
+                // }
+                "link_original" => {
+                    if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
+                        println!("webbrowser error: {}", e);
+                    }
                 }
-                "set_current_volumes_as_default" => {
-                    sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault).unwrap()
+                "link_fork" => {
+                    if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
+                        println!("webbrowser error: {}", e);
+                    }
                 }
                 other => {
                     let parts: Vec<&str> = other.split(':').collect();

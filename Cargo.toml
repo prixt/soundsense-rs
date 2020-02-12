@@ -16,6 +16,7 @@ rand = "0.7"
 lazy_static = "1.4"
 web-view = "0.6"
 getopts = "0.2"
+webbrowser = "0.5.2"
 
 [profile.release]
 lto = true
