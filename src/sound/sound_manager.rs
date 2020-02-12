@@ -23,15 +23,18 @@ impl SoundManager {
 		);
 
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
-			for entry in fs::read_dir(dir).unwrap() {
-				let entry = entry.unwrap();
-				let path = entry.path();
-				if path.is_dir() {
-					visit_dir(&path, func);
-				} else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
-					func(&path);
-				}
-			}
+            match fs::read_dir(dir) {
+                Ok(entries) => for entry in entries {
+                    let entry = entry.unwrap();
+                    let path = entry.path();
+                    if path.is_dir() {
+                        visit_dir(&path, func);
+                    } else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
+                        func(&path);
+                    }
+                },
+                Err(e) => eprintln!("Error while visiting {}: {}", dir.display(), e),
+            }
 		}
 
         let mut func = |file_path: &Path| {
@@ -101,7 +104,7 @@ impl SoundManager {
                                     b"ansiPattern" => (),
                                     b"playbackThreshhold" => (),
                                     _ => {
-                                        println!(
+                                        eprintln!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
@@ -166,7 +169,7 @@ impl SoundManager {
                                         is_playlist = true;
                                     }
                                     _ => {
-                                        println!(
+                                        eprintln!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
@@ -217,13 +220,13 @@ impl SoundManager {
             "weather".into(),
             "trade".into(),
             "swords".into(),
-            "misc".into(),
         ];
         for channel_name in channels.keys() {
             if !channel_names.contains(channel_name) {
                 channel_names.push(channel_name.clone());
             }
         }
+        channel_names.push("misc".into());
         ui_sender.send(UIMessage::LoadedSoundpack(channel_names)).unwrap();
 
         // println!("Finished loading!");
@@ -307,7 +310,13 @@ impl SoundManager {
                 if can_play {
                     let files = &sound.files;
                     let idx : usize = if files.len() > 1 && !sound.loop_attr.unwrap_or(false) {
-                        WeightedIndex::new(&sound.weights).unwrap().sample(rng)
+                        match WeightedIndex::new(&sound.weights) {
+                            Ok(weight) => weight.sample(rng),
+                            Err(e) => {
+                                eprintln!("Error while weighing files: {}", e);
+                                0
+                            }
+                        }
                     } else {
                         0
                     };
