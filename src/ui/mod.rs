@@ -92,11 +92,11 @@ Source at:
         .unwrap();
     let mut handle = UIHandle::new(webview.handle());
     
-    if let Some(path) = gamelog_path {
-        sound_tx.send(SoundMessage::ChangeGamelog(path)).unwrap();
-    }
     if let Some(path) = soundpack_path {
         sound_tx.send(SoundMessage::ChangeSoundpack(path)).unwrap();
+    }
+    if let Some(path) = gamelog_path {
+        sound_tx.send(SoundMessage::ChangeGamelog(path)).unwrap();
     }
     if let Some(path) = ignore_path {
         sound_tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap();
