@@ -263,7 +263,7 @@ impl SoundManager {
         if channel_name == "all" {
             self.total_volume = volume;
             for channel in self.channels.values_mut() {
-                channel.set_volume(channel.volume, self.total_volume);
+                channel.set_volume(channel.local_volume, self.total_volume);
             }
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {

@@ -4,7 +4,8 @@ pub struct SoundChannel {
     pub looping: SpatialSink,
     pub files: Vec<SoundFile>,
     pub one_shots: Vec<SpatialSink>,
-    pub volume: f32,
+    pub local_volume: f32,
+    pub total_volume: f32,
     pub delay: usize,
 }
 
@@ -14,7 +15,8 @@ impl SoundChannel {
             looping : SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]),
             files : Vec::new(),
             one_shots : Vec::new(),
-            volume : 1.0,
+            local_volume : 1.0,
+            total_volume : 1.0,
             delay : 0,
         }
     }
@@ -36,7 +38,8 @@ impl SoundChannel {
 				self.looping = SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
 				for file in self.files.iter() {
 					append_soundfile_to_sink(&self.looping, file, true, rng);
-				}
+                }
+                self.looping.set_volume(self.local_volume * self.total_volume);
 			}
 		} else {
 			self.looping.pause();
@@ -55,12 +58,14 @@ impl SoundChannel {
         self.looping.pause();
         let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
         append_soundfile_to_sink(&sink, file, false, rng);
+        sink.set_volume(self.local_volume * self.total_volume);
         self.one_shots.push(sink);
         self.delay = delay;
     }
 
     pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {
-        self.volume = local_volume;
+        self.local_volume = local_volume;
+        self.total_volume = total_volume;
         let final_volume = local_volume * total_volume;
         self.looping.set_volume(final_volume);
         self.one_shots.iter()
