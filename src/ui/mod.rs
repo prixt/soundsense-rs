@@ -1,4 +1,4 @@
-use std::sync::mpsc::{Sender, Receiver};
+use std::sync::{Mutex, mpsc::{Sender, Receiver}};
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
 // use crate::download;
@@ -8,8 +8,23 @@ pub fn run(
     gamelog_path: Option<std::path::PathBuf>,
     soundpack_path: Option<std::path::PathBuf>,
     ignore_path: Option<std::path::PathBuf>,
+    conf_path: std::path::PathBuf,
 ) {
     static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
+    
+    if let Some(path) = &soundpack_path {
+        sound_tx.send(SoundMessage::ChangeSoundpack(path.clone())).unwrap();
+    }
+    if let Some(path) = &gamelog_path {
+        sound_tx.send(SoundMessage::ChangeGamelog(path.clone())).unwrap();
+    }
+    if let Some(path) = &ignore_path {
+        sound_tx.send(SoundMessage::ChangeIgnoreList(path.clone())).unwrap();
+    }
+    
+    let gamelog_path = Mutex::new(gamelog_path);
+    let soundpack_path = Mutex::new(soundpack_path);
+    let ignore_path = Mutex::new(ignore_path);
     
     let mut webview = builder()
         .title("SoundSense-RS")
@@ -23,17 +38,26 @@ pub fn run(
                 "load_gamelog" => if let Some(path) = webview.dialog()
                     .open_file("Choose gamelog.txt", "")
                     .unwrap() {
-                    sound_tx.send(SoundMessage::ChangeGamelog(path)).unwrap()
+                    sound_tx.send(SoundMessage::ChangeGamelog(path.clone())).unwrap();
+                    gamelog_path.lock()
+                        .unwrap()
+                        .replace(path);
                 }
                 "load_soundpack" => if let Some(path) = webview.dialog()
                     .choose_directory("Choose soundpack directory", "")
                     .unwrap() {
-                    sound_tx.send(SoundMessage::ChangeSoundpack(path)).unwrap()
+                    sound_tx.send(SoundMessage::ChangeSoundpack(path.clone())).unwrap();
+                    soundpack_path.lock()
+                        .unwrap()
+                        .replace(path);
                 }
                 "load_ignore_list" => if let Some(path) = webview.dialog()
                     .open_file("Choose ignore.txt", "")
                     .unwrap() {
-                    sound_tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap()
+                    sound_tx.send(SoundMessage::ChangeIgnoreList(path.clone())).unwrap();
+                    ignore_path.lock()
+                        .unwrap()
+                        .replace(path);
                 }
                 "show_about" => {
                     webview.dialog()
@@ -72,12 +96,12 @@ Source at:
                 // }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
-                        println!("webbrowser error: {}", e);
+                        eprintln!("webbrowser error: {}", e);
                     }
                 }
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
-                        println!("webbrowser error: {}", e);
+                        eprintln!("webbrowser error: {}", e);
                     }
                 }
                 other => {
@@ -100,19 +124,11 @@ Source at:
         .unwrap();
     let mut handle = UIHandle::new(webview.handle());
     
-    if let Some(path) = soundpack_path {
-        sound_tx.send(SoundMessage::ChangeSoundpack(path)).unwrap();
-    }
-    if let Some(path) = gamelog_path {
-        sound_tx.send(SoundMessage::ChangeGamelog(path)).unwrap();
-    }
-    if let Some(path) = ignore_path {
-        sound_tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap();
-    }
-    
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
+
+            #[allow(clippy::single_match)]
             match ui_message {
                 UIMessage::LoadedSoundpack(channel_names) => {
                     handle.clear_sliders();
@@ -120,15 +136,23 @@ Source at:
                         handle.add_slider(name)
                     }
                 }
-                UIMessage::LoadedGamelog => {
-
-                }
-                UIMessage::LoadedIgnoreList => {
-
-                }
+                _ => ()
             }
         }
     }
+
+    use std::io::Write;
+    let mut conf_file = std::fs::File::create(conf_path)
+        .expect("Failed to create conf.ini file.");
+    if let Some(path) = gamelog_path.lock().unwrap().as_ref() {
+        writeln!(conf_file, "gamelog={}", path.to_string_lossy()).unwrap();
+    };
+    if let Some(path) = soundpack_path.lock().unwrap().as_ref() {
+        writeln!(conf_file, "soundpack={}", path.to_string_lossy()).unwrap();
+    };
+    if let Some(path) = ignore_path.lock().unwrap().as_ref() {
+        writeln!(conf_file, "ignore={}", path.to_string_lossy()).unwrap();
+    };
 }
 
 pub struct UIHandle {
