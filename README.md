@@ -1,8 +1,8 @@
-# SOUNDSENSE-RS : SoundSense, written in Rust. [![Build Status](https://travis-ci.org/prixt/soundsense-rs.svg?branch=master)](https://travis-ci.org/prixt/soundsense-rs)
+# SOUNDSENSE-RS : SoundSense, written in Rust. ![Release](https://github.com/prixt/soundsense-rs/workflows/Release/badge.svg?branch=release) ![Build](https://github.com/prixt/soundsense-rs/workflows/Build/badge.svg)
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine tool for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 <p align='center'>
-    <img src="./windows-screenshot.png" title='Windows screenshot' width='50%'>
+    <img src="./screenshots/windows-screenshot.png" title='Windows screenshot' width='50%'>
 </p>
 
 ## Why?
@@ -29,8 +29,6 @@ Example:
 This will make soundsense-rs check if there is a file named "ignore.txt" in the binary directory, and will use that file to make the ignore list.
 
 ## Known problems
-* 'battle/hit/punch/punch4.mp3', 'battle/hit/push/push5.mp3' causes 'DecoderError::UnrecognizedFormat'. Currently displays the error message and continues.
-* not properly test on Linux and Mac.
 * not properly tested in Adventure mode & Arena mode.
 
 ## [MIT License](./LICENSE)
