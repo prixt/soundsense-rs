@@ -1,15 +1,32 @@
-use std::sync::mpsc::{Sender, Receiver};
+use std::sync::{Mutex, mpsc::{Sender, Receiver}};
+use std::fs;
+use std::path::PathBuf;
+use std::io::Write;
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
 // use crate::download;
 
 pub fn run(
     sound_tx: Sender<SoundMessage>, ui_rx: Receiver<UIMessage>,
-    gamelog_path: Option<std::path::PathBuf>,
-    soundpack_path: Option<std::path::PathBuf>,
-    ignore_path: Option<std::path::PathBuf>,
+    gamelog_path: Option<PathBuf>,
+    soundpack_path: Option<PathBuf>,
+    ignore_path: Option<PathBuf>,
 ) {
     static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
+    
+    if let Some(path) = &soundpack_path {
+        sound_tx.send(SoundMessage::ChangeSoundpack(path.clone())).unwrap();
+    }
+    if let Some(path) = &gamelog_path {
+        sound_tx.send(SoundMessage::ChangeGamelog(path.clone())).unwrap();
+    }
+    if let Some(path) = &ignore_path {
+        sound_tx.send(SoundMessage::ChangeIgnoreList(path.clone())).unwrap();
+    }
+    
+    let gamelog_path = Mutex::new(gamelog_path);
+    let soundpack_path = Mutex::new(soundpack_path);
+    let ignore_path = Mutex::new(ignore_path);
     
     let mut webview = builder()
         .title("SoundSense-RS")
@@ -23,17 +40,26 @@ pub fn run(
                 "load_gamelog" => if let Some(path) = webview.dialog()
                     .open_file("Choose gamelog.txt", "")
                     .unwrap() {
-                    sound_tx.send(SoundMessage::ChangeGamelog(path)).unwrap()
+                    sound_tx.send(SoundMessage::ChangeGamelog(path.clone())).unwrap();
+                    gamelog_path.lock()
+                        .unwrap()
+                        .replace(path);
                 }
                 "load_soundpack" => if let Some(path) = webview.dialog()
                     .choose_directory("Choose soundpack directory", "")
                     .unwrap() {
-                    sound_tx.send(SoundMessage::ChangeSoundpack(path)).unwrap()
+                    sound_tx.send(SoundMessage::ChangeSoundpack(path.clone())).unwrap();
+                    soundpack_path.lock()
+                        .unwrap()
+                        .replace(path);
                 }
                 "load_ignore_list" => if let Some(path) = webview.dialog()
                     .open_file("Choose ignore.txt", "")
                     .unwrap() {
-                    sound_tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap()
+                    sound_tx.send(SoundMessage::ChangeIgnoreList(path.clone())).unwrap();
+                    ignore_path.lock()
+                        .unwrap()
+                        .replace(path);
                 }
                 "show_about" => {
                     webview.dialog()
@@ -46,38 +72,68 @@ Source at:
     https://github.com/prixt/soundsense-rs",
                         ).unwrap()
                 }
-                // "download_soundpack" => {
-                    // lazy_static! {
-                    //     static ref IS_DOWNLOADING: AtomicBool = AtomicBool::new(false); 
-                    // }
-                    // if dbg!(!IS_DOWNLOADING.swap(true, Ordering::SeqCst)) {
-                    //     let handle1 = webview.handle();
-                    //     let handle2 = webview.handle();
-                    //     std::thread::Builder::new()
-                    //         .name("download_thread".into())
-                    //         .spawn(move || download::run(&IS_DOWNLOADING, handle1, handle2))
-                    //         .unwrap();
-                    // } else {
-                    //     webview.dialog().warning(
-                    //         "Already downloading!",
-                    //         "SoundSense-rs is currently already downloading the soundpack."
-                    //     ).unwrap()
-                    // }
-                // }
-                // "set_current_paths_as_default" => {
-                //     sound_tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
-                // }
-                // "set_current_volumes_as_default" => {
-                //     sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault).unwrap()
-                // }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
-                        println!("webbrowser error: {}", e);
+                        eprintln!("webbrowser error: {}", e);
                     }
                 }
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
-                        println!("webbrowser error: {}", e);
+                        eprintln!("webbrowser error: {}", e);
+                    }
+                }
+                "set_default_paths" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if !conf_path.is_dir() {
+                        std::fs::create_dir(&conf_path)
+                            .expect("Failed to create soundsense-rs config directory.");
+                    }
+                    conf_path.push("default-paths.ini");
+                    let mut conf_file = fs::File::create(conf_path)
+                        .expect("Failed to create default-paths.ini file.");
+                    if let Some(path) = gamelog_path.lock().unwrap().as_ref() {
+                        writeln!(conf_file, "gamelog={}", path.to_string_lossy()).unwrap();
+                    };
+                    if let Some(path) = soundpack_path.lock().unwrap().as_ref() {
+                        writeln!(conf_file, "soundpack={}", path.to_string_lossy()).unwrap();
+                    };
+                    if let Some(path) = ignore_path.lock().unwrap().as_ref() {
+                        writeln!(conf_file, "ignore={}", path.to_string_lossy()).unwrap();
+                    };
+                }
+                "set_default_volumes" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if !conf_path.is_dir() {
+                        fs::create_dir(&conf_path)
+                            .expect("Failed to create soundsense-rs config directory.");
+                    }
+                    conf_path.push("default-volumes.ini");
+                    let conf_file = fs::File::create(conf_path)
+                        .expect("Failed to create default-volumes.ini file.");
+                    sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault(conf_file)).unwrap();
+                }
+                "remove_default_paths" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if conf_path.is_dir() {
+                        conf_path.push("default-paths.ini");
+                        if conf_path.is_file() {
+                            fs::remove_file(conf_path)
+                                .expect("Failed to delete default-paths.ini file.");
+                        }
+                    }
+                }
+                "remove_default_volumes" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if conf_path.is_dir() {
+                        conf_path.push("default-volumes.ini");
+                        if conf_path.is_file() {
+                            fs::remove_file(conf_path)
+                                .expect("Failed to delete default-volumes.ini file.");
+                        }
                     }
                 }
                 other => {
@@ -100,16 +156,6 @@ Source at:
         .unwrap();
     let mut handle = UIHandle::new(webview.handle());
     
-    if let Some(path) = soundpack_path {
-        sound_tx.send(SoundMessage::ChangeSoundpack(path)).unwrap();
-    }
-    if let Some(path) = gamelog_path {
-        sound_tx.send(SoundMessage::ChangeGamelog(path)).unwrap();
-    }
-    if let Some(path) = ignore_path {
-        sound_tx.send(SoundMessage::ChangeIgnoreList(path)).unwrap();
-    }
-    
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
@@ -120,12 +166,12 @@ Source at:
                         handle.add_slider(name)
                     }
                 }
-                UIMessage::LoadedGamelog => {
-
+                UIMessage::LoadedVolumeSettings(entries) => {
+                    for (name, volume) in entries.into_iter() {
+                        handle.set_slider_value(name, volume);
+                    }
                 }
-                UIMessage::LoadedIgnoreList => {
-
-                }
+                _ => (),
             }
         }
     }
@@ -154,6 +200,19 @@ impl UIHandle {
                 }
             ).unwrap();
         }
+    }
+    pub fn set_slider_value(&mut self, name: Box<str>, value: f32) {
+        self.handle.dispatch(
+            move |webview| {
+                webview.eval(
+                    &format!(
+                        r#"setSliderValue("{channel_name}", {value})"#,
+                        channel_name=&name,
+                        value=value as u32
+                    )
+                )
+            }
+        ).unwrap();
     }
     pub fn clear_sliders(&mut self) {
         self.channels.clear();

@@ -4,7 +4,7 @@ pub enum SoundMessage {
     ChangeIgnoreList(std::path::PathBuf),
     VolumeChange(Box<str>, f32),
     // SetCurrentPathsAsDefault,
-    // SetCurrentVolumesAsDefault,
+    SetCurrentVolumesAsDefault(std::fs::File),
 }
 
 #[allow(dead_code)]
@@ -12,4 +12,5 @@ pub enum UIMessage {
     LoadedGamelog,
     LoadedSoundpack(Vec<Box<str>>),
     LoadedIgnoreList,
+    LoadedVolumeSettings(Vec<(Box<str>,f32)>),
 }

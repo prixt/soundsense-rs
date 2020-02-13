@@ -18,12 +18,30 @@ r#"
 	</head>
 	<body>
 		<div class="w3-bar w3-border w3-light-grey w3-small">
-			<button class='w3-bar-item w3-button'
-				onclick="external.invoke('load_gamelog')">Load gamelog.txt</button>
-			<button class='w3-bar-item w3-button'
-				onclick="external.invoke('load_soundpack')">Load soundpack</button>
-			<button class='w3-bar-item w3-button'
-				onclick="external.invoke('load_ignore_list')">Load ignore.txt</button>
+			<div class='w3-dropdown-hover'>
+				<a ref='#' class='w3-button'>Load</a>
+				<div class='w3-dropdown-content w3-bar-block'>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('load_gamelog')">Load gamelog.txt</button>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('load_soundpack')">Load soundpack</button>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('load_ignore_list')">Load ignore.txt</button>
+				</div>
+			</div>
+			<div class='w3-dropdown-hover'>
+				<a ref ='#' class='w3-button'>Settings</a>
+				<div class='w3-dropdown-content w3-bar-block'>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('set_default_paths')">Set current paths as default</button>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('remove_default_paths')">Delete default paths setting</button>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('set_default_volumes')">Set current volumes as default</button>
+				<button class='w3-bar-item w3-button'
+					onclick="external.invoke('remove_default_volumes')">Delete default volumes setting</button>
+				</div>
+			</div>
 			<div class='w3-dropdown-hover w3-right'>
 				<a ref ='#' class='w3-button'>Options</a>
 				<div class='w3-dropdown-content w3-bar-block' style='right:0'>
