@@ -111,7 +111,7 @@ fn assert_file(path: &Path, sink: &SpatialSink, volume: f32, balance: f32) {
             sink.set_emitter_position([balance, 1.0, 0.0]);
         },
         Err(e) => {
-            println!("error: {}, path: {}", e, path.to_string_lossy());
+            eprintln!("Error while asserting {}: {}", path.display(), e);
         }
     }
 }

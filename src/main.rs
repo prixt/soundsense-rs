@@ -1,12 +1,12 @@
-#![windows_subsystem = "windows"]
+// #![windows_subsystem = "windows"]
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
+use regex::Regex;
 
 mod sound;
 mod ui;
 mod message;
-//mod download;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -14,6 +14,12 @@ fn main() {
     opts.optopt("l", "gamelog", "Path to the gamelog.txt file.", "LOG_FILE");
     opts.optopt("p", "soundpack", "Path to the soundpack directory.", "PACK_DIR");
     opts.optopt("i", "ignore", "Path to the ignore.txt file.", "IGNORE_FILE");
+
+    let conf = dirs::config_dir()
+        .and_then(|mut p| {
+            p.push("soundsense-rs/default-paths.ini");
+            std::fs::read_to_string(p).ok()
+        });
 
     let matches = opts.parse(&args[1..]).unwrap();
     let gamelog_path = matches.opt_str("l").and_then(|path| {
@@ -23,8 +29,19 @@ fn main() {
         } else {
             None
         }
-    }).or_else(|| {
-        let path = PathBuf::from("./gamelog.txt");
+    })
+    .or_else(|| if let Some(conf_txt) = &conf {
+        Regex::new("gamelog=(.+)").unwrap()
+            .captures(&conf_txt)
+            .and_then(|c| c.get(1))
+            .map(|m| PathBuf::from(m.as_str()))
+    } else {
+        None
+    })
+    .or_else(|| {
+        let mut path = env::current_dir()
+            .expect("Error finding current working directory.");
+        path.push("gamelog.txt");
         if path.is_file() {
             Some(path)
         } else {
@@ -38,8 +55,19 @@ fn main() {
         } else {
             None
         }
-    }).or_else(|| {
-        let path = PathBuf::from("./soundpack");
+    })
+    .or_else(|| if let Some(conf_txt) = &conf {
+        Regex::new("soundpack=(.+)").unwrap()
+            .captures(&conf_txt)
+            .and_then(|c| c.get(1))
+            .map(|m| PathBuf::from(m.as_str()))
+    } else {
+        None
+    })
+    .or_else(|| {
+        let mut path = env::current_dir()
+            .expect("Error finding current working directory.");
+        path.push("soundpack");
         if path.is_dir() {
             Some(path)
         } else {
@@ -53,8 +81,19 @@ fn main() {
         } else {
             None
         }
-    }).or_else(|| {
-        let path = PathBuf::from("./ignore.txt");
+    })
+    .or_else(|| if let Some(conf_txt) = &conf {
+        Regex::new("ignore=(.+)").unwrap()
+            .captures(&conf_txt)
+            .and_then(|c| c.get(1))
+            .map(|m| PathBuf::from(m.as_str()))
+    } else {
+        None
+    })
+    .or_else(|| {
+        let mut path = env::current_dir()
+            .expect("Error finding current working directory.");
+        path.push("ignore.txt");
         if path.is_file() {
             Some(path)
         } else {
