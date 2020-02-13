@@ -29,7 +29,18 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 Example:
 
     soundsense-rs.exe -l "path/to/gamelog.txt" -p "path/to/soundpack/folder"
-This will make soundsense-rs check if there is a file named "ignore.txt" in the binary directory, and will use that file to make the ignore list.
+This will make soundsense-rs check if there is a file named "ignore.txt" in the current working directory, and will use that file to make the ignore list.
+
+## Ignore List
+Each line in the ignore list file is considered an regex pattern. If a gamelog message matches any of the patterns, that message is ignored.
+
+Example:
+
+    (.+) cancels (.+): (.*)(Water|water)(.*)\.
+
+This pattern will make soundsense-rs ignore any cancallations related to water.
+
+The regex pattern uses the [regex crate](https://docs.rs/regex/1.3.4/regex/) syntax.
 
 ## [MIT License](./LICENSE)
 
