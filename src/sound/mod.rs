@@ -3,7 +3,7 @@ use std::time::Duration;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 
 use crate::message::*;
 use notify::{Watcher, RecursiveMode, DebouncedEvent};
