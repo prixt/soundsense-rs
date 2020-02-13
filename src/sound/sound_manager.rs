@@ -5,7 +5,7 @@ pub struct SoundManager {
     recent: HashSet<usize>,
     ignore_list: Vec<Regex>,
     device: Device,
-    channels: HashMap<Box<str>, SoundChannel>,
+    channels: BTreeMap<Box<str>, SoundChannel>,
     total_volume: f32,
     concurency: usize,
     ui_sender: Sender<UIMessage>,
@@ -16,7 +16,7 @@ impl SoundManager {
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Self {
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
-		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
+		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
 			SoundChannel::new(&device)
