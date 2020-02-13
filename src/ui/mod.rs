@@ -1,13 +1,16 @@
 use std::sync::{Mutex, mpsc::{Sender, Receiver}};
+use std::fs;
+use std::path::PathBuf;
+use std::io::Write;
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
 // use crate::download;
 
 pub fn run(
     sound_tx: Sender<SoundMessage>, ui_rx: Receiver<UIMessage>,
-    gamelog_path: Option<std::path::PathBuf>,
-    soundpack_path: Option<std::path::PathBuf>,
-    ignore_path: Option<std::path::PathBuf>,
+    gamelog_path: Option<PathBuf>,
+    soundpack_path: Option<PathBuf>,
+    ignore_path: Option<PathBuf>,
 ) {
     static HTML: &str = include_str!(concat!(env!("OUT_DIR"), "/index.html"));
     
@@ -69,13 +72,6 @@ Source at:
     https://github.com/prixt/soundsense-rs",
                         ).unwrap()
                 }
-                // }
-                // "set_current_paths_as_default" => {
-                //     sound_tx.send(SoundMessage::SetCurrentPathsAsDefault).unwrap()
-                // }
-                // "set_current_volumes_as_default" => {
-                //     sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault).unwrap()
-                // }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
                         eprintln!("webbrowser error: {}", e);
@@ -84,6 +80,60 @@ Source at:
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
                         eprintln!("webbrowser error: {}", e);
+                    }
+                }
+                "set_default_paths" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if !conf_path.is_dir() {
+                        std::fs::create_dir(&conf_path)
+                            .expect("Failed to create soundsense-rs config directory.");
+                    }
+                    conf_path.push("default-paths.ini");
+                    let mut conf_file = fs::File::create(conf_path)
+                        .expect("Failed to create default-paths.ini file.");
+                    if let Some(path) = gamelog_path.lock().unwrap().as_ref() {
+                        writeln!(conf_file, "gamelog={}", path.to_string_lossy()).unwrap();
+                    };
+                    if let Some(path) = soundpack_path.lock().unwrap().as_ref() {
+                        writeln!(conf_file, "soundpack={}", path.to_string_lossy()).unwrap();
+                    };
+                    if let Some(path) = ignore_path.lock().unwrap().as_ref() {
+                        writeln!(conf_file, "ignore={}", path.to_string_lossy()).unwrap();
+                    };
+                }
+                "set_default_volumes" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if !conf_path.is_dir() {
+                        fs::create_dir(&conf_path)
+                            .expect("Failed to create soundsense-rs config directory.");
+                    }
+                    conf_path.push("default-volumes.ini");
+                    let conf_file = fs::File::create(conf_path)
+                        .expect("Failed to create default-volumes.ini file.");
+                    sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault(conf_file)).unwrap();
+                }
+                "remove_default_paths" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if conf_path.is_dir() {
+                        conf_path.push("default-paths.ini");
+                        if conf_path.is_file() {
+                            fs::remove_file(conf_path)
+                                .expect("Failed to delete default-paths.ini file.");
+                        }
+                    }
+                }
+                "remove_default_volumes" => {
+                    let mut conf_path = dirs::config_dir().unwrap();
+                    conf_path.push("soundsense-rs");
+                    if conf_path.is_dir() {
+                        conf_path.push("default-volumes.ini");
+                        if conf_path.is_file() {
+                            fs::remove_file(conf_path)
+                                .expect("Failed to delete default-volumes.ini file.");
+                        }
                     }
                 }
                 other => {
@@ -109,8 +159,6 @@ Source at:
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
-
-            #[allow(clippy::single_match)]
             match ui_message {
                 UIMessage::LoadedSoundpack(channel_names) => {
                     handle.clear_sliders();
@@ -118,30 +166,15 @@ Source at:
                         handle.add_slider(name)
                     }
                 }
-                _ => ()
+                UIMessage::LoadedVolumeSettings(entries) => {
+                    for (name, volume) in entries.into_iter() {
+                        handle.set_slider_value(name, volume);
+                    }
+                }
+                _ => (),
             }
         }
     }
-
-    use std::io::Write;
-    let mut conf_path = dirs::config_dir().unwrap();
-    conf_path.push("soundsense-rs");
-    if !conf_path.is_dir() {
-        std::fs::create_dir(&conf_path)
-            .expect("Failed to create soundsense-rs config directory.");
-    }
-    conf_path.push("conf.ini");
-    let mut conf_file = std::fs::File::create(conf_path)
-        .expect("Failed to create conf.ini file.");
-    if let Some(path) = gamelog_path.lock().unwrap().as_ref() {
-        writeln!(conf_file, "gamelog={}", path.to_string_lossy()).unwrap();
-    };
-    if let Some(path) = soundpack_path.lock().unwrap().as_ref() {
-        writeln!(conf_file, "soundpack={}", path.to_string_lossy()).unwrap();
-    };
-    if let Some(path) = ignore_path.lock().unwrap().as_ref() {
-        writeln!(conf_file, "ignore={}", path.to_string_lossy()).unwrap();
-    };
 }
 
 pub struct UIHandle {
@@ -167,6 +200,19 @@ impl UIHandle {
                 }
             ).unwrap();
         }
+    }
+    pub fn set_slider_value(&mut self, name: Box<str>, value: f32) {
+        self.handle.dispatch(
+            move |webview| {
+                webview.eval(
+                    &format!(
+                        r#"setSliderValue("{channel_name}", {value})"#,
+                        channel_name=&name,
+                        value=value as u32
+                    )
+                )
+            }
+        ).unwrap();
     }
     pub fn clear_sliders(&mut self) {
         self.channels.clear();

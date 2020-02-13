@@ -33,6 +33,13 @@ function createSlider(channel_name) {
     return slider;
 }
 
+function setSliderValue(channel_name, value) {
+    let slider = document.getElementById(channel_name+"_slider");
+    if (slider != null) {
+        slider.value = value;
+    }
+}
+
 function clearSliders() {
     let channels = document.getElementById("channels");
     while (channels.firstChild) {

@@ -17,7 +17,7 @@ fn main() {
 
     let conf = dirs::config_dir()
         .and_then(|mut p| {
-            p.push("soundsense-rs/conf.ini");
+            p.push("soundsense-rs/default-paths.ini");
             std::fs::read_to_string(p).ok()
         });
 
@@ -39,7 +39,9 @@ fn main() {
         None
     })
     .or_else(|| {
-        let path = PathBuf::from("./gamelog.txt");
+        let mut path = env::current_dir()
+            .expect("Error finding current working directory.");
+        path.push("gamelog.txt");
         if path.is_file() {
             Some(path)
         } else {
@@ -63,7 +65,9 @@ fn main() {
         None
     })
     .or_else(|| {
-        let path = PathBuf::from("./soundpack");
+        let mut path = env::current_dir()
+            .expect("Error finding current working directory.");
+        path.push("soundpack");
         if path.is_dir() {
             Some(path)
         } else {
@@ -87,7 +91,9 @@ fn main() {
         None
     })
     .or_else(|| {
-        let path = PathBuf::from("./ignore.txt");
+        let mut path = env::current_dir()
+            .expect("Error finding current working directory.");
+        path.push("ignore.txt");
         if path.is_file() {
             Some(path)
         } else {

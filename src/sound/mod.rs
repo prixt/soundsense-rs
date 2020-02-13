@@ -101,10 +101,9 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                         //     println!("SetCurrentPathAsDefault");
                         // }
 
-                        // SetCurrentVolumesAsDefault => {
-                        //     println!("SetCurrentVolumesAsDefault");
-
-                        // }
+                        SetCurrentVolumesAsDefault(file) => {
+                            manager.set_current_volumes_as_default(file);
+                        }
                         _ => (),
                     }
                 }

@@ -8,7 +8,7 @@ pub struct SoundManager {
     channels: HashMap<Box<str>, SoundChannel>,
     total_volume: f32,
     concurency: usize,
-    // ui_sender: Sender<UIMessage>,
+    ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
 }
 
@@ -217,12 +217,9 @@ impl SoundManager {
         let mut channel_names: Vec<Box<str>> = vec![
             "all".into(),
             "music".into(),
-            "weather".into(),
-            "trade".into(),
-            "swords".into(),
         ];
         for channel_name in channels.keys() {
-            if !channel_names.contains(channel_name) {
+            if !channel_names.contains(channel_name) && channel_name.as_ref() != "misc" {
                 channel_names.push(channel_name.clone());
             }
         }
@@ -230,7 +227,7 @@ impl SoundManager {
         ui_sender.send(UIMessage::LoadedSoundpack(channel_names)).unwrap();
 
         // println!("Finished loading!");
-        Self {
+        let mut manager = Self {
             sounds,
             recent: HashSet::new(),
             ignore_list: Vec::new(),
@@ -238,9 +235,19 @@ impl SoundManager {
             channels,
             total_volume: 1.0,
             concurency: 0,
-            // ui_sender,
+            ui_sender,
             rng: thread_rng(),
+        };
+
+        let mut conf_path = dirs::config_dir().unwrap();
+        conf_path.push("soundsense-rs/default-volumes.ini");
+        if conf_path.is_file() {
+            let file = fs::File::open(conf_path)
+                .expect("Failed to open default-volumes.ini file.");
+            manager.get_default_volume(file);
         }
+
+        manager
     }
 
 	pub fn maintain(&mut self) {
@@ -360,6 +367,46 @@ impl SoundManager {
                     break;
                 }
             }
+        }
+    }
+
+    pub fn get_default_volume(&mut self, mut file: File) {
+        lazy_static! {
+            static ref INI_ENTRY: Regex = Regex::new("([[:word:]]+)=(.+)").unwrap();
+        }
+        let mut buf = String::new();
+        let mut entries = vec![];
+        file.read_to_string(&mut buf)
+            .expect("Failed to read default-volume.ini file.");
+        for line in buf.lines() {
+            if let Some(cap) =  INI_ENTRY.captures(line) {
+                let name = cap.get(1)
+                    .unwrap().as_str();
+                let volume: f32 = cap.get(2)
+                    .unwrap().as_str()
+                    .parse().unwrap();
+                if name == "all" {
+                    self.total_volume = volume / 100.0;
+                }
+                else if let Some(chn) = self.channels.get_mut(name) {
+                    chn.set_volume(volume / 100.0, self.total_volume);
+                }
+                entries.push((name.to_string().into_boxed_str(), volume));
+            }
+        }
+        self.ui_sender
+            .send(UIMessage::LoadedVolumeSettings(entries))
+            .expect("Failed to send UIMessage via ui_sender.");
+    }
+
+    pub fn set_current_volumes_as_default(&self, mut file: File) {
+        use std::io::Write;
+        writeln!(&mut file, "all={}", (self.total_volume*100.0) as u32)
+            .expect("Failed to write into default-volumes.ini file.");
+        for (channel_name, channel) in self.channels.iter() {
+            writeln!(&mut file, "{}={}", channel_name, (channel.local_volume*100.0) as u32)
+                .expect("Failed to write into default-volumes.ini file.");
+            println!("{}: {}", channel_name, (channel.local_volume*100.0) as u32);
         }
     }
 }
