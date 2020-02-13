@@ -35,6 +35,7 @@ fn main() {
             .captures(&conf_txt)
             .and_then(|c| c.get(1))
             .map(|m| PathBuf::from(m.as_str()))
+            .filter(|p| p.is_file())
     } else {
         None
     })
@@ -61,6 +62,7 @@ fn main() {
             .captures(&conf_txt)
             .and_then(|c| c.get(1))
             .map(|m| PathBuf::from(m.as_str()))
+            .filter(|p| p.is_dir())
     } else {
         None
     })
@@ -87,6 +89,7 @@ fn main() {
             .captures(&conf_txt)
             .and_then(|c| c.get(1))
             .map(|m| PathBuf::from(m.as_str()))
+            .filter(|p| p.is_file())
     } else {
         None
     })
