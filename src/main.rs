@@ -1,4 +1,4 @@
-// #![windows_subsystem = "windows"]
+#![windows_subsystem = "windows"]
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
