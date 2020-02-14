@@ -1,4 +1,4 @@
-// #![windows_subsystem = "windows"] // Remove comment only on release!
+#![windows_subsystem = "windows"] // Remove comment only on release!
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
