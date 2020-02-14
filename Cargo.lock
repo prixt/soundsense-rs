@@ -695,7 +695,7 @@ dependencies = [
 
 [[package]]
 name = "soundsense-rs"
-version = "1.4.0"
+version = "1.4.1"
 dependencies = [
  "dirs 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "getopts 0.2.21 (registry+https://github.com/rust-lang/crates.io-index)",
