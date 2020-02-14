@@ -224,7 +224,9 @@ impl SoundManager {
             }
         }
         channel_names.push("misc".into());
-        ui_sender.send(UIMessage::LoadedSoundpack(channel_names)).unwrap();
+        ui_sender
+            .send(UIMessage::LoadedSoundpack(channel_names))
+            .expect("Failed to send UIMessage via ui_sender.");
 
         // println!("Finished loading!");
         let mut manager = Self {
@@ -282,7 +284,10 @@ impl SoundManager {
     }
 
     pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) {
-        std::mem::replace(&mut self.ignore_list, ignore_list);
+        self.ignore_list = ignore_list;
+        self.ui_sender
+            .send(UIMessage::LoadedIgnoreList)
+            .expect("Failed to send UIMessage via ui_sender.");
     }
 
     pub fn process_log(&mut self, log: &str) {

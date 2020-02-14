@@ -1,3 +1,4 @@
+#[non_exhaustive]
 pub enum SoundMessage {
     ChangeGamelog(std::path::PathBuf),
     ChangeSoundpack(std::path::PathBuf),
@@ -8,6 +9,7 @@ pub enum SoundMessage {
 }
 
 #[allow(dead_code)]
+#[non_exhaustive]
 pub enum UIMessage {
     LoadedGamelog,
     LoadedSoundpack(Vec<Box<str>>),

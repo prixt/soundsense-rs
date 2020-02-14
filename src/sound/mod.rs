@@ -73,6 +73,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                     let mut file0 = File::open(&path).unwrap();
                     file0.seek(SeekFrom::End(0)).unwrap();
                     file = Some(file0);
+                    ui_tx.send(UIMessage::LoadedGamelog).unwrap();
                 }
 
                 ChangeSoundpack(path) => {
