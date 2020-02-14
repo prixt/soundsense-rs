@@ -1,4 +1,4 @@
-#![windows_subsystem = "windows"]
+// #![windows_subsystem = "windows"] // Remove comment only on release!
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
@@ -22,86 +22,71 @@ fn main() {
         });
 
     let matches = opts.parse(&args[1..]).unwrap();
-    let gamelog_path = matches.opt_str("l").and_then(|path| {
+    let gamelog_path = matches
+    .opt_str("l")
+    .and_then(|path| {
         let path = PathBuf::from(path);
-        if path.is_file() {
-            Some(path)
-        } else {
-            None
-        }
+        if path.is_file() {Some(path)} else {None}
     })
-    .or_else(|| if let Some(conf_txt) = &conf {
-        Regex::new("gamelog=(.+)").unwrap()
-            .captures(&conf_txt)
-            .and_then(|c| c.get(1))
-            .map(|m| PathBuf::from(m.as_str()))
-            .filter(|p| p.is_file())
-    } else {
-        None
-    })
+    .or_else(||
+        conf.as_ref()
+            .and_then(|conf_txt|
+                    Regex::new("gamelog=(.+)").unwrap()
+                        .captures(&conf_txt)
+                        .and_then(|c| c.get(1))
+                        .map(|m| PathBuf::from(m.as_str()))
+                        .filter(|p| p.is_file())
+            )
+    )
     .or_else(|| {
         let mut path = env::current_dir()
             .expect("Error finding current working directory.");
         path.push("gamelog.txt");
-        if path.is_file() {
-            Some(path)
-        } else {
-            None
-        }
+        if path.is_file() {Some(path)} else {None}
     });
-    let soundpack_path = matches.opt_str("p").and_then(|path| {
+    let soundpack_path = matches
+    .opt_str("p")
+    .and_then(|path| {
         let path = PathBuf::from(path);
-        if path.is_dir() {
-            Some(path)
-        } else {
-            None
-        }
+        if path.is_dir() {Some(path)} else {None}
     })
-    .or_else(|| if let Some(conf_txt) = &conf {
-        Regex::new("soundpack=(.+)").unwrap()
-            .captures(&conf_txt)
-            .and_then(|c| c.get(1))
-            .map(|m| PathBuf::from(m.as_str()))
-            .filter(|p| p.is_dir())
-    } else {
-        None
-    })
+    .or_else(||
+        conf.as_ref()
+            .and_then(|conf_txt|
+                Regex::new("soundpack=(.+)").unwrap()
+                    .captures(&conf_txt)
+                    .and_then(|c| c.get(1))
+                    .map(|m| PathBuf::from(m.as_str()))
+                    .filter(|p| p.is_dir())
+            )
+    )
     .or_else(|| {
         let mut path = env::current_dir()
             .expect("Error finding current working directory.");
         path.push("soundpack");
-        if path.is_dir() {
-            Some(path)
-        } else {
-            None
-        }
+        if path.is_dir() {Some(path)} else {None}
     });
-    let ignore_path = matches.opt_str("i").and_then(|path| {
+    let ignore_path = matches
+    .opt_str("i")
+    .and_then(|path| {
         let path = PathBuf::from(path);
-        if path.is_file() {
-            Some(path)
-        } else {
-            None
-        }
+        if path.is_file() {Some(path)} else {None}
     })
-    .or_else(|| if let Some(conf_txt) = &conf {
-        Regex::new("ignore=(.+)").unwrap()
-            .captures(&conf_txt)
-            .and_then(|c| c.get(1))
-            .map(|m| PathBuf::from(m.as_str()))
-            .filter(|p| p.is_file())
-    } else {
-        None
-    })
+    .or_else(||
+        conf.as_ref()
+            .and_then(|conf_txt|
+                Regex::new("ignore=(.+)").unwrap()
+                    .captures(&conf_txt)
+                    .and_then(|c| c.get(1))
+                    .map(|m| PathBuf::from(m.as_str()))
+                    .filter(|p| p.is_file())
+            )
+    )
     .or_else(|| {
         let mut path = env::current_dir()
             .expect("Error finding current working directory.");
         path.push("ignore.txt");
-        if path.is_file() {
-            Some(path)
-        } else {
-            None
-        }
+        if path.is_file() {Some(path)} else {None}
     });
 
     let (sound_tx, sound_rx) = channel();
