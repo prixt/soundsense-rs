@@ -5,7 +5,7 @@
 <style type="text/css">{range}</style>
 <script type="text/javascript">{js}</script>
 {comment_start}--></head>
-<body>
+<body onload="main()">
 <div class='w3-bar w3-border w3-light-grey w3-small'>
     <div class='w3-dropdown-hover'>
         <a ref='#' class='w3-button'>Load</a>
@@ -46,5 +46,7 @@
 <div class='w3-container'>
     <table class="w3-table w3-bordered" id="channels"></table>
 </div>
+<footer id='alerts' class='w3-bottom'></footer>
+<footer id='errors' class='w3-bottom'></footer>
 </body>
 </html>

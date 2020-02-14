@@ -11,12 +11,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 	let index_html = include_str!("web/index.html")
 		.replace("{comment_start}"	, "<!--")
 		.replace("{comment_end}"	, "-->")
+		.replace("<!---->"			, "")
 		.replace("{range}"			, include_str!("web/range.css"))
 		.replace("{w3}"				, include_str!("web/w3.css"))
-		.replace("    "				, "") // Remove four-space tabs
-		.replace("  "				, "") // Remove two-space tabs
-		.replace(|c: char| c.is_whitespace() && c != ' ', "") // Remove all non-space unneccesary whitespaces
-		.replace("{js}"				, include_str!("web/script.js"));
+		.replace("{js}"				, include_str!("web/script.js"))
+		.replace("  "				, "") // Remove tabs
+		.replace(|c: char| c.is_whitespace() && c != ' ', ""); // Remove all unneccesary whitespaces
 
 	File::create(dest_dir)?
 		.write_all( index_html.as_bytes() )?;
