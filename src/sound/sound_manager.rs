@@ -406,7 +406,6 @@ impl SoundManager {
         for (channel_name, channel) in self.channels.iter() {
             writeln!(&mut file, "{}={}", channel_name, (channel.local_volume*100.0) as u32)
                 .expect("Failed to write into default-volumes.ini file.");
-            println!("{}: {}", channel_name, (channel.local_volume*100.0) as u32);
         }
     }
 }
