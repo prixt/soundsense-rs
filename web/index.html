@@ -6,10 +6,10 @@
 <script type="text/javascript">{js}</script>
 {comment_start}--></head>
 <body onload="main()">
-<div class='w3-bar w3-border w3-light-grey w3-small'>
+<header class='w3-bar w3-light-grey w3-small'>
     <div class='w3-dropdown-hover'>
-        <a ref='#' class='w3-button'>Load</a>
-        <div class='w3-dropdown-content w3-bar-block'>
+        <button class='w3-button'>Load</button>
+        <div class='w3-dropdown-content w3-bar-block w3-border'>
         <button class='w3-bar-item w3-button'
             onclick="external.invoke('load_gamelog')">Load gamelog.txt</button>
         <button class='w3-bar-item w3-button'
@@ -19,8 +19,8 @@
         </div>
     </div>
     <div class='w3-dropdown-hover'>
-        <a ref ='#' class='w3-button'>Settings</a>
-        <div class='w3-dropdown-content w3-bar-block'>
+        <button class='w3-button'>Settings</button>
+        <div class='w3-dropdown-content w3-bar-block w3-border'>
         <button class='w3-bar-item w3-button'
             onclick="external.invoke('set_default_paths')">Set current paths as default</button>
         <button class='w3-bar-item w3-button'
@@ -32,8 +32,8 @@
         </div>
     </div>
     <div class='w3-dropdown-hover w3-right'>
-        <a ref ='#' class='w3-button'>Options</a>
-        <div class='w3-dropdown-content w3-bar-block' style='right:0'>
+        <button class='w3-button'>Options</button>
+        <div class='w3-dropdown-content w3-bar-block w3-border' style='right:0'>
             <button class='w3-bar-item w3-button'
                 onclick="external.invoke('link_original')">&#x1f517; - zwei's original SoundSense & soundpack</button>
             <button class='w3-bar-item w3-button'
@@ -42,10 +42,8 @@
                 onclick="external.invoke('show_about')">&#x2139; - About</button>
         </div>
     </div>
-</div>
-<div class='w3-container'>
-    <table class="w3-table w3-bordered" id="channels"></table>
-</div>
+</header>
+<div class="w3-block" id="channels"></div>
 <footer id='alerts' class='w3-bottom'></footer>
 <footer id='errors' class='w3-bottom'></footer>
 </body>
