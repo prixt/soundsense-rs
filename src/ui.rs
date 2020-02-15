@@ -174,12 +174,13 @@ Source at:
         for ui_message in ui_rx.try_iter() {
             match ui_message {
                 UIMessage::LoadedSoundpack(channel_names) => {
+                    std::thread::sleep(std::time::Duration::from_millis(500));
                     clear_sliders(&mut webview);
                     for name in channel_names.iter() {
                         add_slider(&mut webview, name)
                     }
                     remove_alert(&mut webview, "loading_soundpack");
-                    add_alert(&mut webview, "soundpack_loaded", "green", "✔️ Soundpack loaded!");
+                    add_alert(&mut webview, "soundpack_loaded", "green", "&#x2714; Soundpack loaded!");
                 }
                 UIMessage::LoadedVolumeSettings(entries) => {
                     for (name, volume) in entries.into_iter() {
@@ -188,11 +189,11 @@ Source at:
                 }
                 UIMessage::LoadedGamelog => {
                     remove_alert(&mut webview, "loading_gamelog");
-                    add_alert(&mut webview, "gamelog_loaded", "green", "✔️ Gamelog loaded!");
+                    add_alert(&mut webview, "gamelog_loaded", "green", "&#x2714; Gamelog loaded!");
                 }
                 UIMessage::LoadedIgnoreList => {
                     remove_alert(&mut webview, "loading_ignore");
-                    add_alert(&mut webview, "ignore_loaded", "green", "✔️ Ignore list loaded!");
+                    add_alert(&mut webview, "ignore_loaded", "green", "&#x2714; Ignore list loaded!");
                 }
             }
         }
