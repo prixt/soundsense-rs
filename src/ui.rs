@@ -27,19 +27,6 @@ pub fn run(
     let gamelog_path = Mutex::new(gamelog_path);
     let soundpack_path = Mutex::new(soundpack_path);
     let ignore_path = Mutex::new(ignore_path);
-
-    fn add_alert(webview: &mut WebView<()>, name: &str, color: &str, text: &str) {
-        webview.eval(&format!(
-            r#"addAlert("{}", "{}", "{}")"#,
-            name, color, text
-        )).unwrap();
-    }
-    fn remove_alert(webview: &mut WebView<()>, name: &str) {
-        webview.eval(&format!(
-            r#"removeAlert("{}")"#,
-            name
-        )).unwrap();
-    }
     
     let mut webview = builder()
         .title("SoundSense-RS")
@@ -58,7 +45,7 @@ pub fn run(
                         .unwrap()
                         .replace(path);
                     remove_alert(webview, "gamelog_loaded");
-                    add_alert(webview, "loading_gamelog", "blue", "⏳ Loading gamelog...");
+                    add_alert(webview, "loading_gamelog", "blue", "&#x231B; Loading gamelog...");
                 }
                 "load_soundpack" => if let Some(path) = webview.dialog()
                     .choose_directory("Choose soundpack directory", "")
@@ -68,7 +55,7 @@ pub fn run(
                         .unwrap()
                         .replace(path);
                     remove_alert(webview, "soundpack_loaded");
-                    add_alert(webview, "loading_soundpack", "blue", "⏳ Loading soundpack...");
+                    add_alert(webview, "loading_soundpack", "blue", "&#x231B; Loading soundpack...");
                 }
                 "load_ignore_list" => if let Some(path) = webview.dialog()
                     .open_file("Choose ignore.txt", "")
@@ -78,7 +65,7 @@ pub fn run(
                         .unwrap()
                         .replace(path);
                     remove_alert(webview, "ignore_loaded");
-                    add_alert(webview, "loading_ignore", "blue", "⏳ Loading ignore list...");
+                    add_alert(webview, "loading_ignore", "blue", "&#x231B; Loading ignore list...");
                 }
                 "show_about" => {
                     webview.dialog()
@@ -121,7 +108,7 @@ Source at:
                         writeln!(conf_file, "ignore={}", path.to_string_lossy()).unwrap();
                     };
                     remove_alert(webview, "remove_default_paths");
-                    add_alert(webview, "set_default_paths", "green", "💾 Default paths set.");
+                    add_alert(webview, "set_default_paths", "green", "&#x1F4BE; Default paths set.");
                 }
                 "set_default_volumes" => {
                     let mut conf_path = dirs::config_dir().unwrap();
@@ -135,7 +122,7 @@ Source at:
                         .expect("Failed to create default-volumes.ini file.");
                     sound_tx.send(SoundMessage::SetCurrentVolumesAsDefault(conf_file)).unwrap();
                     remove_alert(webview, "remove_default_volumes");
-                    add_alert(webview, "set_default_volumes", "green", "💾 Default volumes set.");
+                    add_alert(webview, "set_default_volumes", "green", "&#x1F4BE; Default volumes set.");
                 }
                 "remove_default_paths" => {
                     let mut conf_path = dirs::config_dir().unwrap();
@@ -146,7 +133,7 @@ Source at:
                             fs::remove_file(conf_path)
                                 .expect("Failed to delete default-paths.ini file.");
                             remove_alert(webview, "set_default_paths");
-                            add_alert(webview, "remove_default_paths", "blue", "🗑️ Removed path defaults.");
+                            add_alert(webview, "remove_default_paths", "blue", "&#x1F5D1; Removed path defaults.");
                         }
                     }
                 }
@@ -159,7 +146,7 @@ Source at:
                             fs::remove_file(conf_path)
                                 .expect("Failed to delete default-volumes.ini file.");
                             remove_alert(webview, "set_default_volumes");
-                            add_alert(webview, "remove_default_volumes", "blue", "🗑️ Removed volume defaults.");
+                            add_alert(webview, "remove_default_volumes", "blue", "&#x1F5D1; Removed volume defaults.");
                         }
                     }
                 }
@@ -181,97 +168,61 @@ Source at:
         })
         .build()
         .unwrap();
-    let mut handle = UIHandle::new(webview.handle());
     
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
             match ui_message {
                 UIMessage::LoadedSoundpack(channel_names) => {
-                    handle.clear_sliders();
+                    clear_sliders(&mut webview);
                     for name in channel_names.iter() {
-                        handle.add_slider(name)
+                        add_slider(&mut webview, name)
                     }
-                    handle.remove_alert("loading_soundpack");
-                    handle.add_alert("soundpack_loaded", "green", "✔️ Soundpack loaded!");
+                    remove_alert(&mut webview, "loading_soundpack");
+                    add_alert(&mut webview, "soundpack_loaded", "green", "✔️ Soundpack loaded!");
                 }
                 UIMessage::LoadedVolumeSettings(entries) => {
                     for (name, volume) in entries.into_iter() {
-                        handle.set_slider_value(name, volume);
+                        set_slider_value(&mut webview, name, volume);
                     }
                 }
                 UIMessage::LoadedGamelog => {
-                    handle.remove_alert("loading_gamelog");
-                    handle.add_alert("gamelog_loaded", "green", "✔️ Gamelog loaded!");
+                    remove_alert(&mut webview, "loading_gamelog");
+                    add_alert(&mut webview, "gamelog_loaded", "green", "✔️ Gamelog loaded!");
                 }
                 UIMessage::LoadedIgnoreList => {
-                    handle.remove_alert("loading_ignore");
-                    handle.add_alert("ignore_loaded", "green", "✔️ Ignore list loaded!");
+                    remove_alert(&mut webview, "loading_ignore");
+                    add_alert(&mut webview, "ignore_loaded", "green", "✔️ Ignore list loaded!");
                 }
             }
         }
     }
 }
 
-pub struct UIHandle {
-    handle: Handle<()>,
-    channels: Vec<Box<str>>,
+fn add_slider(webview: &mut WebView<()>, name: &str) {
+    webview.eval(
+        &format!(r#"addSlider("{channel_name}")"#, channel_name=&name)
+    ).unwrap();
 }
-
-impl UIHandle {
-    pub fn new(handle: Handle<()>) -> Self {
-        Self {
-            handle, channels: vec![],
-        }
-    }
-    pub fn add_slider(&mut self, name: &str) {
-        let name = name.into();
-        if !self.channels.contains(&name){
-            self.channels.push(name.clone());
-            self.handle.dispatch(
-                move |webview| {
-                    webview.eval(
-                        &format!(r#"addSlider("{channel_name}")"#, channel_name=&name)
-                    )
-                }
-            ).unwrap();
-        }
-    }
-    pub fn set_slider_value(&mut self, name: Box<str>, value: f32) {
-        let eval_str = format!(
-            r#"setSliderValue("{channel_name}", {value})"#,
-            channel_name=&name,
-            value=value as u32
-        );
-        self.handle.dispatch(
-            move |webview| webview.eval(&eval_str)
-        ).unwrap();
-    }
-    pub fn clear_sliders(&mut self) {
-        self.channels.clear();
-        self.handle.dispatch(
-            |webview| {
-                webview.eval("clearSliders()")
-            }
-        ).unwrap();
-    }
-    pub fn add_alert(&mut self, name: &str, color: &str, text: &str) {
-        let eval_str = format!(
-            r#"addAlert("{}", "{}", "{}")"#,
-            name, color, text
-        );
-        self.handle.dispatch(
-            move |webview| webview.eval(&eval_str)
-        ).unwrap();
-    }
-    #[allow(dead_code)]
-    pub fn remove_alert(&mut self, name: &str) {
-        let eval_str = format!(
-            r#"removeAlert("{}")"#,
-            name
-        );
-        self.handle.dispatch(
-            move |webview| webview.eval(&eval_str)
-        ).unwrap();
-    }
+fn set_slider_value(webview: &mut WebView<()>, name: Box<str>, value: f32) {
+    webview.eval(&format!(
+        r#"setSliderValue("{channel_name}", {value})"#,
+        channel_name=&name,
+        value=value as u32
+    )).unwrap();
+}
+fn clear_sliders(webview: &mut WebView<()>) {
+    webview.eval("clearSliders()").unwrap();
+}
+fn add_alert(webview: &mut WebView<()>, name: &str, color: &str, text: &str) {
+    webview.eval(&format!(
+        r#"addAlert("{}", "{}", "{}")"#,
+        name, color, text
+    )).unwrap();
+}
+fn remove_alert(webview: &mut WebView<()>, name: &str) {
+    webview.eval(&format!(
+        r#"removeAlert("{}")"#,
+        name
+    )).unwrap();
 }

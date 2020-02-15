@@ -12,12 +12,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let mut opts = getopts::Options::new();
     opts.optopt("l", "gamelog", 
-        "Path to the gamelog.txt file. (Default: .\\gamelog.txt)", "LOG_FILE");
-    opts.optopt("p", "soundpack", 
-        "Path to the soundpack directory. (Default: .\\soundpack)", "PACK_DIR");
-    opts.optopt("i", "ignore", 
-        "Path to the ignore.txt file. (Default: .\\ignore.txt)", "IGNORE_FILE");
-    opts.optflag("", "no-config", 
+        "Path to the gamelog.txt file. (Default: .\\gamelog.txt)", "LOG_FILE")
+        .optopt("p", "soundpack", 
+        "Path to the soundpack directory. (Default: .\\soundpack)", "PACK_DIR")
+        .optopt("i", "ignore", 
+        "Path to the ignore.txt file. (Default: .\\ignore.txt)", "IGNORE_FILE")
+        .optflag("", "no-config", 
         "Don't read config files on start. Will use the given paths, or soundsense-rs defaults.");
 
     let matches = match opts.parse(&args[1..]) {
