@@ -169,12 +169,14 @@ Source at:
         .build()
         .unwrap();
     
+    webview.step().unwrap().unwrap();
+    // std::thread::sleep(std::time::Duration::from_millis(5000));
+    
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
             match ui_message {
                 UIMessage::LoadedSoundpack(channel_names) => {
-                    std::thread::sleep(std::time::Duration::from_millis(500));
                     clear_sliders(&mut webview);
                     for name in channel_names.iter() {
                         add_slider(&mut webview, name)
