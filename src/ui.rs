@@ -31,7 +31,7 @@ pub fn run(
     let mut webview = builder()
         .title("SoundSense-RS")
         .content(Content::Html(HTML))
-        .size(500, 550)
+        .size(500, 440)
         .resizable(true)
         .debug(true)
         .user_data(())

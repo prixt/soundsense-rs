@@ -8,6 +8,7 @@ function addSlider(channel_name) {
         createSlider(channel_name)
     );
     let slider = document.getElementById(channel_name+"_slider");
+    slider.style.cssText="padding: 0px 10px 0px 0px;";
     slider.addEventListener(is_windows?'change':'input',function(){
             external.invoke("change_volume:"+channel_name+":"+this.value);
         },
@@ -15,19 +16,17 @@ function addSlider(channel_name) {
     );
 }
 function createSlider(channel_name) {
-    let slider = document.createElement("tr");
-    slider.className="w3-row";
+    let slider = document.createElement("div");
+    slider.className="w3-cell-row w3-border-bottom";
     slider.insertAdjacentHTML(
         'afterbegin',
-        "<td class='w3-center' style='width:50px'><h4>"+channel_name+"</h4></td>"+
-        "<td class='w3-rest'>"+
-            "<input type='range'"+
-                "id='"+channel_name+"_slider'"+
-                "min='0'"+
-                "max='100'"+
-                "value='100'"+
-            "/>"+
-        "</td>"
+        "<div class='w3-cell w3-cell-middle w3-center w3-padding-small' style='width:10%;min-width:90px'>"+
+            "<h4>"+channel_name+"</h4>"+
+        "</div>"+
+        "<div class='w3-cell w3-cell-middle w3-rest w3-container w3-padding-small'>"+
+            "<input type='range' id='"+channel_name+"_slider'"+
+                "min='0' max='100' value='100'>"+
+        "</div>"
     );
     return slider;
 }
@@ -61,9 +60,10 @@ function createAlert(name, color, text) {
     let alert=document.createElement("div");
     alert.name = name;
     alert.id="alert_"+name;
-    alert.className="w3-container w3-animate-bottom w3-"+color;
+    alert.className="w3-bar w3-animate-bottom w3-"+color;
+    alert.style.cssText="padding: 0px 5px 0px 20px;";
     alert.innerHTML=text;
-    alert.timer = 2.5;
+    alert.timer = 4.0;
 
     let cross = document.createElement("span");
     cross.className="w3-closebtn";
