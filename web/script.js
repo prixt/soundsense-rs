@@ -35,14 +35,11 @@ function createSlider(channel_name) {
 }
 function setSliderValue(channel_name, value) {
     let slider = document.getElementById(channel_name+"_slider");
-    if (slider != null) {
-        slider.value = value;
-    }
+    if (slider != null) slider.value = value;
 }
 function clearSliders() {
-    while (channels.firstChild) {
+    while (channels.firstChild)
         channels.removeChild(channels.firstChild);
-    }
 }
 
 let alerts_footer = null;
@@ -52,9 +49,8 @@ function addAlert(name, color, text) {
     let new_alert = createAlert(name, color, text);
     alerts[name] = new_alert;
     alerts_footer.insertAdjacentElement('afterbegin', new_alert);
-    if (alerts_footer.childElementCount > 4) {
+    if (alerts_footer.childElementCount > 4)
         removeAlert(alerts_footer.lastChild.name);
-    }
 }
 function removeAlert(name) {
     let alert = document.getElementById("alert_"+name);
@@ -86,19 +82,20 @@ function main() {
     alerts_footer = document.getElementById('alerts');
     alerts = new Map();
     
-    let prev = Date.now();
+    let prev = null;
     function step(now) {
-      let dt = (now - prev) * 0.001;
-      prev = now;
+        let dt = 0.0;
+        if (prev != null) dt = (now - prev) * 0.001;
+        prev = now;
 
-      for (let key in alerts) {
-        let alert = alerts[key];
-        alert.timer -= dt;
-        if (alert.timer <= 1) {alert.style.opacity = alert.timer;}
-        if (alert.timer <= 0) {removeAlert(alert.name);}
-      }
+        for (let key in alerts) {
+            let alert = alerts[key];
+            alert.timer -= dt;
+            if (alert.timer <= 1.0) alert.style.opacity = alert.timer;
+            if (alert.timer <= 0.0) removeAlert(alert.name);
+        }
 
-      window.requestAnimationFrame(step);
+        window.requestAnimationFrame(step);
     }
   
     window.requestAnimationFrame(step);
