@@ -106,6 +106,7 @@ fn main() {
 
     let (sound_tx, sound_rx) = channel();
     let (ui_tx, ui_rx) = channel();
+    
     std::thread::Builder::new()
         .name("sound_thread".to_string())
         .spawn(move || sound::run(sound_rx, ui_tx)).unwrap();
