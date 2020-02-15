@@ -29,7 +29,7 @@ jobs:
           tag_name: ${{ steps.tag_name.outputs.tag }}
           release_name: ${{ steps.tag_name.outputs.tag }}
           draft: false
-          prerelease: "contains(steps.tag_name.outputs.tag, 'alpha') || contains(steps.tag_name.outputs.tag, 'beta')"
+          prerelease: ${{contains(steps.tag_name.outputs.tag, 'alpha') || contains(steps.tag_name.outputs.tag, 'beta')}}
       
       - name: Write Down URL
         run: echo "${{steps.create_release.outputs.upload_url}}" > upload_url
