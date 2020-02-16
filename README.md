@@ -1,5 +1,5 @@
 # SOUNDSENSE-RS : SoundSense, written in Rust.</br>![Release](https://github.com/prixt/soundsense-rs/workflows/Release/badge.svg?branch=release) ![Build](https://github.com/prixt/soundsense-rs/workflows/Build/badge.svg)
-My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine tool for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
+My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine utility for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 <p align='center'>
     <img src="./screenshots/windows-screenshot.png" title='Windows screenshot' width='40%'>
@@ -25,6 +25,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 * __-p / --soundpack [PACK_DIR] :__ preload the soundpack _(default: ".\soundpack")_
 * __-i / --ignore [IGNORE_FILE] :__ preload the ignore list _(default: ".\ignore.txt")_
     * The ignore list is a simple text file, with each line being a regular expression. Any gamelog entries that match an expression in the ignore list will not be parsed.
+* __--no-config :__ Don't read config files on start. Will use the given paths, or soundsense-rs defaults.
 
 Example:
 
@@ -37,10 +38,9 @@ Each line in the ignore list file is considered an regex pattern. If a gamelog m
 Example:
 
     (.+) cancels (.+): (.*)(Water|water)(.*)\.
-
 This pattern will make soundsense-rs ignore any cancallations related to water.
 
-The regex pattern uses the [regex crate](https://docs.rs/regex/1.3.4/regex/) syntax.
+The regex pattern uses the [regex crate](https://docs.rs/regex/) syntax.
 
 ## [MIT License](./LICENSE)
 
