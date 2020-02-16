@@ -4,7 +4,6 @@ use std::path::PathBuf;
 use std::io::Write;
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
-// use crate::download;
 
 pub fn run(
     sound_tx: Sender<SoundMessage>, ui_rx: Receiver<UIMessage>,
