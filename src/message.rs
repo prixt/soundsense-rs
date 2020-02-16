@@ -1,24 +1,18 @@
+#[non_exhaustive]
 pub enum SoundMessage {
     ChangeGamelog(std::path::PathBuf),
     ChangeSoundpack(std::path::PathBuf),
     ChangeIgnoreList(std::path::PathBuf),
-    VolumeChange(String, f32),
-    SetCurrentPathsAsDefault,
-    SetCurrentVolumesAsDefault,
+    VolumeChange(Box<str>, f32),
+    // SetCurrentPathsAsDefault,
+    SetCurrentVolumesAsDefault(std::fs::File),
 }
 
-#[derive(Debug, Clone)]
+#[allow(dead_code)]
 #[non_exhaustive]
 pub enum UIMessage {
-    GamelogPressed,
-
-    SoundpackPressed,
-    SoundpackLoaded,
-
-    IgnorePressed,
-
-    Resolved,
-
-    AboutPressed,
-    ChannelVolumeChanged(usize, f32),
+    LoadedGamelog,
+    LoadedSoundpack(Vec<Box<str>>),
+    LoadedIgnoreList,
+    LoadedVolumeSettings(Vec<(Box<str>,f32)>),
 }

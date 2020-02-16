@@ -1,9 +1,9 @@
 use std::sync::mpsc::{Sender, Receiver};
-use std::time::Duration;
+use std::time::{Instant, Duration};
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 
 use crate::message::*;
 use notify::{Watcher, RecursiveMode, DebouncedEvent};
@@ -52,23 +52,22 @@ pub struct SoundEntry {
     pub delay: Option<usize>,	// number, delay before sound is played. In miliseconds, default 0.
     pub halt_on_match: bool,	// boolean, if set to true, sound sense will stop processing long line after it was matched to this sound. Default false
     pub random_balance: bool,	// boolean, if set to true will randomply distribute sound betweem stereo channels.
+    pub playback_threshold: u8,
     pub files: Vec<SoundFile>,
     pub weights: Vec<f32>,
     pub current_timeout: usize,
     pub recent_call: usize,
 }
 
-pub fn run(
-    sound_receiver: Receiver<SoundMessage>,
-    ui_sender: Sender<Vec<String>>
-) {
+pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
     let mut manager : Option<SoundManager> = None;
     let mut file : Option<File> = None;
     let (notify_tx, notify_rx) = std::sync::mpsc::channel();
     let mut watcher = notify::watcher(notify_tx, Duration::from_millis(100)).unwrap();
 
+    let mut prev = Instant::now();
     loop {
-        for message in sound_receiver.try_iter() {
+        for message in sound_rx.try_iter() {
             use SoundMessage::*;
             match message {
                 ChangeGamelog(path) => {
@@ -76,10 +75,11 @@ pub fn run(
                     let mut file0 = File::open(&path).unwrap();
                     file0.seek(SeekFrom::End(0)).unwrap();
                     file = Some(file0);
+                    ui_tx.send(UIMessage::LoadedGamelog).unwrap();
                 }
 
                 ChangeSoundpack(path) => {
-                    manager = Some(SoundManager::new(&path, ui_sender.clone()));
+                    manager = Some(SoundManager::new(&path, ui_tx.clone()));
                 }
 
                 message => if let Some(manager) = manager.as_mut() {
@@ -100,13 +100,12 @@ pub fn run(
                             manager.set_volume(&channel, volume * 0.01);
                         }
 
-                        SetCurrentPathsAsDefault => {
-                            println!("SetCurrentPathAsDefault");
-                        }
+                        // SetCurrentPathsAsDefault => {
+                        //     println!("SetCurrentPathAsDefault");
+                        // }
 
-                        SetCurrentVolumesAsDefault => {
-                            println!("SetCurrentVolumesAsDefault");
-
+                        SetCurrentVolumesAsDefault(file) => {
+                            manager.set_current_volumes_as_default(file);
                         }
                         _ => (),
                     }
@@ -129,7 +128,10 @@ pub fn run(
             }
         }
         if let Some(manager) = manager.as_mut() {
-            manager.maintain();
+            let current = Instant::now();
+            let dt = current.duration_since(prev).as_millis() as usize;
+            manager.maintain(dt);
+            prev = current;
         }
         
         std::thread::sleep(Duration::from_millis(100));

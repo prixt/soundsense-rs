@@ -4,23 +4,27 @@ pub struct SoundChannel {
     pub looping: SpatialSink,
     pub files: Vec<SoundFile>,
     pub one_shots: Vec<SpatialSink>,
-    pub volume: f32,
+    pub local_volume: f32,
+    pub total_volume: f32,
     pub delay: usize,
+    only_one_sound: bool,
 }
 
 impl SoundChannel {
-    pub fn new(device: &Device) -> Self {
+    pub fn new(device: &Device, name: &str) -> Self {
         Self {
             looping : SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]),
             files : Vec::new(),
             one_shots : Vec::new(),
-            volume : 1.0,
+            local_volume : 1.0,
+            total_volume : 1.0,
             delay : 0,
+            only_one_sound: name == "weather" || name == "music",
         }
     }
 
-	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng) {
-		let delay = self.delay.saturating_sub(100);
+	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, dt: usize) {
+		let delay = self.delay.saturating_sub(dt);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
 			if delay != 0 {
@@ -36,7 +40,8 @@ impl SoundChannel {
 				self.looping = SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
 				for file in self.files.iter() {
 					append_soundfile_to_sink(&self.looping, file, true, rng);
-				}
+                }
+                self.looping.set_volume(self.local_volume * self.total_volume);
 			}
 		} else {
 			self.looping.pause();
@@ -48,19 +53,26 @@ impl SoundChannel {
         self.files.clear();
         self.files.extend_from_slice(files);
         self.delay = delay;
-        self.maintain(device, rng);
+        self.maintain(device, rng, 0);
     }
 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
         self.looping.pause();
         let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
         append_soundfile_to_sink(&sink, file, false, rng);
+        sink.set_volume(self.local_volume * self.total_volume);
+        if self.only_one_sound {
+            self.one_shots
+                .drain(..)
+                .for_each(|s| s.stop());
+        }
         self.one_shots.push(sink);
         self.delay = delay;
     }
 
     pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {
-        self.volume = local_volume;
+        self.local_volume = local_volume;
+        self.total_volume = total_volume;
         let final_volume = local_volume * total_volume;
         self.looping.set_volume(final_volume);
         self.one_shots.iter()
@@ -106,7 +118,7 @@ fn assert_file(path: &Path, sink: &SpatialSink, volume: f32, balance: f32) {
             sink.set_emitter_position([balance, 1.0, 0.0]);
         },
         Err(e) => {
-            println!("error: {}, path: {}", e, path.to_string_lossy());
+            eprintln!("Error while asserting {}: {}", path.display(), e);
         }
     }
 }

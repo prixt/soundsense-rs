@@ -5,33 +5,37 @@ pub struct SoundManager {
     recent: HashSet<usize>,
     ignore_list: Vec<Regex>,
     device: Device,
-    channels: HashMap<Box<str>, SoundChannel>,
+    channels: BTreeMap<Box<str>, SoundChannel>,
     total_volume: f32,
     concurency: usize,
+    ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
     ui_sender: Sender<Vec<String>>
 }
 
 impl SoundManager {
-	pub fn new(sound_dir: &Path, ui_sender: Sender<Vec<String>>) -> Self {
+	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Self {
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
-		let mut channels : HashMap<Box<str>, SoundChannel> = HashMap::new();
+		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
-			SoundChannel::new(&device)
+			SoundChannel::new(&device, "misc")
 		);
 
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
-			for entry in fs::read_dir(dir).unwrap() {
-				let entry = entry.unwrap();
-				let path = entry.path();
-				if path.is_dir() {
-					visit_dir(&path, func);
-				} else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
-					func(&path);
-				}
-			}
+            match fs::read_dir(dir) {
+                Ok(entries) => for entry in entries {
+                    let entry = entry.unwrap();
+                    let path = entry.path();
+                    if path.is_dir() {
+                        visit_dir(&path, func);
+                    } else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
+                        func(&path);
+                    }
+                },
+                Err(e) => eprintln!("Error while visiting {}: {}", dir.display(), e),
+            }
 		}
 
         let mut func = |file_path: &Path| {
@@ -56,6 +60,8 @@ impl SoundManager {
                             let mut delay: Option<usize> = None;
                             let mut halt_on_match: bool = false;
                             let mut random_balance: bool = false;
+                            #[allow(unused_mut)]
+                            let mut playback_threshold: u8 = 5;
                             let files = Vec::new();
                             let weights = Vec::new();
 
@@ -71,7 +77,7 @@ impl SoundManager {
                                     b"channel" => {
                                         let channel_name : Box<str> = attr_value.into();
                                         if !channels.contains_key(&channel_name) {
-                                            channels.insert(channel_name.clone(), SoundChannel::new(&device));
+                                            channels.insert(channel_name.clone(), SoundChannel::new(&device, &channel_name));
                                         }
                                         channel = Some(channel_name);
                                     }
@@ -85,7 +91,7 @@ impl SoundManager {
                                         timeout = Some( attr_value.parse().unwrap() );
                                     }
                                     // Probability was mispelled...
-                                    b"propability" => {
+                                    b"propability" | b"probability" => {
                                         probability = Some( attr_value.parse().unwrap() );
                                     }
                                     b"delay" => {
@@ -97,11 +103,13 @@ impl SoundManager {
                                     b"randomBalance" => {
                                         random_balance = attr_value == "true" ;
                                     }
+                                    b"playbackThreshhold" => {
+                                        playback_threshold = attr_value.parse().unwrap();
+                                    }
                                     b"ansiFormat" => (),
                                     b"ansiPattern" => (),
-                                    b"playbackThreshhold" => (),
                                     _ => {
-                                        println!(
+                                        eprintln!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
@@ -120,6 +128,7 @@ impl SoundManager {
                                     delay,
                                     halt_on_match,
                                     random_balance,
+                                    playback_threshold,
                                     files,
                                     weights,
                                     current_timeout: 0,
@@ -128,8 +137,8 @@ impl SoundManager {
                             );
                         }
 
-                        else if current_sound.is_some() && local_name == b"soundFile" {
-
+                        else if local_name == b"soundFile" {
+                            assert!(current_sound.is_some(), "SoundFile must be associated with a Sound!");
                             let mut path = PathBuf::from(file_path);
                             path.pop();
                             let mut is_playlist = false;
@@ -141,9 +150,7 @@ impl SoundManager {
 
                             for attr in data.attributes() {
                                 let attr = attr.unwrap();
-                                let attr_value = unsafe {
-                                    std::str::from_utf8_unchecked(&attr.value)
-                                };
+                                let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
                                 match attr.key {
                                     b"fileName" => path.push(attr_value),
                                     b"weight" => {
@@ -166,7 +173,7 @@ impl SoundManager {
                                         is_playlist = true;
                                     }
                                     _ => {
-                                        println!(
+                                        eprintln!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
@@ -200,7 +207,7 @@ impl SoundManager {
                         }
                     },
 
-                    Ok(Event::Eof) => break,
+                    Ok(Event::Eof) => return,
 
                     Err(e) => panic!("Error parsing xml at position {}: {:?}", reader.buffer_position(), e),
 
@@ -210,27 +217,23 @@ impl SoundManager {
         };
 
         visit_dir(sound_dir, &mut func);
-        let mut channel_names = vec![
-            "all".to_string(),
-            "music".to_string(),
-            "weather".to_string(),
-            "trade".to_string(),
-            "swords".to_string(),
-            "misc".to_string(),
+
+        let mut channel_names: Vec<Box<str>> = vec![
+            "all".into(),
+            "music".into(),
         ];
-        for channel in channels.keys() {
-            if channel_names
-                .iter()
-                .find(|name| *name.as_str() == **channel)
-                .is_none()
-            {
-                channel_names.push(channel.to_string())
+        for channel_name in channels.keys() {
+            if !channel_names.contains(channel_name) && channel_name.as_ref() != "misc" {
+                channel_names.push(channel_name.clone());
             }
         }
-        ui_sender.send(channel_names).unwrap();
+        channel_names.push("misc".into());
+        ui_sender
+            .send(UIMessage::LoadedSoundpack(channel_names))
+            .expect("Failed to send UIMessage via ui_sender.");
 
-        // println!("Finished loading!");
-        Self {
+        println!("Soundpack loaded!");
+        let mut manager = Self {
             sounds,
             recent: HashSet::new(),
             ignore_list: Vec::new(),
@@ -238,18 +241,28 @@ impl SoundManager {
             channels,
             total_volume: 1.0,
             concurency: 0,
-            rng: thread_rng(),
             ui_sender,
+            rng: thread_rng(),
+        };
+
+        let mut conf_path = dirs::config_dir().unwrap();
+        conf_path.push("soundsense-rs/default-volumes.ini");
+        if conf_path.is_file() {
+            let file = fs::File::open(conf_path)
+                .expect("Failed to open default-volumes.ini file.");
+            manager.get_default_volume(file);
         }
+
+        manager
     }
 
-	pub fn maintain(&mut self) {
+	pub fn maintain(&mut self, dt: usize) {
 		self.concurency = 0;
 		{
 			let sounds = &mut self.sounds;
 			let recent = &mut self.recent;
 			recent.retain(|&i| {
-				let timeout = sounds[i].current_timeout.saturating_sub(100);
+				let timeout = sounds[i].current_timeout.saturating_sub(dt);
 				let recent_call = sounds[i].recent_call.saturating_sub(1);
 				sounds[i].current_timeout = timeout;
 				sounds[i].recent_call = recent_call;
@@ -257,7 +270,7 @@ impl SoundManager {
 			});
 		}
 		for chn in self.channels.values_mut() {
-			chn.maintain(&self.device, &mut self.rng);
+			chn.maintain(&self.device, &mut self.rng, dt);
 			self.concurency += chn.len();
 		}
 	}
@@ -266,7 +279,7 @@ impl SoundManager {
         if channel_name == "all" {
             self.total_volume = volume;
             for channel in self.channels.values_mut() {
-                channel.set_volume(channel.volume, self.total_volume);
+                channel.set_volume(channel.local_volume, self.total_volume);
             }
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
@@ -275,7 +288,10 @@ impl SoundManager {
     }
 
     pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) {
-        std::mem::replace(&mut self.ignore_list, ignore_list);
+        self.ignore_list = ignore_list;
+        self.ui_sender
+            .send(UIMessage::LoadedIgnoreList)
+            .expect("Failed to send UIMessage via ui_sender.");
     }
 
     pub fn process_log(&mut self, log: &str) {
@@ -293,7 +309,7 @@ impl SoundManager {
 
         for (i, sound) in sounds.iter_mut().enumerate() {
             if sound.pattern.is_match(log) {
-                println!("--pattern: {}", sound.pattern.as_str());
+                println!("-pattern: {}", sound.pattern.as_str());
                 recent.insert(i);
                 sound.recent_call += 1;
 
@@ -310,7 +326,13 @@ impl SoundManager {
                 if can_play {
                     let files = &sound.files;
                     let idx : usize = if files.len() > 1 && !sound.loop_attr.unwrap_or(false) {
-                        WeightedIndex::new(&sound.weights).unwrap().sample(rng)
+                        match WeightedIndex::new(&sound.weights) {
+                            Ok(weight) => weight.sample(rng),
+                            Err(e) => {
+                                eprintln!("Error while weighing files: {}", e);
+                                0
+                            }
+                        }
                     } else {
                         0
                     };
@@ -322,16 +344,16 @@ impl SoundManager {
                         sound.current_timeout = sound.recent_call * 100;
                     }
                     if let Some(chn) = &sound.channel {
-                        println!("--channel: {}", chn);
+                        print!("--channel: {}", chn);
                         let device = &self.device;
                         let channel = self.channels.get_mut(chn).unwrap();
                         
                         if let Some(is_loop_start) = sound.loop_attr {
                             if is_loop_start {
-                                println!("----loop=start");
+                                print!(" --loop=start");
                                 channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
                             } else {
-                                println!("----loop=stop");
+                                print!(" --loop=stop");
                                 channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
                                 if !sound.files.is_empty() {
                                     channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
@@ -341,8 +363,9 @@ impl SoundManager {
                         else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
                             channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
                         }
-                    
-                    } else if !sound.files.is_empty() {
+                        println!();
+                    }
+                    else if !sound.files.is_empty() {
                         let channel = self.channels.get_mut("misc").unwrap();
                         if channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
@@ -356,6 +379,45 @@ impl SoundManager {
             }
         }
     }
+
+    pub fn get_default_volume(&mut self, mut file: File) {
+        lazy_static! {
+            static ref INI_ENTRY: Regex = Regex::new("([[:word:]]+)=(.+)").unwrap();
+        }
+        let mut buf = String::new();
+        let mut entries = vec![];
+        file.read_to_string(&mut buf)
+            .expect("Failed to read default-volume.ini file.");
+        for line in buf.lines() {
+            if let Some(cap) =  INI_ENTRY.captures(line) {
+                let name = cap.get(1)
+                    .unwrap().as_str();
+                let volume: f32 = cap.get(2)
+                    .unwrap().as_str()
+                    .parse().unwrap();
+                if name == "all" {
+                    self.total_volume = volume / 100.0;
+                }
+                else if let Some(chn) = self.channels.get_mut(name) {
+                    chn.set_volume(volume / 100.0, self.total_volume);
+                }
+                entries.push((name.to_string().into_boxed_str(), volume));
+            }
+        }
+        self.ui_sender
+            .send(UIMessage::LoadedVolumeSettings(entries))
+            .expect("Failed to send UIMessage via ui_sender.");
+    }
+
+    pub fn set_current_volumes_as_default(&self, mut file: File) {
+        use std::io::Write;
+        writeln!(&mut file, "all={}", (self.total_volume*100.0) as u32)
+            .expect("Failed to write into default-volumes.ini file.");
+        for (channel_name, channel) in self.channels.iter() {
+            writeln!(&mut file, "{}={}", channel_name, (channel.local_volume*100.0) as u32)
+                .expect("Failed to write into default-volumes.ini file.");
+        }
+    }
 }
 
 fn parse_playlist(path: &Path) -> Vec<PathBuf> {
@@ -364,7 +426,11 @@ fn parse_playlist(path: &Path) -> Vec<PathBuf> {
     let mut path_vec = Vec::new();
     let mut f = File::open(path).unwrap();
     let buf = &mut String::new();
-    let extension = path.extension().unwrap();
+    let extension = path.extension()
+        .unwrap_or_else(|| panic!(
+            "Playlist {:?} is not valid! Playlist needs to have either .m3u or .pls extension.",
+            path
+        ));
     if extension == "m3u" {
         f.read_to_string(buf).unwrap();
         for line in buf.lines() {
@@ -398,7 +464,10 @@ fn parse_playlist(path: &Path) -> Vec<PathBuf> {
         }
     }
     else {
-        unreachable!("Playlist {:?} is not valid!", path)
+        panic!(
+            "Playlist {:?} is not valid! Playlist needs to have either .m3u or .pls extension.",
+            path
+        )
     }
     
     path_vec

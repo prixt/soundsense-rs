@@ -1,15 +1,15 @@
 [package]
 name = "soundsense-rs"
-version = "1.4.0"
+version = "1.4.4"
+build = "build.rs"
 authors = ["prixt <paraxite@naver.com>"]
 edition = "2018"
+description = "A Rusty SoundSense alternative"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies.iced]
-git="https://github.com/hecrj/iced"
-rev="95880ca74bddb6a23774621ef766b91956d40a61"
-features = ["tokio"]
+[features]
+edge = ["web-view/edge"]
 
 [dependencies]
 notify = "4.0"
@@ -18,9 +18,10 @@ rodio = "0.10"
 quick-xml = "0.17"
 rand = "0.7"
 lazy_static = "1.4"
+web-view = "0.6"
 getopts = "0.2"
-hyper = "0.13"
-tinyfiledialogs = "3.3"
+webbrowser = "0.5.2"
+dirs = "2.0"
 
 [profile.release]
 lto = true

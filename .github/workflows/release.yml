@@ -1,0 +1,166 @@
+name: Release
+
+on:
+  push:
+    tags: 'v[0-9]+.[0-9]+.[0-9]+**'
+
+jobs:
+  prepare-release:
+    if: "!contains(github.event.head_commit.message, 'ci-skip')"
+    runs-on: windows-latest
+    name: Prepare Release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Echo Tag
+        run: echo ${{steps.tag_name.outputs.tag }}
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_name.outputs.tag }}
+          release_name: ${{ steps.tag_name.outputs.tag }}
+          draft: false
+          prerelease: ${{contains(steps.tag_name.outputs.tag, 'alpha') || contains(steps.tag_name.outputs.tag, 'beta')}}
+      
+      - name: Write Down URL
+        run: echo "${{steps.create_release.outputs.upload_url}}" > upload_url
+      
+      - name: Upload URL
+        uses: actions/upload-artifact@v1
+        with:
+          name: upload_url
+          path: upload_url
+
+  build-linux:
+    needs: prepare-release
+    name: Build Release (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Download URL
+        uses: actions/download-artifact@v1
+        with:
+          name: upload_url
+      
+      - name: Get URL
+        id: get_url
+        run: echo ::set-output name=url::$( cat upload_url/upload_url )
+      
+      - name: Echo URL
+        run: echo ${{steps.get_url.outputs.url}}
+      
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_url.outputs.url}}
+          asset_path: ./target/release/soundsense-rs
+          asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-linux
+          asset_content_type: application/octet-stream  
+
+  build-macos:
+    needs: prepare-release
+    name: Build Release (MacOS)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Download URL
+        uses: actions/download-artifact@v1
+        with:
+          name: upload_url
+      
+      - name: Get URL
+        id: get_url
+        run: echo ::set-output name=url::$( cat upload_url/upload_url )
+      
+      - name: Echo URL
+        run: echo ${{steps.get_url.outputs.url}}
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_url.outputs.url}}
+          asset_path: ./target/release/soundsense-rs
+          asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-osx
+          asset_content_type: application/octet-stream
+  
+  build-windows:
+    needs: prepare-release
+    name: Build Release (Windows)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Download URL
+        uses: actions/download-artifact@v1
+        with:
+          name: upload_url
+      
+      - name: Get URL
+        id: get_url
+        run: echo "::set-output name=url::$( cat upload_url/upload_url )"
+      
+      - name: Echo URL
+        run: echo "${{steps.get_url.outputs.url}}"
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_url.outputs.url}}
+          asset_path: ./target/release/soundsense-rs.exe
+          asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}-windows.exe
+          asset_content_type: application/octet-stream
