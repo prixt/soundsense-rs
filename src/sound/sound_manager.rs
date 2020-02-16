@@ -10,7 +10,6 @@ pub struct SoundManager {
     concurency: usize,
     ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
-    ui_sender: Sender<Vec<String>>
 }
 
 impl SoundManager {
@@ -270,7 +269,7 @@ impl SoundManager {
 			});
 		}
 		for chn in self.channels.values_mut() {
-			chn.maintain(&self.device, &mut self.rng, dt);
+			chn.maintain(&mut self.rng, dt);
 			self.concurency += chn.len();
 		}
 	}
@@ -279,11 +278,11 @@ impl SoundManager {
         if channel_name == "all" {
             self.total_volume = volume;
             for channel in self.channels.values_mut() {
-                channel.set_volume(channel.local_volume, self.total_volume);
+                channel.set_total_volume(volume);
             }
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
-            channel.set_volume(volume, self.total_volume);
+            channel.set_local_volume(volume);
         }
     }
 
@@ -354,7 +353,7 @@ impl SoundManager {
                                 channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
                             } else {
                                 print!(" --loop=stop");
-                                channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
+                                channel.stop_loop(sound.delay.unwrap_or(0));
                                 if !sound.files.is_empty() {
                                     channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
                                 }
@@ -366,6 +365,7 @@ impl SoundManager {
                         println!();
                     }
                     else if !sound.files.is_empty() {
+                        println!("--channel: misc");
                         let channel = self.channels.get_mut("misc").unwrap();
                         if channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
@@ -399,7 +399,8 @@ impl SoundManager {
                     self.total_volume = volume / 100.0;
                 }
                 else if let Some(chn) = self.channels.get_mut(name) {
-                    chn.set_volume(volume / 100.0, self.total_volume);
+                    chn.set_local_volume(volume / 100.0);
+                    chn.set_total_volume(self.total_volume);
                 }
                 entries.push((name.to_string().into_boxed_str(), volume));
             }
@@ -414,7 +415,7 @@ impl SoundManager {
         writeln!(&mut file, "all={}", (self.total_volume*100.0) as u32)
             .expect("Failed to write into default-volumes.ini file.");
         for (channel_name, channel) in self.channels.iter() {
-            writeln!(&mut file, "{}={}", channel_name, (channel.local_volume*100.0) as u32)
+            writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)
                 .expect("Failed to write into default-volumes.ini file.");
         }
     }

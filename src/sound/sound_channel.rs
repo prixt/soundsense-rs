@@ -1,20 +1,24 @@
 use super::*;
 
+mod loop_player;
+mod oneshot_player;
+
+use loop_player::LoopPlayer;
+
 pub struct SoundChannel {
-    pub looping: SpatialSink,
-    pub files: Vec<SoundFile>,
-    pub one_shots: Vec<SpatialSink>,
-    pub local_volume: f32,
-    pub total_volume: f32,
-    pub delay: usize,
+    looping: LoopPlayer,
+    one_shots: Vec<SpatialSink>,
+    local_volume: f32,
+    total_volume: f32,
+    delay: usize,
     only_one_sound: bool,
 }
 
 impl SoundChannel {
+    #[inline]
     pub fn new(device: &Device, name: &str) -> Self {
         Self {
-            looping : SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]),
-            files : Vec::new(),
+            looping : LoopPlayer::new(device),
             one_shots : Vec::new(),
             local_volume : 1.0,
             total_volume : 1.0,
@@ -23,7 +27,7 @@ impl SoundChannel {
         }
     }
 
-	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, dt: usize) {
+	pub fn maintain(&mut self, rng: &mut ThreadRng, dt: usize) {
 		let delay = self.delay.saturating_sub(dt);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
@@ -34,26 +38,28 @@ impl SoundChannel {
 			}
 			!s.empty()
 		});
-		self.looping.play();
 		if self.one_shots.is_empty() && delay == 0 {
-			if self.looping.empty() && !self.files.is_empty() {
-				self.looping = SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
-				for file in self.files.iter() {
-					append_soundfile_to_sink(&self.looping, file, true, rng);
-                }
-                self.looping.set_volume(self.local_volume * self.total_volume);
-			}
+            self.looping.play();
+            self.looping.maintain(rng);
 		} else {
 			self.looping.pause();
 		}
 	}
 
     pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
-        self.looping.stop();
-        self.files.clear();
-        self.files.extend_from_slice(files);
+        self.looping.change_loop(device, files, rng);
         self.delay = delay;
-        self.maintain(device, rng, 0);
+        self.maintain(rng, 0);
+        if self.only_one_sound {
+            self.one_shots
+                .drain(..)
+                .for_each(|s| s.stop());
+        }
+    }
+
+    pub fn stop_loop(&mut self, delay: usize) {
+        self.looping.stop();
+        self.delay = delay;
     }
 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
@@ -70,10 +76,21 @@ impl SoundChannel {
         self.delay = delay;
     }
 
-    pub fn set_volume(&mut self, local_volume: f32, total_volume: f32) {
+    #[inline]
+    pub fn set_local_volume(&mut self, local_volume: f32) {
         self.local_volume = local_volume;
+        self.set_final_volume(local_volume * self.total_volume);
+    }
+    #[inline]
+    pub fn set_total_volume(&mut self, total_volume: f32) {
         self.total_volume = total_volume;
-        let final_volume = local_volume * total_volume;
+        self.set_final_volume(self.local_volume * total_volume);
+    }
+    #[inline]
+    pub fn get_local_volume(&self) -> f32 {self.local_volume}
+
+    #[inline]
+    fn set_final_volume(&mut self, final_volume: f32) {
         self.looping.set_volume(final_volume);
         self.one_shots.iter()
             .for_each(|s| s.set_volume(final_volume));
@@ -81,7 +98,7 @@ impl SoundChannel {
 
     #[inline]
     pub fn len(&self) -> usize {
-        self.one_shots.len() + !(self.files.is_empty() || self.looping.is_paused()) as usize
+        self.one_shots.len() + !self.looping.is_paused() as usize
     }
 }
 
