@@ -61,7 +61,7 @@ function createAlert(name, color, text) {
     alert.name = name;
     alert.id="alert_"+name;
     alert.className="w3-bar w3-animate-bottom w3-"+color;
-    alert.style.cssText="padding: 0px 5px 0px 20px;";
+    alert.style.cssText="padding: 2px 15px 2px 15px;";
     alert.innerHTML=text;
     alert.timer = 4.0;
 

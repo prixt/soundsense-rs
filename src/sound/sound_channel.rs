@@ -1,5 +1,6 @@
 use super::*;
 
+
 pub struct SoundChannel {
     pub looping: SpatialSink,
     pub files: Vec<SoundFile>,
@@ -7,10 +8,11 @@ pub struct SoundChannel {
     pub local_volume: f32,
     pub total_volume: f32,
     pub delay: usize,
+    only_one_sound: bool,
 }
 
 impl SoundChannel {
-    pub fn new(device: &Device) -> Self {
+    pub fn new(device: &Device, name: &str) -> Self {
         Self {
             looping : SpatialSink::new(device, [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]),
             files : Vec::new(),
@@ -18,11 +20,12 @@ impl SoundChannel {
             local_volume : 1.0,
             total_volume : 1.0,
             delay : 0,
+            only_one_sound: name == "weather" || name == "music",
         }
     }
 
-	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng) {
-		let delay = self.delay.saturating_sub(100);
+	pub fn maintain(&mut self, device: &Device, rng: &mut ThreadRng, dt: usize) {
+		let delay = self.delay.saturating_sub(dt);
 		self.delay = delay;
 		self.one_shots.retain(|s| {
 			if delay != 0 {
@@ -51,7 +54,7 @@ impl SoundChannel {
         self.files.clear();
         self.files.extend_from_slice(files);
         self.delay = delay;
-        self.maintain(device, rng);
+        self.maintain(device, rng, 0);
     }
 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
@@ -59,6 +62,11 @@ impl SoundChannel {
         let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
         append_soundfile_to_sink(&sink, file, false, rng);
         sink.set_volume(self.local_volume * self.total_volume);
+        if self.only_one_sound {
+            self.one_shots
+                .drain(..)
+                .for_each(|s| s.pause());
+        }
         self.one_shots.push(sink);
         self.delay = delay;
     }
