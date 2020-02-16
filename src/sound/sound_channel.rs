@@ -1,13 +1,15 @@
 use super::*;
+use source::Spatial;
 
 mod loop_player;
 mod oneshot_player;
 
 use loop_player::LoopPlayer;
+use oneshot_player::OneshotPlayer;
 
 pub struct SoundChannel {
     looping: LoopPlayer,
-    one_shots: Vec<SpatialSink>,
+    one_shots: OneshotPlayer,
     local_volume: f32,
     total_volume: f32,
     delay: usize,
@@ -19,7 +21,7 @@ impl SoundChannel {
     pub fn new(device: &Device, name: &str) -> Self {
         Self {
             looping : LoopPlayer::new(device),
-            one_shots : Vec::new(),
+            one_shots : OneshotPlayer::new(),
             local_volume : 1.0,
             total_volume : 1.0,
             delay : 0,
@@ -29,21 +31,17 @@ impl SoundChannel {
 
 	pub fn maintain(&mut self, rng: &mut ThreadRng, dt: usize) {
 		let delay = self.delay.saturating_sub(dt);
-		self.delay = delay;
-		self.one_shots.retain(|s| {
-			if delay != 0 {
-				s.pause();
-			} else {
-				s.play();
-			}
-			!s.empty()
-		});
+        self.delay = delay;
+        if self.delay > 0 {
+            self.one_shots.pause()
+        }
+        self.one_shots.maintain();
 		if self.one_shots.is_empty() && delay == 0 {
             self.looping.play();
-            self.looping.maintain(rng);
 		} else {
 			self.looping.pause();
 		}
+        self.looping.maintain(rng);
 	}
 
     pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
@@ -51,9 +49,7 @@ impl SoundChannel {
         self.delay = delay;
         self.maintain(rng, 0);
         if self.only_one_sound {
-            self.one_shots
-                .drain(..)
-                .for_each(|s| s.stop());
+            self.one_shots.stop();
         }
     }
 
@@ -63,16 +59,21 @@ impl SoundChannel {
     }
 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
-        self.looping.pause();
-        let sink = SpatialSink::new(device, [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0], [1.0, 0.0, 0.0]);
-        append_soundfile_to_sink(&sink, file, false, rng);
-        sink.set_volume(self.local_volume * self.total_volume);
         if self.only_one_sound {
-            self.one_shots
-                .drain(..)
-                .for_each(|s| s.stop());
+            self.looping.pause();
+            self.one_shots.stop();
         }
-        self.one_shots.push(sink);
+        self.one_shots.play();
+        get_soundfiles(file, false, rng)
+            .into_iter()
+            .for_each(|(volume, balance, source)|
+                self.one_shots.add_source(
+                    device,
+                    source.convert_samples::<f32>(),
+                    volume,
+                    balance
+                )
+            );
         self.delay = delay;
     }
 
@@ -92,8 +93,7 @@ impl SoundChannel {
     #[inline]
     fn set_final_volume(&mut self, final_volume: f32) {
         self.looping.set_volume(final_volume);
-        self.one_shots.iter()
-            .for_each(|s| s.set_volume(final_volume));
+        self.one_shots.set_volume(final_volume);
     }
 
     #[inline]
@@ -102,40 +102,39 @@ impl SoundChannel {
     }
 }
 
-fn append_soundfile_to_sink(sink: &SpatialSink, soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) {
+fn get_soundfiles(soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) -> Vec<(f32, f32, rodio::decoder::Decoder<std::fs::File>)>
+{
     let volume = soundfile.volume;
     let balance: f32 = if soundfile.random_balance {
-            rng.gen_range(-1.0, 1.0)
-        } else {
-            soundfile.balance
-        };
+        rng.gen_range(-1.0, 1.0)
+    } else {
+        soundfile.balance
+    };
     match soundfile.r#type {
         SoundFileType::IsPath(ref path) => {
-            assert_file(path, sink, volume, balance);
+            vec![ (volume, balance, get_source(path)) ]
         }
         SoundFileType::IsPlaylist(ref paths) => {
             if is_looping {
-                paths.iter().for_each(|p| {
-                    assert_file(p, sink, volume, balance);
-                });
+                paths.iter()
+                    .map(|p| (volume, balance, get_source(p)))
+                    .collect()
             } else {
-                assert_file(&paths.choose(rng).unwrap(), sink, volume, balance);
+                vec![ (volume, balance, get_source(&paths.choose(rng).unwrap())) ]
             }
         }
     }
 }
 
-fn assert_file(path: &Path, sink: &SpatialSink, volume: f32, balance: f32) {
+fn get_source(path: &Path) -> rodio::decoder::Decoder<std::fs::File> {
     let f = fs::File::open(path).unwrap();
     let source = Decoder::new(f);
     match source {
         Ok(source) => {
-            let source = source.amplify(volume);
-            sink.append(source.buffered().convert_samples::<f32>());
-            sink.set_emitter_position([balance, 1.0, 0.0]);
+            source
         },
         Err(e) => {
-            eprintln!("Error while asserting {}: {}", path.display(), e);
+            panic!("Error while asserting {}: {}", path.display(), e);
         }
     }
 }

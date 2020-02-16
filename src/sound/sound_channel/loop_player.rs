@@ -2,8 +2,9 @@ use super::*;
 use std::sync::{
     Arc,
     Mutex,
-    atomic::{AtomicBool, Ordering}
+    atomic::{AtomicBool, AtomicUsize, Ordering},
 };
+
 struct Control {
     stopped: AtomicBool,
     paused: AtomicBool,
@@ -12,7 +13,7 @@ struct Control {
 
 pub struct LoopPlayer {
     queue_tx: Arc<queue::SourcesQueueInput<f32>>,
-    in_queue: usize,
+    in_queue: Arc<AtomicUsize>,
     controls: Arc<Control>,
     sleep_until_end: Option<Receiver<()>>,
     current_file_idx: usize,
@@ -30,7 +31,7 @@ impl LoopPlayer {
         };
         Self {
             queue_tx,
-            in_queue: 0,
+            in_queue: Arc::new(AtomicUsize::new(0)),
             controls: Arc::new(control),
             sleep_until_end: None,
             current_file_idx: 0,
@@ -40,6 +41,7 @@ impl LoopPlayer {
 
     #[inline]
     pub fn play(&self) {
+        self.controls.stopped.store(false, Ordering::SeqCst);
         self.controls.paused.store(false, Ordering::SeqCst);
     }
 
@@ -108,29 +110,41 @@ impl LoopPlayer {
         }
     }
 
-    fn append_source<S>(&mut self, source: S, volume: f32, _balance: f32)
+    fn append_source<S>(&mut self, source: S, source_volume: f32, _balance: f32)
     where
         S: Source + Send + 'static,
         S::Item: Sample + Send
     {
         let controls = self.controls.clone();
-        let source = source
+        let source = source.convert_samples::<f32>()
             .pausable(false)
-            .amplify(volume)
+            .amplify(1.0)
             .stoppable()
-            .periodic_access(Duration::from_millis(5), move |src| {
-                if controls.stopped.load(Ordering::SeqCst) {
-                    src.stop();
+            .periodic_access(Duration::from_millis(5),
+                move |src| {
+                    if controls.stopped.load(Ordering::SeqCst) {
+                        src.stop();
+                    }
+                    else {
+                        src.inner_mut()
+                            .set_factor(
+                                source_volume * (*controls.volume.lock().unwrap())
+                            );
+                        src.inner_mut()
+                            .inner_mut()
+                            .set_paused(controls.paused.load(Ordering::SeqCst));
+                    }
                 }
-                else {
-                    src.inner_mut().set_factor(*controls.volume.lock().unwrap());
-                    src.inner_mut()
-                        .inner_mut()
-                        .set_paused(controls.paused.load(Ordering::SeqCst));
-                }
-            })
-            .convert_samples();
-        self.in_queue += 1;
+            ).convert_samples::<f32>();
+        // TODO: make Spatial work in here!!
+        // let source = Spatial::new(
+        //     source,
+        //     [_balance, 1.0, 0.0],
+        //     [-1.0, 0.0, 0.0],
+        //     [1.0, 0.0, 0.0],
+        // );
+        self.in_queue.fetch_add(1, Ordering::SeqCst);
+        let source = source::Done::new(source, self.in_queue.clone());
         self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
     }
 
@@ -148,8 +162,7 @@ impl LoopPlayer {
     }
 
     fn on_source_end(&mut self, rng: &mut ThreadRng) {
-        self.in_queue -= 1;
-        if self.in_queue == 0 {
+        if self.in_queue.load(Ordering::Relaxed) == 0 {
             self.current_file_idx += 1;
             if self.files.len() == self.current_file_idx {
                 self.current_file_idx = 0;

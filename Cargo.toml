@@ -14,7 +14,7 @@ edge = ["web-view/edge"]
 [dependencies]
 notify = "4.0"
 regex = {version="1.3", default-features=false, features=["std", "perf"]}
-rodio = "0.10"
+rodio = {git="https://github.com/RustAudio/rodio", rev="2c7d1716707876aad450949fa9c7d4f3a8c5ea3b"}
 quick-xml = "0.17"
 rand = "0.7"
 lazy_static = "1.4"
