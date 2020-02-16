@@ -1,6 +1,5 @@
 use super::*;
 
-
 pub struct SoundChannel {
     pub looping: SpatialSink,
     pub files: Vec<SoundFile>,
@@ -65,7 +64,7 @@ impl SoundChannel {
         if self.only_one_sound {
             self.one_shots
                 .drain(..)
-                .for_each(|s| s.pause());
+                .for_each(|s| s.stop());
         }
         self.one_shots.push(sink);
         self.delay = delay;

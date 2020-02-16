@@ -349,10 +349,10 @@ impl SoundManager {
                         
                         if let Some(is_loop_start) = sound.loop_attr {
                             if is_loop_start {
-                                print!("--loop=start");
+                                print!(" --loop=start");
                                 channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
                             } else {
-                                print!("--loop=stop");
+                                print!(" --loop=stop");
                                 channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
                                 if !sound.files.is_empty() {
                                     channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);

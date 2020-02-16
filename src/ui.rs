@@ -69,13 +69,17 @@ pub fn run(
                 "show_about" => {
                     webview.dialog()
                         .info(
-                            "SoundSense-rs",
-                            r"Created by prixt
-The original SoundSense can be found at:
-    http://df.zweistein.cz/soundsense/
-Source at:
-    https://github.com/prixt/soundsense-rs",
-                        ).unwrap()
+                            "About SoundSense-RS",
+                            &format!(
+r"
+A sound-engine utility for Dwarf Fortress, written in Rust
+    Version {}
+    Created by prixt
+    Original SoundSense created by zwei:
+    http://df.zweistein.cz/soundsense/",
+                                env!("CARGO_PKG_VERSION")
+                            )
+                        ).unwrap();
                 }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
@@ -84,6 +88,11 @@ Source at:
                 }
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
+                        eprintln!("webbrowser error: {}", e);
+                    }
+                }
+                "link_source" => {
+                    if let Err(e) = webbrowser::open("https://github.com/prixt/soundsense-rs") {
                         eprintln!("webbrowser error: {}", e);
                     }
                 }
