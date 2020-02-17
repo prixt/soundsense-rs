@@ -69,6 +69,9 @@ jobs:
         id: tag_name
         uses: olegtarasov/get-tag@v1
       
+      - name: Rustup Update
+        run: rustup update
+      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
@@ -109,6 +112,9 @@ jobs:
         id: tag_name
         uses: olegtarasov/get-tag@v1
       
+      - name: Rustup Update
+        run: rustup update
+      
       - name: Cargo Build
         uses: actions-rs/cargo@v1
         with:
@@ -148,6 +154,9 @@ jobs:
       - name: Get Tag
         id: tag_name
         uses: olegtarasov/get-tag@v1
+      
+      - name: Rustup Update
+        run: rustup update
       
       - name: Cargo Build
         uses: actions-rs/cargo@v1
