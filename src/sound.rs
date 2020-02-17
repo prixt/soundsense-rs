@@ -1,6 +1,6 @@
 use std::time::{Instant, Duration};
 use std::fs::{self, File};
-use std::io::{Read, Seek, SeekFrom};
+use std::io::{Read, Seek, SeekFrom, BufReader, BufRead};
 use std::path::{Path, PathBuf};
 use std::collections::{BTreeMap, HashSet};
 use std::sync::{
@@ -10,7 +10,6 @@ use std::sync::{
 };
 
 use crate::message::*;
-use notify::{Watcher, RecursiveMode, DebouncedEvent};
 use rodio::*;
 use rand::prelude::*;
 use rand::distributions::weighted::WeightedIndex;
@@ -79,9 +78,7 @@ pub struct SoundEntry {
 
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
     let mut manager : Option<SoundManager> = None;
-    let mut file : Option<File> = None;
-    let (notify_tx, notify_rx) = std::sync::mpsc::channel();
-    let mut watcher = notify::watcher(notify_tx, Duration::from_millis(100)).unwrap();
+    let mut buf_reader : Option<BufReader<File>> = None;
 
     let mut prev = Instant::now();
     loop {
@@ -92,10 +89,10 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
             use SoundMessage::*;
             match message {
                 ChangeGamelog(path) => {
-                    watcher.watch(&path, RecursiveMode::NonRecursive).unwrap();
+                    // watcher.watch(&path, RecursiveMode::NonRecursive).unwrap();
                     let mut file0 = File::open(&path).unwrap();
                     file0.seek(SeekFrom::End(0)).unwrap();
-                    file = Some(file0);
+                    buf_reader = Some(BufReader::new(file0));
                     ui_tx.send(UIMessage::LoadedGamelog).unwrap();
                 }
 
@@ -130,19 +127,12 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
             }
         }
 
-        for event in notify_rx.try_iter() {
-            if file.is_some() && manager.is_some() {
-                let manager = manager.as_mut().unwrap();
-                if let DebouncedEvent::Write(_path) = event {
-                    let file = file.as_mut().unwrap();
-                    let mut buf = Vec::new();
-                    file.read_to_end(&mut buf).unwrap();
-                    let lossy = String::from_utf8_lossy(&buf);
-                    lossy.lines().for_each(|log| {
-                        manager.process_log(log);
-                    });
-                }
-            }
+        if buf_reader.is_some() && manager.is_some() {
+            let manager = manager.as_mut().unwrap();
+            let buf_reader = buf_reader.as_mut().unwrap();
+            buf_reader.lines()
+                .filter_map(|result| result.ok())
+                .for_each(|log| manager.process_log(&log));
         }
         if let Some(manager) = manager.as_mut() {
             manager.maintain(dt);
