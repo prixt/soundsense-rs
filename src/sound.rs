@@ -41,7 +41,7 @@ pub struct SoundFile {
     pub r#type: SoundFileType,	// path to audio file with sound. OR list of paths
     pub weight: f32,	// controls likelihood of sound to be chosen. Default is 100.
     pub volume: f32,	// adjusts volume of sample. Can range from -40 to +6 decibles, default 0.
-    pub random_balance: bool,	// if set to true will randomply distribute sound between stereo channels.
+    pub random_balance: bool,	// if set to true will randomly distribute sound between stereo channels.
     pub delay: usize,	// number, delay before sound is played. In miliseconds, default 0.
     pub balance: f32,	// adjusts stereo channel, can range for -1 (full left) to 1 (full right).
 }
