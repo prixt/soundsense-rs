@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
       
+      - name: Rustup Update
+        run: rustup update
+      
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -24,4 +27,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --verbose
+          args: --release -vv

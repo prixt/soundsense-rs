@@ -6,20 +6,20 @@ pub struct SoundManager {
     ignore_list: Vec<Regex>,
     device: Device,
     channels: BTreeMap<Box<str>, SoundChannel>,
-    total_volume: f32,
-    concurency: usize,
+    total_volume: VolumeLock,
     ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
 }
 
 impl SoundManager {
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Self {
+        let total_volume = VolumeLock::new();
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
 		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
-			SoundChannel::new(&device, "misc")
+			SoundChannel::new(&device, "misc", total_volume.clone())
 		);
 
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
@@ -76,7 +76,7 @@ impl SoundManager {
                                     b"channel" => {
                                         let channel_name : Box<str> = attr_value.into();
                                         if !channels.contains_key(&channel_name) {
-                                            channels.insert(channel_name.clone(), SoundChannel::new(&device, &channel_name));
+                                            channels.insert(channel_name.clone(), SoundChannel::new(&device, &channel_name, total_volume.clone()));
                                         }
                                         channel = Some(channel_name);
                                     }
@@ -238,8 +238,7 @@ impl SoundManager {
             ignore_list: Vec::new(),
             device,
             channels,
-            total_volume: 1.0,
-            concurency: 0,
+            total_volume: total_volume.clone(),
             ui_sender,
             rng: thread_rng(),
         };
@@ -256,7 +255,6 @@ impl SoundManager {
     }
 
 	pub fn maintain(&mut self, dt: usize) {
-		self.concurency = 0;
 		{
 			let sounds = &mut self.sounds;
 			let recent = &mut self.recent;
@@ -269,20 +267,16 @@ impl SoundManager {
 			});
 		}
 		for chn in self.channels.values_mut() {
-			chn.maintain(&self.device, &mut self.rng, dt);
-			self.concurency += chn.len();
+			chn.maintain(&mut self.rng, dt);
 		}
 	}
 
     pub fn set_volume(&mut self, channel_name: &str, volume: f32) {
         if channel_name == "all" {
-            self.total_volume = volume;
-            for channel in self.channels.values_mut() {
-                channel.set_volume(channel.local_volume, self.total_volume);
-            }
+            self.total_volume.set(volume);
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
-            channel.set_volume(volume, self.total_volume);
+            channel.set_local_volume(volume);
         }
     }
 
@@ -316,10 +310,12 @@ impl SoundManager {
                 if can_play {
                     if let Some(probability) = sound.probability {
                         can_play &= probability >= rng.next_u32() as usize;
+                        if !can_play {
+                            println!("--can't play: failed probability roll");
+                        }
                     }
-                    if let Some(concurency) = sound.concurency {
-                        can_play &= self.concurency <= concurency;
-                    }
+                } else {
+                    println!("--can't play: current_timeout: {}", sound.current_timeout);
                 }
 
                 if can_play {
@@ -335,51 +331,75 @@ impl SoundManager {
                     } else {
                         0
                     };
-                    if let Some(timeout) = sound.timeout {
-                        sound.current_timeout = timeout;
-                    }
-                    // Prevent repeated alerts from firing constantly.
-                    if sound.recent_call >= sound.current_timeout + 5 {
-                        sound.current_timeout = sound.recent_call * 100;
-                    }
+
                     if let Some(chn) = &sound.channel {
                         print!("--channel: {}", chn);
-                        let device = &self.device;
                         let channel = self.channels.get_mut(chn).unwrap();
-                        
-                        if let Some(is_loop_start) = sound.loop_attr {
-                            if is_loop_start {
-                                print!(" --loop=start");
-                                channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
-                            } else {
-                                print!(" --loop=stop");
-                                channel.change_loop(device, &[], sound.delay.unwrap_or(0), rng);
-                                if !sound.files.is_empty() {
-                                    channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                        let chn_len = channel.len();
+                        if chn_len < sound.concurency.unwrap_or(std::usize::MAX) {
+                            if let Some(timeout) = sound.timeout {
+                                sound.current_timeout = timeout;
+                            }
+                            let device = &self.device;
+                            
+                            if let Some(is_loop_start) = sound.loop_attr {
+                                if is_loop_start {
+                                    print!(" --loop=start");
+                                    channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
+                                } else {
+                                    print!(" --loop=stop");
+                                    channel.stop_loop(sound.delay.unwrap_or(0));
+                                    if !sound.files.is_empty() {
+                                        channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                                    }
                                 }
                             }
+                            else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
+                                channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                            }
+                            println!();
                         }
-                        else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
-                            channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                        else {
+                            println!(" --can't play: at concurency limit: limit {}, channel {}",
+                                sound.concurency.unwrap(), chn_len);
                         }
-                        println!();
                     }
                     else if !sound.files.is_empty() {
+                        print!("--channel: misc");
                         let channel = self.channels.get_mut("misc").unwrap();
-                        if channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
+                        let chn_len = channel.len();
+                        if channel.len() < sound.concurency.unwrap_or(std::usize::MAX) {
+                            if let Some(timeout) = sound.timeout {
+                                sound.current_timeout = timeout;
+                            }
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
                         }
+                        else {
+                            println!(" --can't play: at concurency limit: limit {}, channel {}",
+                                sound.concurency.unwrap(), chn_len);
+                        }
+                        println!();
                     }
                 }
 
                 if sound.halt_on_match {
-                    break;
+                    return
                 }
             }
         }
     }
 
-    pub fn get_default_volume(&mut self, mut file: File) {
+    pub fn set_current_volumes_as_default(&self, mut file: File) {
+        use std::io::Write;
+        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)
+            .expect("Failed to write into default-volumes.ini file.");
+        for (channel_name, channel) in self.channels.iter() {
+            writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)
+                .expect("Failed to write into default-volumes.ini file.");
+        }
+    }
+
+    fn get_default_volume(&mut self, mut file: File) {
         lazy_static! {
             static ref INI_ENTRY: Regex = Regex::new("([[:word:]]+)=(.+)").unwrap();
         }
@@ -395,10 +415,10 @@ impl SoundManager {
                     .unwrap().as_str()
                     .parse().unwrap();
                 if name == "all" {
-                    self.total_volume = volume / 100.0;
+                    self.total_volume.set(volume / 100.0);
                 }
                 else if let Some(chn) = self.channels.get_mut(name) {
-                    chn.set_volume(volume / 100.0, self.total_volume);
+                    chn.set_local_volume(volume / 100.0);
                 }
                 entries.push((name.to_string().into_boxed_str(), volume));
             }
@@ -406,16 +426,6 @@ impl SoundManager {
         self.ui_sender
             .send(UIMessage::LoadedVolumeSettings(entries))
             .expect("Failed to send UIMessage via ui_sender.");
-    }
-
-    pub fn set_current_volumes_as_default(&self, mut file: File) {
-        use std::io::Write;
-        writeln!(&mut file, "all={}", (self.total_volume*100.0) as u32)
-            .expect("Failed to write into default-volumes.ini file.");
-        for (channel_name, channel) in self.channels.iter() {
-            writeln!(&mut file, "{}={}", channel_name, (channel.local_volume*100.0) as u32)
-                .expect("Failed to write into default-volumes.ini file.");
-        }
     }
 }
 
