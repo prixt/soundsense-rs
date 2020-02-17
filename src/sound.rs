@@ -1,9 +1,13 @@
-use std::sync::mpsc::{Sender, Receiver};
 use std::time::{Instant, Duration};
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::collections::{BTreeMap, HashSet};
+use std::sync::{
+    Arc, Mutex, RwLock,
+    mpsc::{Sender, Receiver},
+    atomic::{AtomicBool, AtomicUsize, Ordering}
+};
 
 use crate::message::*;
 use notify::{Watcher, RecursiveMode, DebouncedEvent};
@@ -40,6 +44,20 @@ pub struct SoundFile {
     pub random_balance: bool,	// if set to true will randomply distribute sound between stereo channels.
     pub delay: usize,	// number, delay before sound is played. In miliseconds, default 0.
     pub balance: f32,	// adjusts stereo channel, can range for -1 (full left) to 1 (full right).
+}
+
+#[derive(Clone)]
+pub struct VolumeLock(Arc<RwLock<f32>>);
+impl VolumeLock {
+    pub fn new() -> Self {
+        Self(Arc::new(RwLock::new(1.0)))
+    }
+    pub fn get(&self) -> f32 {
+        *self.0.read().unwrap()
+    }
+    pub fn set(&self, volume: f32) {
+        *self.0.write().unwrap() = volume;
+    }
 }
 
 pub struct SoundEntry {

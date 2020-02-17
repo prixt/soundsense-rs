@@ -1,9 +1,4 @@
 use super::*;
-use std::sync::{
-    Arc,
-    Mutex,
-    atomic::{AtomicBool, AtomicUsize, Ordering},
-};
 
 struct Control {
     stopped: AtomicBool,
@@ -15,13 +10,19 @@ pub struct LoopPlayer {
     queue_tx: Arc<queue::SourcesQueueInput<f32>>,
     in_queue: Arc<AtomicUsize>,
     controls: Arc<Control>,
+    local_volume: VolumeLock,
+    total_volume: VolumeLock,
     sleep_until_end: Option<Receiver<()>>,
     current_file_idx: usize,
     files: Vec<SoundFile>,
 }
 impl LoopPlayer {
     #[inline]
-    pub fn new(device: &Device) -> Self {
+    pub fn new(
+        device: &Device,
+        local_volume: VolumeLock,
+        total_volume: VolumeLock
+    ) -> Self {
         let (queue_tx, queue_rx) = queue::queue(true);
         play_raw(device, queue_rx);
         let control = Control {
@@ -33,6 +34,8 @@ impl LoopPlayer {
             queue_tx,
             in_queue: Arc::new(AtomicUsize::new(0)),
             controls: Arc::new(control),
+            local_volume,
+            total_volume,
             sleep_until_end: None,
             current_file_idx: 0,
             files: vec![],
@@ -60,12 +63,18 @@ impl LoopPlayer {
         self.controls.stopped.store(true, Ordering::SeqCst);
     }
 
+    #[allow(dead_code)]
     #[inline]
     pub fn set_volume(&self, volume: f32) {
         *self.controls.volume.lock().unwrap() = volume;
     }
 
-    pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], rng: &mut ThreadRng) {
+    pub fn change_loop(
+        &mut self,
+        device: &Device,
+        files: &[SoundFile],
+        rng: &mut ThreadRng
+    ) {
         self.stop();
         self.current_file_idx = 0;
         self.files.clear(); self.files.extend_from_slice(files);
@@ -116,7 +125,9 @@ impl LoopPlayer {
         S::Item: Sample + Send
     {
         let controls = self.controls.clone();
-        let source = source.convert_samples::<f32>()
+        let local_volume = self.local_volume.clone();
+        let total_volume = self.total_volume.clone();
+        let source = source
             .pausable(false)
             .amplify(1.0)
             .stoppable()
@@ -128,7 +139,10 @@ impl LoopPlayer {
                     else {
                         src.inner_mut()
                             .set_factor(
-                                source_volume * (*controls.volume.lock().unwrap())
+                                source_volume
+                                * (*controls.volume.lock().unwrap())
+                                * local_volume.get()
+                                * total_volume.get()
                             );
                         src.inner_mut()
                             .inner_mut()

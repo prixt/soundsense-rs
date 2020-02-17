@@ -6,7 +6,7 @@ pub struct SoundManager {
     ignore_list: Vec<Regex>,
     device: Device,
     channels: BTreeMap<Box<str>, SoundChannel>,
-    total_volume: f32,
+    total_volume: VolumeLock,
     concurency: usize,
     ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
@@ -14,12 +14,13 @@ pub struct SoundManager {
 
 impl SoundManager {
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Self {
+        let total_volume = VolumeLock::new();
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
 		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
-			SoundChannel::new(&device, "misc")
+			SoundChannel::new(&device, "misc", total_volume.clone())
 		);
 
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
@@ -76,7 +77,7 @@ impl SoundManager {
                                     b"channel" => {
                                         let channel_name : Box<str> = attr_value.into();
                                         if !channels.contains_key(&channel_name) {
-                                            channels.insert(channel_name.clone(), SoundChannel::new(&device, &channel_name));
+                                            channels.insert(channel_name.clone(), SoundChannel::new(&device, &channel_name, total_volume.clone()));
                                         }
                                         channel = Some(channel_name);
                                     }
@@ -238,7 +239,7 @@ impl SoundManager {
             ignore_list: Vec::new(),
             device,
             channels,
-            total_volume: 1.0,
+            total_volume: total_volume.clone(),
             concurency: 0,
             ui_sender,
             rng: thread_rng(),
@@ -276,10 +277,7 @@ impl SoundManager {
 
     pub fn set_volume(&mut self, channel_name: &str, volume: f32) {
         if channel_name == "all" {
-            self.total_volume = volume;
-            for channel in self.channels.values_mut() {
-                channel.set_total_volume(volume);
-            }
+            self.total_volume.set(volume);
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
             channel.set_local_volume(volume);
@@ -396,11 +394,10 @@ impl SoundManager {
                     .unwrap().as_str()
                     .parse().unwrap();
                 if name == "all" {
-                    self.total_volume = volume / 100.0;
+                    self.total_volume.set(volume / 100.0);
                 }
                 else if let Some(chn) = self.channels.get_mut(name) {
                     chn.set_local_volume(volume / 100.0);
-                    chn.set_total_volume(self.total_volume);
                 }
                 entries.push((name.to_string().into_boxed_str(), volume));
             }
@@ -412,7 +409,7 @@ impl SoundManager {
 
     pub fn set_current_volumes_as_default(&self, mut file: File) {
         use std::io::Write;
-        writeln!(&mut file, "all={}", (self.total_volume*100.0) as u32)
+        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)
             .expect("Failed to write into default-volumes.ini file.");
         for (channel_name, channel) in self.channels.iter() {
             writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)

@@ -1,4 +1,6 @@
 use super::*;
+
+#[allow(unused_imports)]
 use source::Spatial;
 
 mod loop_player;
@@ -10,20 +12,19 @@ use oneshot_player::OneshotPlayer;
 pub struct SoundChannel {
     looping: LoopPlayer,
     one_shots: OneshotPlayer,
-    local_volume: f32,
-    total_volume: f32,
+    local_volume: VolumeLock,
     delay: usize,
     only_one_sound: bool,
 }
 
 impl SoundChannel {
     #[inline]
-    pub fn new(device: &Device, name: &str) -> Self {
+    pub fn new(device: &Device, name: &str, total_volume: VolumeLock) -> Self {
+        let local_volume = VolumeLock::new();
         Self {
-            looping : LoopPlayer::new(device),
-            one_shots : OneshotPlayer::new(),
-            local_volume : 1.0,
-            total_volume : 1.0,
+            looping : LoopPlayer::new(device, local_volume.clone(), total_volume.clone()),
+            one_shots : OneshotPlayer::new(local_volume.clone(), total_volume),
+            local_volume,
             delay : 0,
             only_one_sound: name == "weather" || name == "music",
         }
@@ -66,11 +67,11 @@ impl SoundChannel {
         self.one_shots.play();
         get_soundfiles(file, false, rng)
             .into_iter()
-            .for_each(|(volume, balance, source)|
+            .for_each(|(source_volume, balance, source)|
                 self.one_shots.add_source(
                     device,
                     source.convert_samples::<f32>(),
-                    volume,
+                    source_volume,
                     balance
                 )
             );
@@ -79,21 +80,11 @@ impl SoundChannel {
 
     #[inline]
     pub fn set_local_volume(&mut self, local_volume: f32) {
-        self.local_volume = local_volume;
-        self.set_final_volume(local_volume * self.total_volume);
+        self.local_volume.set(local_volume);
     }
     #[inline]
-    pub fn set_total_volume(&mut self, total_volume: f32) {
-        self.total_volume = total_volume;
-        self.set_final_volume(self.local_volume * total_volume);
-    }
-    #[inline]
-    pub fn get_local_volume(&self) -> f32 {self.local_volume}
-
-    #[inline]
-    fn set_final_volume(&mut self, final_volume: f32) {
-        self.looping.set_volume(final_volume);
-        self.one_shots.set_volume(final_volume);
+    pub fn get_local_volume(&self) -> f32 {
+        self.local_volume.get()
     }
 
     #[inline]

@@ -1,30 +1,28 @@
 #![allow(dead_code, unused_imports)]
 
 use super::*;
-use std::sync::{
-    Arc,
-    Mutex,
-    atomic::{AtomicBool, AtomicUsize, Ordering}
-};
 
 struct Control {
+    volume: Mutex<f32>,
     stopped: AtomicBool,
     count: Arc<AtomicUsize>,
 }
 
 pub struct OneshotPlayer {
-    volume: Arc<Mutex<f32>>,
     paused: Arc<AtomicBool>,
     controls: Vec<Arc<Control>>,
+    local_volume: VolumeLock,
+    total_volume: VolumeLock,
 }
 
 impl OneshotPlayer {
     #[inline]
-    pub fn new() -> Self {
+    pub fn new(local_volume: VolumeLock, total_volume: VolumeLock) -> Self {
         Self {
-            volume: Arc::new(Mutex::new(1.0)),
             paused: Arc::new(AtomicBool::new(false)),
             controls: vec![],
+            local_volume,
+            total_volume,
         }
     }
 
@@ -60,12 +58,13 @@ impl OneshotPlayer {
         self.len() == 0
     }
 
-    #[inline]
-    pub fn set_volume(&self, volume: f32) {
-        *self.volume.lock().unwrap() = volume;
-    }
-
-    pub fn add_source<S>(&mut self, device: &Device, source: S, source_volume: f32, _balance: f32)
+    pub fn add_source<S>(
+        &mut self,
+        device: &Device,
+        source: S,
+        source_volume: f32,
+        _balance: f32
+    )
     where
         S: Source + Send + 'static,
         S::Item: Sample + Send
@@ -73,15 +72,17 @@ impl OneshotPlayer {
         let count = Arc::new(AtomicUsize::new(1));
         let control = Arc::new(
             Control {
+                volume: Mutex::new(1.0),
                 stopped: AtomicBool::new(false),
                 count,
             }
         );
-        let volume = self.volume.clone();
         let paused = self.paused.clone();
+        let local_volume = self.local_volume.clone();
+        let total_volume = self.total_volume.clone();
         let control_a = control.clone();
         let control_b = control.clone();
-        let source = source.convert_samples::<f32>()
+        let source = source
             .pausable(false)
             .amplify(1.0)
             .stoppable()
@@ -93,7 +94,10 @@ impl OneshotPlayer {
                     else {
                         src.inner_mut()
                             .set_factor(
-                                source_volume * (*volume.lock().unwrap())
+                                source_volume
+                                * (*control_a.volume.lock().unwrap())
+                                * local_volume.get()
+                                * total_volume.get()
                             );
                         src.inner_mut()
                             .inner_mut()
