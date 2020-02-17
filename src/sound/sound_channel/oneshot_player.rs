@@ -63,7 +63,7 @@ impl OneshotPlayer {
         device: &Device,
         source: S,
         source_volume: f32,
-        _balance: f32
+        balance: f32
     )
     where
         S: Source + Send + 'static,
@@ -105,16 +105,20 @@ impl OneshotPlayer {
                     }
                 }
             ).convert_samples::<f32>();
-        // TODO: make Spatial work in here!!
-        #[cfg(not(target_os="windows"))]
-        let source = Spatial::new(
-            source,
-            [_balance, 1.0, 0.0],
-            [-1.0, 0.0, 0.0],
-            [1.0, 0.0, 0.0],
-        );
         let source = source::Done::new(source, control_b.count.clone());
-        play_raw(device, source);
+        if balance == 0.0 {
+            play_raw(device, source);
+        }
+        else {
+            let source = source.buffered();
+            let source = Spatial::new(
+                source,
+                [balance, 1.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [1.0, 0.0, 0.0],
+            );
+            play_raw(device, source);
+        }
         self.controls.push(control);
     }
 

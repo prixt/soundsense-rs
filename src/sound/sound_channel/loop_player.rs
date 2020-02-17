@@ -8,7 +8,7 @@ struct Control {
 
 pub struct LoopPlayer {
     queue_tx: Arc<queue::SourcesQueueInput<f32>>,
-    in_queue: Arc<AtomicUsize>,
+    in_queue: usize,
     controls: Arc<Control>,
     local_volume: VolumeLock,
     total_volume: VolumeLock,
@@ -32,7 +32,7 @@ impl LoopPlayer {
         };
         Self {
             queue_tx,
-            in_queue: Arc::new(AtomicUsize::new(0)),
+            in_queue: 0,
             controls: Arc::new(control),
             local_volume,
             total_volume,
@@ -63,6 +63,11 @@ impl LoopPlayer {
         self.controls.stopped.store(true, Ordering::SeqCst);
     }
 
+    #[inline]
+    pub fn is_stopped(&self) -> bool {
+        self.controls.stopped.load(Ordering::Relaxed)
+    }
+
     #[allow(dead_code)]
     #[inline]
     pub fn set_volume(&self, volume: f32) {
@@ -87,6 +92,7 @@ impl LoopPlayer {
             volume: Mutex::new(volume),
         };
         self.controls = Arc::new(controls);
+        self.in_queue = 0;
         self.queue_tx = queue_tx;
         self.append_file(0, rng);
     }
@@ -106,7 +112,10 @@ impl LoopPlayer {
             Some(file.balance)
         };
         for path in files.iter() {
-            let f = fs::File::open(path).unwrap();
+            let f = match fs::File::open(path) {
+                Ok(f) => f,
+                Err(e) => panic!("Failed to open file {}\nError: {}", path.display(), e),
+            };
             let source = Decoder::new(f);
             match source {
                 Ok(source) => {
@@ -119,7 +128,7 @@ impl LoopPlayer {
         }
     }
 
-    fn append_source<S>(&mut self, source: S, source_volume: f32, _balance: f32)
+    fn append_source<S>(&mut self, source: S, source_volume: f32, balance: f32)
     where
         S: Source + Send + 'static,
         S::Item: Sample + Send
@@ -134,6 +143,7 @@ impl LoopPlayer {
             .periodic_access(Duration::from_millis(5),
                 move |src| {
                     if controls.stopped.load(Ordering::SeqCst) {
+                        println!("loop_player: stop current source");
                         src.stop();
                     }
                     else {
@@ -150,17 +160,20 @@ impl LoopPlayer {
                     }
                 }
             ).convert_samples::<f32>();
-        // TODO: make Spatial work in here!!
-        #[cfg(not(target_os="windows"))]
-        let source = Spatial::new(
-            source,
-            [_balance, 1.0, 0.0],
-            [-1.0, 0.0, 0.0],
-            [1.0, 0.0, 0.0],
-        );
-        self.in_queue.fetch_add(1, Ordering::SeqCst);
-        let source = source::Done::new(source, self.in_queue.clone());
-        self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
+        self.in_queue += 1;
+        if balance == 0.0 {
+            self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
+        }
+        else {
+            let source = source.buffered();
+            let source = Spatial::new(
+                source,
+                [balance, 1.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [1.0, 0.0, 0.0],
+            );
+            self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
+        }
     }
 
     pub fn maintain(&mut self, rng: &mut ThreadRng) {
@@ -177,7 +190,9 @@ impl LoopPlayer {
     }
 
     fn on_source_end(&mut self, rng: &mut ThreadRng) {
-        if self.in_queue.load(Ordering::Relaxed) == 0 {
+        self.in_queue -= 1;
+        if self.in_queue == 0 && !self.controls.stopped.load(Ordering::Relaxed)
+        {
             self.current_file_idx += 1;
             if self.files.len() == self.current_file_idx {
                 self.current_file_idx = 0;

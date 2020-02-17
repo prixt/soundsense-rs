@@ -38,7 +38,9 @@ impl SoundChannel {
         }
         self.one_shots.maintain();
 		if self.one_shots.is_empty() && delay == 0 {
-            self.looping.play();
+            if !self.looping.is_stopped() {
+                self.looping.play();
+            }
 		} else {
 			self.looping.pause();
 		}
@@ -61,7 +63,7 @@ impl SoundChannel {
 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
         if self.only_one_sound {
-            self.looping.pause();
+            self.looping.stop();
             self.one_shots.stop();
         }
         self.one_shots.play();
