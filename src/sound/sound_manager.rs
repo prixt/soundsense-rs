@@ -7,7 +7,6 @@ pub struct SoundManager {
     device: Device,
     channels: BTreeMap<Box<str>, SoundChannel>,
     total_volume: VolumeLock,
-    concurency: usize,
     ui_sender: Sender<UIMessage>,
     rng: ThreadRng,
 }
@@ -240,7 +239,6 @@ impl SoundManager {
             device,
             channels,
             total_volume: total_volume.clone(),
-            concurency: 0,
             ui_sender,
             rng: thread_rng(),
         };
@@ -257,7 +255,6 @@ impl SoundManager {
     }
 
 	pub fn maintain(&mut self, dt: usize) {
-		self.concurency = 0;
 		{
 			let sounds = &mut self.sounds;
 			let recent = &mut self.recent;
@@ -271,7 +268,6 @@ impl SoundManager {
 		}
 		for chn in self.channels.values_mut() {
 			chn.maintain(&mut self.rng, dt);
-			self.concurency += chn.len();
 		}
 	}
 
@@ -314,10 +310,12 @@ impl SoundManager {
                 if can_play {
                     if let Some(probability) = sound.probability {
                         can_play &= probability >= rng.next_u32() as usize;
+                        if !can_play {
+                            println!("--can't play: failed probability roll");
+                        }
                     }
-                    if let Some(concurency) = sound.concurency {
-                        can_play &= self.concurency <= concurency;
-                    }
+                } else {
+                    println!("--can't play: current_timeout: {}", sound.current_timeout);
                 }
 
                 if can_play {
@@ -333,41 +331,54 @@ impl SoundManager {
                     } else {
                         0
                     };
-                    if let Some(timeout) = sound.timeout {
-                        sound.current_timeout = timeout;
-                    }
-                    // Prevent repeated alerts from firing constantly.
-                    if sound.recent_call >= sound.current_timeout + 5 {
-                        sound.current_timeout = sound.recent_call * 100;
-                    }
+
                     if let Some(chn) = &sound.channel {
                         print!("--channel: {}", chn);
-                        let device = &self.device;
                         let channel = self.channels.get_mut(chn).unwrap();
-                        
-                        if let Some(is_loop_start) = sound.loop_attr {
-                            if is_loop_start {
-                                print!(" --loop=start");
-                                channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
-                            } else {
-                                print!(" --loop=stop");
-                                channel.stop_loop(sound.delay.unwrap_or(0));
-                                if !sound.files.is_empty() {
-                                    channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                        let chn_len = channel.len();
+                        if chn_len < sound.concurency.unwrap_or(std::usize::MAX) {
+                            if let Some(timeout) = sound.timeout {
+                                sound.current_timeout = timeout;
+                            }
+                            let device = &self.device;
+                            
+                            if let Some(is_loop_start) = sound.loop_attr {
+                                if is_loop_start {
+                                    print!(" --loop=start");
+                                    channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
+                                } else {
+                                    print!(" --loop=stop");
+                                    channel.stop_loop(sound.delay.unwrap_or(0));
+                                    if !sound.files.is_empty() {
+                                        channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                                    }
                                 }
                             }
+                            else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
+                                channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                            }
+                            println!();
                         }
-                        else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
-                            channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
+                        else {
+                            println!(" --can't play: at concurency limit: limit {}, channel {}",
+                                sound.concurency.unwrap(), chn_len);
                         }
-                        println!();
                     }
                     else if !sound.files.is_empty() {
-                        println!("--channel: misc");
+                        print!("--channel: misc");
                         let channel = self.channels.get_mut("misc").unwrap();
-                        if channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
+                        let chn_len = channel.len();
+                        if channel.len() < sound.concurency.unwrap_or(std::usize::MAX) {
+                            if let Some(timeout) = sound.timeout {
+                                sound.current_timeout = timeout;
+                            }
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
                         }
+                        else {
+                            println!(" --can't play: at concurency limit: limit {}, channel {}",
+                                sound.concurency.unwrap(), chn_len);
+                        }
+                        println!();
                     }
                 }
 

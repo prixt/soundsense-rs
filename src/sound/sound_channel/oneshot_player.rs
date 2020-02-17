@@ -1,9 +1,9 @@
-#![allow(dead_code, unused_imports)]
+#![allow(dead_code)]
 
 use super::*;
 
 struct Control {
-    volume: Mutex<f32>,
+    volume: VolumeLock,
     stopped: AtomicBool,
     count: Arc<AtomicUsize>,
 }
@@ -58,6 +58,16 @@ impl OneshotPlayer {
         self.len() == 0
     }
 
+    #[inline]
+    pub fn get_volume(&self, idx: usize) -> f32 {
+        self.controls[idx].volume.get()
+    }
+
+    #[inline]
+    pub fn set_volume(&self, idx: usize, volume: f32) {
+        self.controls[idx].volume.set(volume);
+    }
+
     pub fn add_source<S>(
         &mut self,
         device: &Device,
@@ -72,7 +82,7 @@ impl OneshotPlayer {
         let count = Arc::new(AtomicUsize::new(1));
         let control = Arc::new(
             Control {
-                volume: Mutex::new(1.0),
+                volume: VolumeLock::new(),
                 stopped: AtomicBool::new(false),
                 count,
             }
@@ -95,7 +105,7 @@ impl OneshotPlayer {
                         src.inner_mut()
                             .set_factor(
                                 source_volume
-                                * (*control_a.volume.lock().unwrap())
+                                * control_a.volume.get()
                                 * local_volume.get()
                                 * total_volume.get()
                             );

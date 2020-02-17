@@ -4,7 +4,7 @@ use std::io::{Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use std::collections::{BTreeMap, HashSet};
 use std::sync::{
-    Arc, Mutex, RwLock,
+    Arc, RwLock,
     mpsc::{Sender, Receiver},
     atomic::{AtomicBool, AtomicUsize, Ordering}
 };
@@ -64,7 +64,7 @@ pub struct SoundEntry {
     pub pattern: regex::Regex,	// regular expression matching log line
     pub channel: Option<Box<str>>,	// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
     pub loop_attr: Option<bool>,	// "start" - sound start loop on channel until different sound is played on channel (if it is non-looped sound, loop will resume when it is done playing) or sound with "stop" is triggered.
-    pub concurency: Option<usize>,	// number of councured sounds allowd to be played besides this sound. If currenty playing more than that, sound is ignored. In miliseconds, default unlimited.
+    pub concurency: Option<usize>,	// number of councured sounds allowed to be played besides this sound. If currenty playing more than that, sound is ignored. In miliseconds, default unlimited.
     pub timeout: Option<usize>,	// number, timeout during which is sound going to be prevented from playing again. In miliseconds default 0.
     pub probability: Option<usize>,	 // percentage, Propablity that sound will be played. Default is always played.
     pub delay: Option<usize>,	// number, delay before sound is played. In miliseconds, default 0.
@@ -141,12 +141,12 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                 }
             }
         }
+        let current = Instant::now();
         if let Some(manager) = manager.as_mut() {
-            let current = Instant::now();
             let dt = current.duration_since(prev).as_millis() as usize;
             manager.maintain(dt);
-            prev = current;
         }
+        prev = current;
         
         std::thread::sleep(Duration::from_millis(50));
     }

@@ -37,13 +37,14 @@ impl SoundChannel {
             self.one_shots.pause()
         }
         self.one_shots.maintain();
-		if self.one_shots.is_empty() && delay == 0 {
-            if !self.looping.is_stopped() {
-                self.looping.play();
-            }
-		} else {
-			self.looping.pause();
-		}
+        if self.one_shots.is_empty() && delay == 0
+            && !self.looping.is_stopped() {
+            self.looping.play();
+            self.looping.set_volume(1.0);
+        }
+        else {
+            self.looping.pause()
+        }
         self.looping.maintain(rng);
 	}
 
@@ -67,6 +68,11 @@ impl SoundChannel {
             self.one_shots.stop();
         }
         self.one_shots.play();
+        for idx in 0..self.one_shots.len() {
+            let current_vol = self.one_shots.get_volume(idx);
+            self.one_shots.set_volume(idx, current_vol * 0.75);
+        }
+        self.looping.set_volume(0.25);
         get_soundfiles(file, false, rng)
             .into_iter()
             .for_each(|(source_volume, balance, source)|
@@ -91,7 +97,7 @@ impl SoundChannel {
 
     #[inline]
     pub fn len(&self) -> usize {
-        self.one_shots.len() + !self.looping.is_paused() as usize
+        self.one_shots.len() + self.looping.len()
     }
 }
 
@@ -105,29 +111,34 @@ fn get_soundfiles(soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) 
     };
     match soundfile.r#type {
         SoundFileType::IsPath(ref path) => {
-            vec![ (volume, balance, get_source(path)) ]
+            if let Some(source) = get_source(path) {
+                return vec![ (volume, balance, source) ]
+            }
         }
         SoundFileType::IsPlaylist(ref paths) => {
             if is_looping {
-                paths.iter()
-                    .map(|p| (volume, balance, get_source(p)))
+                return paths.iter()
+                    .filter_map(|p| get_source(p))
+                    .map(|s| (volume, balance, s))
                     .collect()
-            } else {
-                vec![ (volume, balance, get_source(&paths.choose(rng).unwrap())) ]
+            } else if let Some(source) = get_source(&paths.choose(rng).unwrap()) {
+                return vec![ (volume, balance, source) ]
             }
         }
     }
+    vec![]
 }
 
-fn get_source(path: &Path) -> rodio::decoder::Decoder<std::fs::File> {
+fn get_source(path: &Path) -> Option<rodio::decoder::Decoder<std::fs::File>> {
     let f = fs::File::open(path).unwrap();
     let source = Decoder::new(f);
     match source {
         Ok(source) => {
-            source
+            Some(source)
         },
         Err(e) => {
-            panic!("Error while asserting {}: {}", path.display(), e);
+            eprintln!("Error while asserting {}: {}", path.display(), e);
+            None
         }
     }
 }
