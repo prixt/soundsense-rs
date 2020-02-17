@@ -151,12 +151,13 @@ impl LoopPlayer {
                 }
             ).convert_samples::<f32>();
         // TODO: make Spatial work in here!!
-        // let source = Spatial::new(
-        //     source,
-        //     [_balance, 1.0, 0.0],
-        //     [-1.0, 0.0, 0.0],
-        //     [1.0, 0.0, 0.0],
-        // );
+        #[cfg(not(target_os="windows"))]
+        let source = Spatial::new(
+            source,
+            [_balance, 1.0, 0.0],
+            [-1.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+        );
         self.in_queue.fetch_add(1, Ordering::SeqCst);
         let source = source::Done::new(source, self.in_queue.clone());
         self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
