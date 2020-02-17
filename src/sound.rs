@@ -85,6 +85,9 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
 
     let mut prev = Instant::now();
     loop {
+        let current = Instant::now();
+        let dt = current.duration_since(prev).as_millis() as usize;
+        prev = current;
         for message in sound_rx.try_iter() {
             use SoundMessage::*;
             match message {
@@ -141,12 +144,9 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                 }
             }
         }
-        let current = Instant::now();
         if let Some(manager) = manager.as_mut() {
-            let dt = current.duration_since(prev).as_millis() as usize;
             manager.maintain(dt);
         }
-        prev = current;
         
         std::thread::sleep(Duration::from_millis(50));
     }
