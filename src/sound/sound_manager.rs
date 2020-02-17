@@ -372,13 +372,23 @@ impl SoundManager {
                 }
 
                 if sound.halt_on_match {
-                    break;
+                    return
                 }
             }
         }
     }
 
-    pub fn get_default_volume(&mut self, mut file: File) {
+    pub fn set_current_volumes_as_default(&self, mut file: File) {
+        use std::io::Write;
+        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)
+            .expect("Failed to write into default-volumes.ini file.");
+        for (channel_name, channel) in self.channels.iter() {
+            writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)
+                .expect("Failed to write into default-volumes.ini file.");
+        }
+    }
+
+    fn get_default_volume(&mut self, mut file: File) {
         lazy_static! {
             static ref INI_ENTRY: Regex = Regex::new("([[:word:]]+)=(.+)").unwrap();
         }
@@ -405,16 +415,6 @@ impl SoundManager {
         self.ui_sender
             .send(UIMessage::LoadedVolumeSettings(entries))
             .expect("Failed to send UIMessage via ui_sender.");
-    }
-
-    pub fn set_current_volumes_as_default(&self, mut file: File) {
-        use std::io::Write;
-        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)
-            .expect("Failed to write into default-volumes.ini file.");
-        for (channel_name, channel) in self.channels.iter() {
-            writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)
-                .expect("Failed to write into default-volumes.ini file.");
-        }
     }
 }
 
