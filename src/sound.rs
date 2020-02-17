@@ -137,7 +137,5 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
         if let Some(manager) = manager.as_mut() {
             manager.maintain(dt);
         }
-        
-        std::thread::sleep(Duration::from_millis(50));
     }
 }
