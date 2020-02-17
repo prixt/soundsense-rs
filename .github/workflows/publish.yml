@@ -1,0 +1,96 @@
+name: Build and Upload Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-linux:
+    name: Build and Upload
+    runs-on: linux-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Rustup Update
+        run: rustup update
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose
+      
+      - name: Rename Binary
+        run: mv ./taget/release/soundsense-rs.exe ./soundsense-rs-${{ github.ref }}-windows.exe
+      
+      - name: Upload Release Assets
+        uses: JasonEtco/upload-to-release@v0.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: soundsense-rs-${{ github.ref }}-windows.exe application/octet-stream
+
+  build-windows:
+    name: Build and Upload
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Rustup Update
+        run: rustup update
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose
+      
+      - name: Rename Binary
+        run: mv ./taget/release/soundsense-rs ./soundsense-rs-${{ github.ref }}-macos
+      
+      - name: Upload Release Assets
+        uses: JasonEtco/upload-to-release@v0.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: soundsense-rs.exe-${{ github.ref }}-macos application/octet-stream
+
+  build-macos:
+    name: Build and Upload
+    runs-on: linux-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Get Tag
+        id: tag_name
+        uses: olegtarasov/get-tag@v1
+      
+      - name: Rustup Update
+        run: rustup update
+      
+      - name: Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose
+      
+      - name: Rename Binary
+        run: mv ./taget/release/soundsense-rs ./soundsense-rs-${{ github.ref }}-linux
+      
+      - name: Upload Release Assets
+        uses: JasonEtco/upload-to-release@v0.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: soundsense-rs-${{ github.ref }}-linux application/octet-stream

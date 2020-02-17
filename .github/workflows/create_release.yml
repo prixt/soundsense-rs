@@ -1,0 +1,25 @@
+name: Create Release
+
+on:
+  push:
+    tags: 'v[0-9]+.[0-9]+.[0-9]+**'
+
+jobs:
+  prepare-release:
+    if: "!contains(github.event.head_commit.message, 'ci-skip')"
+    runs-on: windows-latest
+    name: Prepare Release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: ${{contains( github.ref, 'alpha' ) || contains( github.ref, 'beta' )}}
