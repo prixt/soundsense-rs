@@ -5,12 +5,12 @@ on:
     types: [created]
 
 jobs:
-  build-linux:
+  build-windows:
     name: Build and Upload
-    runs-on: linux-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       
       - name: Get Tag
         id: tag_name
@@ -35,12 +35,12 @@ jobs:
         with:
           args: soundsense-rs-${{ github.ref }}-windows.exe application/octet-stream
 
-  build-windows:
+  build-macos:
     name: Build and Upload
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       
       - name: Get Tag
         id: tag_name
@@ -65,12 +65,12 @@ jobs:
         with:
           args: soundsense-rs.exe-${{ github.ref }}-macos application/octet-stream
 
-  build-macos:
+  build-linux:
     name: Build and Upload
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       
       - name: Get Tag
         id: tag_name
@@ -88,7 +88,7 @@ jobs:
       - name: Rename Binary
         run: mv ./taget/release/soundsense-rs ./soundsense-rs-${{ github.ref }}-linux
       
-      - name: Upload Release Assets
+      - name: Upload Release Assetss
         uses: JasonEtco/upload-to-release@v0.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
