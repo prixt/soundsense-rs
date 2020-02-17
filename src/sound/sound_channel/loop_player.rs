@@ -119,7 +119,7 @@ impl LoopPlayer {
         }
     }
 
-    fn append_source<S>(&mut self, source: S, source_volume: f32, balance: f32)
+    fn append_source<S>(&mut self, source: S, source_volume: f32, _balance: f32)
     where
         S: Source + Send + 'static,
         S::Item: Sample + Send
@@ -151,13 +151,12 @@ impl LoopPlayer {
                 }
             ).convert_samples::<f32>();
         // TODO: make Spatial work in here!!
-        #[cfg(not(taget_os="windows"))]
-        let source = Spatial::new(
-            source,
-            [balance, 1.0, 0.0],
-            [-1.0, 0.0, 0.0],
-            [1.0, 0.0, 0.0],
-        );
+        // let source = Spatial::new(
+        //     source,
+        //     [_balance, 1.0, 0.0],
+        //     [-1.0, 0.0, 0.0],
+        //     [1.0, 0.0, 0.0],
+        // );
         self.in_queue.fetch_add(1, Ordering::SeqCst);
         let source = source::Done::new(source, self.in_queue.clone());
         self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
