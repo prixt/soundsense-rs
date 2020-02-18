@@ -1,10 +1,6 @@
 [package]
 name = "soundsense-rs"
-<<<<<<< HEAD
 version = "1.4.4"
-=======
-version = "1.4.2"
->>>>>>> prepare for v1.4.2 [ci-build]
 build = "build.rs"
 authors = ["prixt <paraxite@naver.com>"]
 edition = "2018"

@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 #![cfg_attr(release, windows_subsystem = "windows")]
 #![cfg_attr(not(release), windows_subsystem = "console")]
 
-=======
-#![windows_subsystem = "windows"] // Remove comment only on release!
->>>>>>> prepare for v1.4.2 [ci-build]
 use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
