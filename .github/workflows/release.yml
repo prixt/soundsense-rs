@@ -162,4 +162,4 @@ jobs:
         with:
           upload_url: ${{steps.get_url.outputs.url}}
           asset_path: ./target/release/soundsense-rs.exe
-          asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }
+          asset_name: soundsense-rs-${{ steps.tag_name.outputs.tag }}
