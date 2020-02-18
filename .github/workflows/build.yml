@@ -1,23 +1,7 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-name: Build
-
->>>>>>> attempt to trigger actions
-on:
-  push:
-    tags-ignore:
-      - v*
-
-<<<<<<< HEAD
->>>>>>> fixed tag trigger [travis skip]
 name: Build
 
 on: push
 
-=======
->>>>>>> attempt to trigger actions
 jobs:
   build:
     if: "!contains(github.event.head_commit.message, 'ci-skip') && contains(github.event.head_commit.message, 'ci-build')"

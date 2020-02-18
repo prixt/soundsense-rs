@@ -2,19 +2,8 @@ name: Release
 
 on:
   push:
-<<<<<<< HEAD
     tags: 'v[0-9]+.[0-9]+.[0-9]+**'
-=======
-    branch: release
-    tags:
-      - v*
 
-<<<<<<< HEAD
-name: Release
->>>>>>> fixed tag trigger [travis skip]
-
-=======
->>>>>>> attempt to trigger actions
 jobs:
   prepare-release:
     if: "!contains(github.event.head_commit.message, 'ci-skip')"
