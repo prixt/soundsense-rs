@@ -4,18 +4,15 @@ on: push
 
 jobs:
   build:
-    if: "contains(github.event.head_commit.message, 'ci-build')"
-    name: Build
-    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, 'ci-skip') && contains(github.event.head_commit.message, 'ci-build')"
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+    name: Build
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Rustup Update
-        run: rustup update
+        uses: actions/checkout@master
       
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
@@ -27,4 +24,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release -vv
+          args: --release --verbose
