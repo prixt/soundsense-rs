@@ -141,8 +141,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
             }
             prev = current;
         }
-    } () // Arguably the most front-heavy if statement I ever wrote.
-    {
+    }(){ // Arguably the most front-heavy if statement I ever wrote.
         ui_tx.send(
             UIMessage::SoundThreadPanicked(
                 "SoundThreadError".to_string(),
