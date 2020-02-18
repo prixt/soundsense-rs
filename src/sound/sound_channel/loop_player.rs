@@ -1,16 +1,15 @@
 use super::*;
+use std::collections::VecDeque;
 
 pub struct LoopPlayer {
     queue_tx: Arc<queue::SourcesQueueInput<f32>>,
-    in_queue: usize,
     stopped: Arc<AtomicBool>,
     paused: Arc<AtomicBool>,
     volume: VolumeLock,
     local_volume: VolumeLock,
     total_volume: VolumeLock,
     sleep_until_end: Option<Receiver<()>>,
-    current_file_idx: usize,
-    files: Vec<SoundFile>,
+    files: VecDeque<SoundFile>,
 }
 impl LoopPlayer {
     #[inline]
@@ -23,15 +22,13 @@ impl LoopPlayer {
         play_raw(device, queue_rx);
         Self {
             queue_tx,
-            in_queue: 0,
             local_volume,
             total_volume,
             stopped: Arc::new(AtomicBool::new(false)),
             paused: Arc::new(AtomicBool::new(false)),
             volume: VolumeLock::new(),
             sleep_until_end: None,
-            current_file_idx: 0,
-            files: vec![],
+            files: VecDeque::new(),
         }
     }
 
@@ -74,7 +71,7 @@ impl LoopPlayer {
 
     #[inline]
     pub fn len(&self) -> usize {
-        (!self.is_paused() && !self.is_stopped() && self.in_queue != 0) as usize
+        (!self.is_paused() && !self.is_stopped() && !self.files.is_empty()) as usize
     }
 
     pub fn change_loop(
@@ -84,8 +81,7 @@ impl LoopPlayer {
         rng: &mut ThreadRng
     ) {
         self.stop();
-        self.current_file_idx = 0;
-        self.files.clear(); self.files.extend_from_slice(files);
+        self.files = files.iter().cloned().collect();
         let (queue_tx, queue_rx) = queue::queue(true);
         play_raw(device, queue_rx);
         let volume = self.volume.get();
@@ -93,18 +89,15 @@ impl LoopPlayer {
         self.paused = Arc::new(AtomicBool::new(false));
         self.volume = VolumeLock::new();
         self.volume.set(volume);
-        self.in_queue = 0;
         self.queue_tx = queue_tx;
-        self.append_file(0, rng);
+        self.append_file(rng);
     }
 
-    fn append_file(&mut self, idx: usize, rng: &mut ThreadRng) {
-        let file = self.files.get_mut(idx).unwrap();
+    fn append_file(&mut self, rng: &mut ThreadRng) {
+        let file = self.files.front_mut().unwrap();
         let files = match &file.r#type {
-            SoundFileType::IsPath(path) =>
-                vec![path.clone()],
-            SoundFileType::IsPlaylist(paths) => 
-                paths.iter().map(PathBuf::from).collect(),
+            SoundFileType::IsPath(path) => vec![path.clone()],
+            SoundFileType::IsPlaylist(paths) => paths.to_vec(),
         };
         let volume = file.volume;
         let balance = if file.random_balance {
@@ -162,7 +155,6 @@ impl LoopPlayer {
                     }
                 }
             ).convert_samples::<f32>();
-        self.in_queue += 1;
         if balance == 0.0 {
             self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
         }
@@ -192,14 +184,10 @@ impl LoopPlayer {
     }
 
     fn on_source_end(&mut self, rng: &mut ThreadRng) {
-        self.in_queue -= 1;
-        if self.in_queue == 0 && !self.stopped.load(Ordering::Relaxed)
+        if !self.files.is_empty() && !self.stopped.load(Ordering::Relaxed)
         {
-            self.current_file_idx += 1;
-            if self.files.len() == self.current_file_idx {
-                self.current_file_idx = 0;
-            }
-            self.append_file(self.current_file_idx, rng);
+            self.files.rotate_left(1);
+            self.append_file(rng);
         }
     }
 }

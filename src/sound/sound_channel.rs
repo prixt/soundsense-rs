@@ -73,16 +73,19 @@ impl SoundChannel {
             self.one_shots.set_volume(idx, current_vol * 0.75);
         }
         self.looping.set_volume(0.25);
-        get_soundfiles(file, false, rng)
-            .into_iter()
-            .for_each(|(source_volume, balance, source)|
-                self.one_shots.add_source(
-                    device,
-                    source.convert_samples::<f32>(),
-                    source_volume,
-                    balance
-                )
-            );
+        let mut data = get_soundfiles(file, rng);
+        match data.len() {
+            0 => (),
+            1 => {
+                let (source, volume, balance) = data.remove(0);
+                self.one_shots.add_source(device, source, volume, balance);
+            }
+            _ => {
+                let (source, volume, balance)
+                    = data.remove(rng.gen_range(0, data.len()));
+                self.one_shots.add_source(device, source, volume, balance);
+            }
+        }
         self.delay = delay;
     }
 
@@ -101,10 +104,11 @@ impl SoundChannel {
     }
 }
 
-fn get_soundfiles(soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) -> Vec<(f32, f32, rodio::decoder::Decoder<std::fs::File>)>
+fn get_soundfiles(soundfile: &SoundFile, rng: &mut ThreadRng)
+    -> Vec<(rodio::decoder::Decoder<std::fs::File>, f32, f32)>
 {
     let volume = soundfile.volume;
-    let balance: f32 = if soundfile.random_balance {
+    let balance = if soundfile.random_balance {
         rng.gen_range(-1.0, 1.0)
     } else {
         soundfile.balance
@@ -112,17 +116,13 @@ fn get_soundfiles(soundfile: &SoundFile, is_looping: bool, rng: &mut ThreadRng) 
     match soundfile.r#type {
         SoundFileType::IsPath(ref path) => {
             if let Some(source) = get_source(path) {
-                return vec![ (volume, balance, source) ]
+                return vec![ (source, volume, balance) ]
             }
         }
         SoundFileType::IsPlaylist(ref paths) => {
-            if is_looping {
-                return paths.iter()
-                    .filter_map(|p| get_source(p))
-                    .map(|s| (volume, balance, s))
-                    .collect()
-            } else if let Some(source) = get_source(&paths.choose(rng).unwrap()) {
-                return vec![ (volume, balance, source) ]
+            if let Some(source) = get_source(&paths.choose(rng).unwrap())
+            {
+                return vec![ (source, volume, balance) ]
             }
         }
     }

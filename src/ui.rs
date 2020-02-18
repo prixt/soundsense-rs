@@ -178,7 +178,6 @@ A sound-engine utility for Dwarf Fortress, written in Rust
         .unwrap();
     
     webview.step().unwrap().unwrap();
-    // std::thread::sleep(std::time::Duration::from_millis(5000));
     
     while let Some(result) = webview.step() {
         result.unwrap();
@@ -204,6 +203,9 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                 UIMessage::LoadedIgnoreList => {
                     remove_alert(&mut webview, "loading_ignore");
                     add_alert(&mut webview, "ignore_loaded", "green", "&#x2714; Ignore list loaded!");
+                }
+                UIMessage::SoundThreadPanicked(name, text) => {
+                    add_error(&mut webview, &name, &text);
                 }
             }
         }
@@ -235,5 +237,11 @@ fn remove_alert(webview: &mut WebView<()>, name: &str) {
     webview.eval(&format!(
         r#"removeAlert("{}")"#,
         name
+    )).unwrap();
+}
+fn add_error(webview: &mut WebView<()>, name: &str, text: &str) {
+    webview.eval(&format!(
+        r#"addError("{}", "{}")"#,
+        name, text
     )).unwrap();
 }

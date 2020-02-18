@@ -12,7 +12,7 @@ pub struct SoundManager {
 }
 
 impl SoundManager {
-	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Self {
+	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Result<Self> {
         let total_volume = VolumeLock::new();
 		let mut sounds = Vec::new();
 		let device = default_output_device().expect("Failed to get default audio output device.");
@@ -22,22 +22,23 @@ impl SoundManager {
 			SoundChannel::new(&device, "misc", total_volume.clone())
 		);
 
-		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)) {
+		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)->Result<()>) -> Result<()> {
             match fs::read_dir(dir) {
                 Ok(entries) => for entry in entries {
-                    let entry = entry.unwrap();
+                    let entry = entry?;
                     let path = entry.path();
                     if path.is_dir() {
-                        visit_dir(&path, func);
+                        visit_dir(&path, func)?;
                     } else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
-                        func(&path);
+                        func(&path)?;
                     }
                 },
                 Err(e) => eprintln!("Error while visiting {}: {}", dir.display(), e),
             }
+            Ok(())
 		}
 
-        let mut func = |file_path: &Path| {
+        let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
             let mut reader = Reader::from_file(file_path).unwrap();
 
@@ -180,7 +181,7 @@ impl SoundManager {
                                 }
                             }
                             let r#type = if is_playlist {
-                                let path_vec = parse_playlist(&path);
+                                let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
                             } else {
                                 // test_file(&path);
@@ -206,7 +207,7 @@ impl SoundManager {
                         }
                     },
 
-                    Ok(Event::Eof) => return,
+                    Ok(Event::Eof) => return Ok(()),
 
                     Err(e) => panic!("Error parsing xml at position {}: {:?}", reader.buffer_position(), e),
 
@@ -215,7 +216,7 @@ impl SoundManager {
             }
         };
 
-        visit_dir(sound_dir, &mut func);
+        visit_dir(sound_dir, &mut func)?;
 
         let mut channel_names: Vec<Box<str>> = vec![
             "all".into(),
@@ -248,13 +249,13 @@ impl SoundManager {
         if conf_path.is_file() {
             let file = fs::File::open(conf_path)
                 .expect("Failed to open default-volumes.ini file.");
-            manager.get_default_volume(file);
+            manager.get_default_volume(file)?;
         }
 
-        manager
+        Ok(manager)
     }
 
-	pub fn maintain(&mut self, dt: usize) {
+	pub fn maintain(&mut self, dt: usize) -> Result<()> {
 		{
 			let sounds = &mut self.sounds;
 			let recent = &mut self.recent;
@@ -269,30 +270,33 @@ impl SoundManager {
 		for chn in self.channels.values_mut() {
 			chn.maintain(&mut self.rng, dt);
 		}
+        Ok(())
 	}
 
-    pub fn set_volume(&mut self, channel_name: &str, volume: f32) {
+    pub fn set_volume(&mut self, channel_name: &str, volume: f32) -> Result<()> {
         if channel_name == "all" {
             self.total_volume.set(volume);
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
             channel.set_local_volume(volume);
         }
+        Ok(())
     }
 
-    pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) {
+    pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) -> Result<()> {
         self.ignore_list = ignore_list;
         self.ui_sender
             .send(UIMessage::LoadedIgnoreList)
             .expect("Failed to send UIMessage via ui_sender.");
+        Ok(())
     }
 
-    pub fn process_log(&mut self, log: &str) {
+    pub fn process_log(&mut self, log: &str) -> Result<()> {
         println!("log: {}", log);
 
         for pattern in self.ignore_list.iter() {
             if pattern.is_match(log) {
-                return
+                return Ok(())
             }
         }
 
@@ -383,13 +387,14 @@ impl SoundManager {
                 }
 
                 if sound.halt_on_match {
-                    return
+                    return Ok(())
                 }
             }
         }
+        Ok(())
     }
 
-    pub fn set_current_volumes_as_default(&self, mut file: File) {
+    pub fn set_current_volumes_as_default(&self, mut file: File) -> Result<()> {
         use std::io::Write;
         writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)
             .expect("Failed to write into default-volumes.ini file.");
@@ -397,9 +402,10 @@ impl SoundManager {
             writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)
                 .expect("Failed to write into default-volumes.ini file.");
         }
+        Ok(())
     }
 
-    fn get_default_volume(&mut self, mut file: File) {
+    fn get_default_volume(&mut self, mut file: File) -> Result<()> {
         lazy_static! {
             static ref INI_ENTRY: Regex = Regex::new("([[:word:]]+)=(.+)").unwrap();
         }
@@ -426,10 +432,11 @@ impl SoundManager {
         self.ui_sender
             .send(UIMessage::LoadedVolumeSettings(entries))
             .expect("Failed to send UIMessage via ui_sender.");
+        Ok(())
     }
 }
 
-fn parse_playlist(path: &Path) -> Vec<PathBuf> {
+fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
     let parent_path = path.parent().unwrap();
 
     let mut path_vec = Vec::new();
@@ -479,5 +486,5 @@ fn parse_playlist(path: &Path) -> Vec<PathBuf> {
         )
     }
     
-    path_vec
+    Ok(path_vec)
 }

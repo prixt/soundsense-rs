@@ -45,9 +45,9 @@ function addAlert(name, color, text) {
     removeAlert(name);
     let new_alert = createAlert(name, color, text);
     alerts[name] = new_alert;
-    alerts_footer.insertAdjacentElement('afterbegin', new_alert);
+    alerts_footer.insertAdjacentElement('beforeend', new_alert);
     if (alerts_footer.childElementCount > 10)
-        removeAlert(alerts_footer.lastChild.name);
+        removeAlert(alerts_footer.firstChild.name);
 }
 function removeAlert(name) {
     let alert = document.getElementById("alert_"+name);
@@ -70,15 +70,45 @@ function createAlert(name, color, text) {
     cross.setAttribute("onclick", "removeAlert('"+name+"')");
     cross.innerHTML="&times;";
 
-    alert.insertAdjacentElement('beforeend',cross);
+    alert.insertAdjacentElement('afterbegin',cross);
     
     return alert;
+}
+
+let error_footer = null;
+function addError(name, text) {
+    let new_error = createError(name, text);
+    error_footer.insertAdjacentElement('afterbegin', new_error);
+}
+function removeError(id) {
+    let error = document.getElementById(id);
+    if (error != null) {
+        error_footer.removeChild(error);
+    }
+}
+function createError(name, text) {
+    let error=document.createElement("div");
+    error.name=name;
+    error.id="error_"+name+toString(Math.floor(Math.random()*100000));
+    error.className="w3-bar w3-animate-bottom w3-red";
+    error.style.cssText="padding: 10px 15px 10px 15px;";
+    error.innerHTML="<h3>"+name+"</h3><p>"+text+"</p>";
+
+    let cross = document.createElement("span");
+    cross.className="w3-closebtn";
+    cross.setAttribute("onclick", "removeError('"+error.id+"')");
+    cross.innerHTML="&times;";
+
+    error.insertAdjacentElement('afterbegin',cross);
+
+    return error;
 }
 
 function main() {
     channels = document.getElementById('channels');
     is_windows = /MSIE|Trident|Edge/.test(window.navigator.userAgent);
     alerts_footer = document.getElementById('alerts');
+    error_footer = document.getElementById('errors');
     alerts = new Map();
     
     let prev = null;
