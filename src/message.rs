@@ -15,4 +15,5 @@ pub enum UIMessage {
     LoadedSoundpack(Vec<Box<str>>),
     LoadedIgnoreList,
     LoadedVolumeSettings(Vec<(Box<str>,f32)>),
+    SoundThreadPanicked(String,String),
 }
