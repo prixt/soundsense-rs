@@ -22,4 +22,4 @@ jobs:
           tag_name: $GITHUB_REF
           release_name: $GITHUB_REF
           draft: false
-          prerelease: ${{contains( GITHUB_REF, 'alpha' ) || contains($GITHUB_REF, 'beta' )}}
+          prerelease: ${{contains( $GITHUB_REF, 'alpha' ) || contains( $GITHUB_REF, 'beta' )}}
