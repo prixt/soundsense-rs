@@ -30,6 +30,7 @@ jobs:
 
       - name: Cargo Build (Debug)
         if: contains( GITHUB_REF, 'alpha' ) || contains( GITHUB_REF, 'beta' )
+        uses: actions-rs/cargo@v1
         with:
           command: build
           args: --verbose
