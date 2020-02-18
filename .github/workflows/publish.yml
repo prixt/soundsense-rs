@@ -5,92 +5,53 @@ on:
     types: [created]
 
 jobs:
-  build-windows:
+  build-upload:
     name: Build and Upload
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
+      - name: Set Extension
+        if: runner.os == 'Windows'
+        run: echo "::set-env name=extension::.exe"
+        
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Get Tag
-        id: tag_name
-        uses: olegtarasov/get-tag@v1
       
       - name: Rustup Update
         run: rustup update
       
-      - name: Cargo Build
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt update
+          sudo apt install -y libasound2-dev libgtk-3-dev libwebkit2gtk-4.0-dev
+
+      - name: Cargo Build (Debug)
+        if: contains( GITHUB_REF, 'alpha' ) || contains( GITHUB_REF, 'beta' )
+        with:
+          command: build
+          args: --verbose
+      
+      - name: Rename Binary (Debug)
+        if: (contains( GITHUB_REF, 'alpha' ) || contains( GITHUB_REF, 'beta' ))
+        run: mv ./taget/debug/soundsense-rs.exe ${{join(['./soundsense-rs-',GITHUB_REF,'-',runner.os], env.extension)}}
+      
+      - name: Cargo Build (Release)
+        if: "!contains( GITHUB_REF, 'alpha' ) && !contains( GITHUB_REF, 'beta' )"
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release --verbose
       
-      - name: Rename Binary
-        run: mv ./taget/release/soundsense-rs.exe ./soundsense-rs-${{ github.ref }}-windows.exe
+      - name: Rename Binary (Release)
+        if: "!contains( github.ref, 'alpha' ) && !contains( github.ref, 'beta' )"
+        run: mv ./taget/release/soundsense-rs.exe ${{join(['./soundsense-rs-',GITHUB_REF,'-',runner.os], env.extension)}}
       
       - name: Upload Release Assets
         uses: JasonEtco/upload-to-release@v0.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: soundsense-rs-${{ github.ref }}-windows.exe application/octet-stream
-
-  build-macos:
-    name: Build and Upload
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Get Tag
-        id: tag_name
-        uses: olegtarasov/get-tag@v1
-      
-      - name: Rustup Update
-        run: rustup update
-      
-      - name: Cargo Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --verbose
-      
-      - name: Rename Binary
-        run: mv ./taget/release/soundsense-rs ./soundsense-rs-${{ github.ref }}-macos
-      
-      - name: Upload Release Assets
-        uses: JasonEtco/upload-to-release@v0.1.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: soundsense-rs.exe-${{ github.ref }}-macos application/octet-stream
-
-  build-linux:
-    name: Build and Upload
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Get Tag
-        id: tag_name
-        uses: olegtarasov/get-tag@v1
-      
-      - name: Rustup Update
-        run: rustup update
-      
-      - name: Cargo Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --verbose
-      
-      - name: Rename Binary
-        run: mv ./taget/release/soundsense-rs ./soundsense-rs-${{ github.ref }}-linux
-      
-      - name: Upload Release Assetss
-        uses: JasonEtco/upload-to-release@v0.1.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: soundsense-rs-${{ github.ref }}-linux application/octet-stream
+          args: ${{join('./soundsense-rs-$GITHUB_REF-${{ runner.os }}', env.extension)}} application/octet-stream
