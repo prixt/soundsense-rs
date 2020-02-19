@@ -15,7 +15,7 @@
     <string>soundsense-rs</string>
 
     <key>CFBundleIconFile</key>
-    <string></string>
+    <string>icon.incs</string>
 
     <key>CFBundleName</key>
     <string>SoundSense-RS</string>
@@ -24,6 +24,6 @@
     <string>APPL</string>
 
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2019 prixt</string>
+    <string>Copyright © 2020 prixt</string>
 </dict>
 </plist>

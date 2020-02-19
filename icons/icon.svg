@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9899495"
-     inkscape:cx="291.72943"
-     inkscape:cy="292.1795"
+     inkscape:zoom="2.8"
+     inkscape:cx="159.96819"
+     inkscape:cy="349.96778"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -80,30 +80,19 @@
          x="109.90547"
          y="88.093483"
          style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:129.12113953px;font-family:'Rockwell Extra Bold';-inkscape-font-specification:'Rockwell Extra Bold, Ultra-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:20.45111084">D</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="122.81395"
-       y="36.933655"
-       id="text3755"><tspan
-         sodipodi:role="line"
-         id="tspan3753"
-         x="122.81395"
-         y="46.589149"
-         style="stroke-width:0.26458332" /></text>
     <rect
        id="rect34"
-       width="9.8889723"
-       height="12.962572"
+       width="16.314569"
+       height="16.080875"
        x="48.302856"
-       y="9.15837"
-       style="stroke-width:0.2988576" />
+       y="6.5692329"
+       style="stroke-width:0.42754886" />
     <rect
        id="rect34-8"
-       width="15.05372"
-       height="19.766144"
+       width="20.250893"
+       height="14.474477"
        x="44.419033"
-       y="69.480637"
-       style="stroke-width:0.45532975" />
+       y="68.951469"
+       style="stroke-width:0.45192531" />
   </g>
 </svg>
