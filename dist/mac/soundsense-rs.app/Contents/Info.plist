@@ -6,7 +6,7 @@
     <string>SoundSense-RS</string>
 
     <key>CFBundleIdentifier</key>
-    <string>com.github.prixt</string>
+    <string>com.github.prixt.soundsense-rs</string>
 
     <key>CFBundleVersion</key>
     <string>1.4.4</string>
@@ -15,10 +15,15 @@
     <string>soundsense-rs</string>
 
     <key>CFBundleIconFile</key>
-    <string>icon.incs</string>
+    <string>icon</string>
+    <key>CFBundleIconName</key>
+    <string>icon</string>
 
     <key>CFBundleName</key>
     <string>SoundSense-RS</string>
+
+    <key>CFBundleSignature</key>
+    <string>SoundSenseRS</string>
 
     <key>CFBundlePackageType</key>
     <string>APPL</string>
