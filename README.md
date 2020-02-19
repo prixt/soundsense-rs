@@ -1,4 +1,4 @@
-# <p style="text-align:center">SOUNDSENSE-RS</br><img src="./icons/icon.ico" width="128px" height="128px"></img></br>SoundSense, written in Rust.</br>![Release](https://github.com/prixt/soundsense-rs/workflows/Release/badge.svg?branch=release) ![Build](https://github.com/prixt/soundsense-rs/workflows/Build/badge.svg)</p>
+# <p align="center">SOUNDSENSE-RS</br><img src="./icons/icon.ico" width="128px" height="128px"></img></br>SoundSense, written in Rust.</br>![Release](https://github.com/prixt/soundsense-rs/workflows/Release/badge.svg?branch=release) ![Build](https://github.com/prixt/soundsense-rs/workflows/Build/badge.svg)</p>
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine utility for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 <p align='center'>

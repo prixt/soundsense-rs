@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="rust-icon-gears-D.svg">
+   sodipodi:docname="icon.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -25,11 +25,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="159.96819"
-     inkscape:cy="349.96778"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="49.344228"
+     inkscape:cy="160.57297"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="text3745"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1057"
@@ -68,31 +68,23 @@
          inkscape:connector-curvature="0"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:8.36776161;stroke-linecap:round;stroke-linejoin:round" />
     </g>
-    <text
-       xml:space="preserve"
+    <g
+       aria-label="D"
+       transform="scale(0.96571233,1.0355051)"
        style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:129.12113953px;line-height:1.25;font-family:'Rockwell Extra Bold';-inkscape-font-specification:'Rockwell Extra Bold, Ultra-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:20.45111084"
-       x="109.90547"
-       y="88.093483"
-       id="text3745"
-       transform="scale(0.96571233,1.0355051)"><tspan
-         sodipodi:role="line"
-         id="tspan3751"
-         x="109.90547"
-         y="88.093483"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:129.12113953px;font-family:'Rockwell Extra Bold';-inkscape-font-specification:'Rockwell Extra Bold, Ultra-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:20.45111084">D</tspan></text>
-    <rect
-       id="rect34"
-       width="16.314569"
-       height="16.080875"
-       x="48.302856"
-       y="6.5692329"
-       style="stroke-width:0.42754886" />
-    <rect
-       id="rect34-8"
-       width="20.250893"
-       height="14.474477"
-       x="44.419033"
-       y="68.951469"
-       style="stroke-width:0.45192531" />
+       id="text3745">
+      <path
+         d="m 100.82664,21.389301 v 45.709387 h 3.21542 q 11.97901,0 15.57272,-6.36779 3.53065,-6.367791 3.53065,-16.014048 0,-5.800364 -1.51314,-11.474632 -1.57618,-5.674269 -5.54817,-8.763593 -3.90894,-3.089324 -13.99653,-3.089324 z m 0,66.704182 H 60.034954 V 67.098688 h 6.87217 V 21.389301 h -6.87217 V 0.39450588 h 41.989586 q 14.37482,0 23.45365,1.76532812 9.14187,1.765328 17.21195,7.2504546 8.00702,5.5481744 12.60948,15.0052884 2.26971,4.539415 3.46761,9.709305 1.1979,5.169889 1.1979,10.844158 0,11.411585 -4.85465,20.805652 -4.7916,9.33102 -12.16815,14.311767 -7.18741,4.980747 -15.76186,6.493886 -8.51141,1.513138 -26.35383,1.513138 z"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:129.12113953px;font-family:'Rockwell Extra Bold';-inkscape-font-specification:'Rockwell Extra Bold, Ultra-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:20.45111084"
+         id="path64" />
+    </g>
+    <path
+       style="stroke-width:0.42754886"
+       d="m 48.302856,6.5692329 h 16.31457 V 22.650108 h -16.31457 z"
+       id="rect34" />
+    <path
+       style="stroke-width:0.45192531"
+       d="M 44.419033,68.951469 H 64.669926 V 83.425946 H 44.419033 Z"
+       id="rect34-8" />
   </g>
 </svg>
