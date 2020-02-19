@@ -42,6 +42,10 @@ This pattern will make soundsense-rs ignore any cancallations related to water.
 
 The regex pattern uses the [regex crate](https://docs.rs/regex/) syntax.
 
+## Dependencies
+SoundSense-RS uses web-view for its UI, and required each OS'es native web rendering engine to render its graphics.
+In the case of Linux, this requires webview2gtk-4.0, so you may need to install it.
+
 ## [MIT License](./LICENSE)
 
 Copyright (c) prixt
