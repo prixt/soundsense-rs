@@ -130,7 +130,7 @@ fn get_soundfiles(soundfile: &SoundFile, rng: &mut ThreadRng)
 }
 
 fn get_source(path: &Path) -> Option<rodio::decoder::Decoder<std::fs::File>> {
-    let f = fs::File::open(path).unwrap();
+    let f = fs::File::open(path).expect("Invalid sound source path!");
     let source = Decoder::new(f);
     match source {
         Ok(source) => {

@@ -15,9 +15,7 @@
     <string>soundsense-rs</string>
 
     <key>CFBundleIconFile</key>
-    <string>icon</string>
-    <key>CFBundleIconName</key>
-    <string>icon</string>
+    <string>icon.icns</string>
 
     <key>CFBundleName</key>
     <string>SoundSense-RS</string>
@@ -27,6 +25,9 @@
 
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+
+    <key>LSMinimumSystemVersion</key>
+    <string>10.0.0</string>
 
     <key>NSHumanReadableCopyright</key>
     <string>© 2019-2020 prixt</string>

@@ -15,7 +15,8 @@ impl SoundManager {
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Result<Self> {
         let total_volume = VolumeLock::new();
 		let mut sounds = Vec::new();
-		let device = default_output_device().expect("Failed to get default audio output device.");
+        let device = default_output_device()
+            .ok_or("Failed to get default audio output device.")?;
 		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
@@ -40,7 +41,7 @@ impl SoundManager {
 
         let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
-            let mut reader = Reader::from_file(file_path).unwrap();
+            let mut reader = Reader::from_file(file_path)?;
 
             let mut current_sound : Option<SoundEntry> = None;
 
@@ -66,13 +67,13 @@ impl SoundManager {
                             let weights = Vec::new();
 
                             for attr in data.attributes().with_checks(false) {
-                                let attr = attr.unwrap();
+                                let attr = attr?;
                                 let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
                                 match attr.key {
                                     b"logPattern" => {
                                         let processed = FAULTY_ESCAPE.replace_all(&attr_value, "$1");
                                         let processed = EMPTY_EXPR.replace_all(&processed, ")?");
-                                        pattern = Some(Regex::new(&processed).unwrap());
+                                        pattern = Some(Regex::new(&processed)?);
                                     }
                                     b"channel" => {
                                         let channel_name : Box<str> = attr_value.into();
@@ -85,17 +86,17 @@ impl SoundManager {
                                         loop_attr.replace(attr_value == "start");
                                     }
                                     b"concurency" => {
-                                        concurency = Some( attr_value.parse().unwrap() );
+                                        concurency = Some( attr_value.parse()? );
                                     }
                                     b"timeout" => {
-                                        timeout = Some( attr_value.parse().unwrap() );
+                                        timeout = Some( attr_value.parse()? );
                                     }
                                     // Probability was mispelled...
                                     b"propability" | b"probability" => {
-                                        probability = Some( attr_value.parse().unwrap() );
+                                        probability = Some( attr_value.parse()? );
                                     }
                                     b"delay" => {
-                                        delay = Some( attr_value.parse().unwrap() );
+                                        delay = Some( attr_value.parse()? );
                                     }
                                     b"haltOnMatch" => {
                                         halt_on_match = attr_value == "true";
@@ -104,7 +105,7 @@ impl SoundManager {
                                         random_balance = attr_value == "true" ;
                                     }
                                     b"playbackThreshhold" => {
-                                        playback_threshold = attr_value.parse().unwrap();
+                                        playback_threshold = attr_value.parse()?;
                                     }
                                     b"ansiFormat" => (),
                                     b"ansiPattern" => (),
@@ -149,25 +150,25 @@ impl SoundManager {
                             let mut delay: usize = 0;
 
                             for attr in data.attributes() {
-                                let attr = attr.unwrap();
+                                let attr = attr?;
                                 let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
                                 match attr.key {
                                     b"fileName" => path.push(attr_value),
                                     b"weight" => {
-                                        weight = attr_value.parse().unwrap();
+                                        weight = attr_value.parse()?;
                                     }
                                     b"volumeAdjustment" => {
                                         // TODO: check if linear conversion from decibel to normal volume does work
-                                        volume = (attr_value.parse::<f32>().unwrap() + 40.0) / 40.0;
+                                        volume = (attr_value.parse::<f32>()? + 40.0) / 40.0;
                                     }
                                     b"randomBalance" => {
                                         random_balance = attr_value == "true";
                                     }
                                     b"balanceAdjustment" => {
-                                        balance = attr_value.parse().unwrap();
+                                        balance = attr_value.parse()?;
                                     }
                                     b"delay" => {
-                                        delay = attr_value.parse().unwrap();
+                                        delay = attr_value.parse()?;
                                     }
                                     b"playlist" => {
                                         is_playlist = true;
@@ -203,7 +204,9 @@ impl SoundManager {
 
                     Ok(Event::End(data)) => {
                         if current_sound.is_some() && data.local_name() == b"sound" {
-                            sounds.push( current_sound.take().unwrap() );
+                            sounds.push( current_sound.take()
+                                .ok_or("Tried to finish a Sound, even though there is no Sound!")?
+                            );
                         }
                     },
 
@@ -228,9 +231,7 @@ impl SoundManager {
             }
         }
         channel_names.push("misc".into());
-        ui_sender
-            .send(UIMessage::LoadedSoundpack(channel_names))
-            .expect("Failed to send UIMessage via ui_sender.");
+        ui_sender.send(UIMessage::LoadedSoundpack(channel_names))?;
 
         println!("Soundpack loaded!");
         let mut manager = Self {
@@ -244,11 +245,10 @@ impl SoundManager {
             rng: thread_rng(),
         };
 
-        let mut conf_path = dirs::config_dir().unwrap();
+        let mut conf_path = dirs::config_dir().ok_or("No configuration directory found!")?;
         conf_path.push("soundsense-rs/default-volumes.ini");
         if conf_path.is_file() {
-            let file = fs::File::open(conf_path)
-                .expect("Failed to open default-volumes.ini file.");
+            let file = fs::File::open(conf_path)?;
             manager.get_default_volume(file)?;
         }
 
@@ -285,9 +285,7 @@ impl SoundManager {
 
     pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) -> Result<()> {
         self.ignore_list = ignore_list;
-        self.ui_sender
-            .send(UIMessage::LoadedIgnoreList)
-            .expect("Failed to send UIMessage via ui_sender.");
+        self.ui_sender.send(UIMessage::LoadedIgnoreList)?;
         Ok(())
     }
 
@@ -338,7 +336,12 @@ impl SoundManager {
 
                     if let Some(chn) = &sound.channel {
                         print!("--channel: {}", chn);
-                        let channel = self.channels.get_mut(chn).unwrap();
+                        let channel = if let Some(channel) = self.channels.get_mut(chn) {
+                            channel
+                        } else {
+                            println!(" --doesn't exist in current soundpack!");
+                            continue;
+                        };
                         let chn_len = channel.len();
                         if chn_len < sound.concurency.unwrap_or(std::usize::MAX) {
                             if let Some(timeout) = sound.timeout {
@@ -396,11 +399,9 @@ impl SoundManager {
 
     pub fn set_current_volumes_as_default(&self, mut file: File) -> Result<()> {
         use std::io::Write;
-        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)
-            .expect("Failed to write into default-volumes.ini file.");
+        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)?;
         for (channel_name, channel) in self.channels.iter() {
-            writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)
-                .expect("Failed to write into default-volumes.ini file.");
+            writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)?;
         }
         Ok(())
     }
@@ -411,15 +412,16 @@ impl SoundManager {
         }
         let mut buf = String::new();
         let mut entries = vec![];
-        file.read_to_string(&mut buf)
-            .expect("Failed to read default-volume.ini file.");
+        file.read_to_string(&mut buf)?;
         for line in buf.lines() {
             if let Some(cap) =  INI_ENTRY.captures(line) {
                 let name = cap.get(1)
-                    .unwrap().as_str();
+                    .ok_or("Failed to parse .ini file.")?
+                    .as_str();
                 let volume: f32 = cap.get(2)
-                    .unwrap().as_str()
-                    .parse().unwrap();
+                    .ok_or("Failed to parse .ini file.")?
+                    .as_str()
+                    .parse()?;
                 if name == "all" {
                     self.total_volume.set(volume / 100.0);
                 }
@@ -430,30 +432,33 @@ impl SoundManager {
             }
         }
         self.ui_sender
-            .send(UIMessage::LoadedVolumeSettings(entries))
-            .expect("Failed to send UIMessage via ui_sender.");
+            .send(UIMessage::LoadedVolumeSettings(entries))?;
         Ok(())
     }
 }
 
 fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
-    let parent_path = path.parent().unwrap();
+    let parent_path = path.parent()
+        .ok_or_else(||
+            format!("Playlist {:?} doesn't have a parent directory!", path)
+        )?;
 
     let mut path_vec = Vec::new();
-    let mut f = File::open(path).unwrap();
+    let mut f = File::open(path)?;
     let buf = &mut String::new();
     let extension = path.extension()
-        .unwrap_or_else(|| panic!(
+        .filter(|ext| *ext=="m3u" || *ext=="pls")
+        .ok_or_else(|| format!(
             "Playlist {:?} is not valid! Playlist needs to have either .m3u or .pls extension.",
             path
-        ));
+        ))?;
     if extension == "m3u" {
-        f.read_to_string(buf).unwrap();
+        f.read_to_string(buf)?;
         for line in buf.lines() {
             lazy_static! {
                 static ref M3U_PATTERN: Regex = Regex::new(
-                        r"#EXT[A-Z]*"
-                    ).unwrap();
+                    r"#EXT[A-Z]*"
+                ).unwrap();
             }
 
             if !M3U_PATTERN.is_match(line) {
@@ -464,12 +469,12 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
         }
     }
     else if extension == "pls" {
-        f.read_to_string(buf).unwrap();
+        f.read_to_string(buf)?;
         for line in buf.lines() {
             lazy_static! {
                 static ref PLS_PATTERN: Regex = Regex::new(
-                        r"File.+=(.+)"
-                    ).unwrap();
+                    r"File.+=(.+)"
+                ).unwrap();
             }
             
             if let Some(caps) = PLS_PATTERN.captures(line) {
@@ -479,12 +484,5 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
             }
         }
     }
-    else {
-        panic!(
-            "Playlist {:?} is not valid! Playlist needs to have either .m3u or .pls extension.",
-            path
-        )
-    }
-    
     Ok(path_vec)
 }
