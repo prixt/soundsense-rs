@@ -307,9 +307,9 @@ checksum = "53445de381a1f436797497c61d851644d0e8e88e6140f22872ad33a704933978"
 
 [[package]]
 name = "minimp3"
-version = "0.3.3"
+version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "542e9bed56860c5070a09939eee0e2df6f8f73f60304ddf56d620947e7017239"
+checksum = "9943faa16a9729ff85d28857d9e4a4e8ac4f47f82a738184cd28d32a50c2bc38"
 dependencies = [
  "minimp3-sys",
  "slice-deque",
