@@ -18,15 +18,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 	let index_html = include_str!("web/index.html")
 		.replace("{comment_start}"	, "<!--")
 		.replace("{comment_end}"	, "-->")
-		.replace("<!---->"			, "")
 		.replace("{range}"			, range_css)
 		.replace("{w3}"				, include_str!("web/w3.css"))
-		.replace("{js}"				, include_str!("web/script.js"))
-		.replace("  "				, "") // Remove tabs
-		.replace(|c: char| c.is_whitespace() && c != ' ', ""); // Remove all unneccesary whitespaces
+		.replace("{js}"				, include_str!("web/script.js"));
+	let mut html_minifier = html_minifier::HTMLMinifier::new();
+	html_minifier.digest(index_html)?;
 
 	File::create(dest_dir)?
-		.write_all( index_html.as_bytes() )?;
+		.write_all( html_minifier.get_html().as_bytes() )?;
 	
 	#[cfg(target_os="windows")]
 	{
