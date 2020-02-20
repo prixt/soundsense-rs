@@ -42,7 +42,7 @@ impl SoundManager {
 
         let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
-            println!("-XML: {:?}", file_path);
+            println!(" XML: {:?}", file_path);
             let mut reader = Reader::from_file(file_path)?;
 
             let mut current_sound : Option<SoundEntry> = None;
@@ -120,7 +120,7 @@ impl SoundManager {
                                 }
                             }
 
-                            println!("--Sound {{");
+                            println!("  Sound {{");
                             current_sound = Some(
                                 SoundEntry{
                                     pattern: pattern.unwrap(),
@@ -183,7 +183,7 @@ impl SoundManager {
                                     }
                                 }
                             }
-                            println!("---SoundFile: {:?}", path);
+                            println!("   SoundFile: {:?}", path);
                             let r#type = if is_playlist {
                                 let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
@@ -317,11 +317,11 @@ impl SoundManager {
                     if let Some(probability) = sound.probability {
                         can_play &= probability >= rng.next_u32() as usize;
                         if !can_play {
-                            println!("--can't play: failed probability roll");
+                            println!("  can't play: failed probability roll");
                         }
                     }
                 } else {
-                    println!("--can't play: current_timeout: {}", sound.current_timeout);
+                    println!("  can't play: current_timeout: {}", sound.current_timeout);
                 }
 
                 if can_play {
@@ -339,11 +339,11 @@ impl SoundManager {
                     };
 
                     if let Some(chn) = &sound.channel {
-                        print!("--channel: {}", chn);
+                        print!("  channel: {}", chn);
                         let channel = if let Some(channel) = self.channels.get_mut(chn) {
                             channel
                         } else {
-                            println!(" --doesn't exist in current soundpack!");
+                            println!("   doesn't exist in current soundpack!");
                             continue;
                         };
                         let chn_len = channel.len();
@@ -355,10 +355,10 @@ impl SoundManager {
                             
                             if let Some(is_loop_start) = sound.loop_attr {
                                 if is_loop_start {
-                                    print!(" --loop=start");
+                                    print!("   loop=start");
                                     channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
                                 } else {
-                                    print!(" --loop=stop");
+                                    print!("   loop=stop");
                                     channel.stop_loop(sound.delay.unwrap_or(0));
                                     if !sound.files.is_empty() {
                                         channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
@@ -371,12 +371,12 @@ impl SoundManager {
                             println!();
                         }
                         else {
-                            println!(" --can't play: at concurency limit: limit {}, channel {}",
+                            println!("   can't play: at concurency limit: limit {}, channel {}",
                                 sound.concurency.unwrap(), chn_len);
                         }
                     }
                     else if !sound.files.is_empty() {
-                        print!("--channel: misc");
+                        print!("  channel: misc");
                         let channel = self.channels.get_mut("misc").unwrap();
                         let chn_len = channel.len();
                         if channel.len() < sound.concurency.unwrap_or(std::usize::MAX) {
@@ -386,7 +386,7 @@ impl SoundManager {
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
                         }
                         else {
-                            println!(" --can't play: at concurency limit: limit {}, channel {}",
+                            println!("   can't play: at concurency limit: limit {}, channel {}",
                                 sound.concurency.unwrap(), chn_len);
                         }
                         println!();
@@ -467,7 +467,7 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
             if !M3U_PATTERN.is_match(&line) {
                 let mut path = PathBuf::from(parent_path);
                 path.push(line);
-                println!("---Playlist Entry: {:?}", path);
+                println!("   Playlist Entry: {:?}", path);
                 path_vec.push(path);
             }
         }
@@ -485,6 +485,7 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
             if let Some(caps) = PLS_PATTERN.captures(&line) {
                 let mut path = PathBuf::from(parent_path);
                 path.push(&caps[0]);
+                println!("   Playlist Entry: {:?}", path);
                 path_vec.push(path);
             }
         }
