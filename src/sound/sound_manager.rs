@@ -120,6 +120,7 @@ impl SoundManager {
                                 }
                             }
 
+                            println!("--Sound {{");
                             current_sound = Some(
                                 SoundEntry{
                                     pattern: pattern.unwrap(),
@@ -182,7 +183,7 @@ impl SoundManager {
                                     }
                                 }
                             }
-                            println!("--SoundFile: {:?}", path);
+                            println!("---SoundFile: {:?}", path);
                             let r#type = if is_playlist {
                                 let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
@@ -209,6 +210,7 @@ impl SoundManager {
                             sounds.push( current_sound.take()
                                 .ok_or("Tried to finish a Sound, even though there is no Sound!")?
                             );
+                            println!("  }}");
                         }
                     },
 
@@ -440,14 +442,11 @@ impl SoundManager {
 }
 
 fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
-    let parent_path = path.parent()
-        .ok_or_else(||
-            format!("Playlist {:?} doesn't have a parent directory!", path)
-        )?;
+    let parent_path = path.parent().unwrap();
 
     let mut path_vec = Vec::new();
-    let mut f = File::open(path)?;
-    let buf = &mut String::new();
+    let f = File::open(path)?;
+    let f = BufReader::new(f);
     let extension = path.extension()
         .filter(|ext| *ext=="m3u" || *ext=="pls")
         .ok_or_else(|| format!(
@@ -455,31 +454,35 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
             path
         ))?;
     if extension == "m3u" {
-        f.read_to_string(buf)?;
-        for line in buf.lines() {
+        // f.read_to_string(buf)?;
+        for line in f.lines()
+            .filter_map(|l| l.ok())
+        {
             lazy_static! {
                 static ref M3U_PATTERN: Regex = Regex::new(
                     r#"#EXT(.*)"#
                 ).unwrap();
             }
 
-            if !M3U_PATTERN.is_match(line) {
+            if !M3U_PATTERN.is_match(&line) {
                 let mut path = PathBuf::from(parent_path);
                 path.push(line);
+                println!("---Playlist Entry: {:?}", path);
                 path_vec.push(path);
             }
         }
     }
     else if extension == "pls" {
-        f.read_to_string(buf)?;
-        for line in buf.lines() {
+        for line in f.lines()
+            .filter_map(|l| l.ok())
+        {
             lazy_static! {
                 static ref PLS_PATTERN: Regex = Regex::new(
                     r"File.+=(.+)"
                 ).unwrap();
             }
             
-            if let Some(caps) = PLS_PATTERN.captures(line) {
+            if let Some(caps) = PLS_PATTERN.captures(&line) {
                 let mut path = PathBuf::from(parent_path);
                 path.push(&caps[0]);
                 path_vec.push(path);
