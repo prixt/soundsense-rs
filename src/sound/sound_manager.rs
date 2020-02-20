@@ -42,7 +42,7 @@ impl SoundManager {
 
         let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
-            println!("-File: {:?}", file_path);
+            println!("-XML: {:?}", file_path);
             let mut reader = Reader::from_file(file_path)?;
 
             let mut current_sound : Option<SoundEntry> = None;
@@ -141,9 +141,8 @@ impl SoundManager {
                         }
 
                         else if local_name == b"soundFile" {
-                            assert!(current_sound.is_some(), "SoundFile must be associated with a Sound!");
+                            assert!(current_sound.is_some(), "SoundFile must be declared inside a Sound!");
                             let mut path = PathBuf::from(file_path);
-                            path.pop();
                             let mut is_playlist = false;
                             let mut weight: f32 = 100.0;		
                             let mut volume: f32 = 1.0;	
@@ -155,7 +154,7 @@ impl SoundManager {
                                 let attr = attr?;
                                 let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
                                 match attr.key {
-                                    b"fileName" => path.push(attr_value),
+                                    b"fileName" => path.set_file_name(attr_value),
                                     b"weight" => {
                                         weight = attr_value.parse()?;
                                     }
@@ -183,6 +182,7 @@ impl SoundManager {
                                     }
                                 }
                             }
+                            println!("--SoundFile: {:?}", path);
                             let r#type = if is_playlist {
                                 let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
@@ -459,7 +459,7 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
         for line in buf.lines() {
             lazy_static! {
                 static ref M3U_PATTERN: Regex = Regex::new(
-                    r"#EXT[A-Z]*"
+                    r#"#EXT(.*)"#
                 ).unwrap();
             }
 
