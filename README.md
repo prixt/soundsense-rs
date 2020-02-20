@@ -2,8 +2,9 @@
 My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sound-engine utility for [Dwarf Fortress](http://www.bay12games.com/dwarves/), using Rust.
 
 <p align='center'>
-    <img src="./screenshots/windows-screenshot.png" title='Windows screenshot' width='40%'>
-    <img src="./screenshots/macos-screenshot.png" title='MacOs screenshot by jecowa' width='40%'>
+    <img src="./screenshots/windows-screenshot.png" title='Windows screenshot' width='33%' style="float:left;">
+    <img src="./screenshots/macos-screenshot.png" title='MacOs screenshot by jecowa' width='33%'>
+    <img src="./screenshots/linux-screenshot.png" title='Ubuntu screenshot' width='32%' style="float:right;">
 </p>
 
 ## Why?

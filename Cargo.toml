@@ -21,12 +21,13 @@ web-view = "0.6"
 getopts = "0.2"
 webbrowser = "0.5.2"
 dirs = "2.0"
+log = "0.4.8"
+env_logger = "0.7.1"
 
 [build-dependencies]
 winres = "0.1"
+html-minifier = "1.1.14"
 
-[profile.dev.package."*"]
-opt-level = 3
 [profile.dev.package.rodio]
 debug-assertions = false
 
