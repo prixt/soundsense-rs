@@ -186,7 +186,7 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                 UIMessage::LoadedSoundpack(channel_names) => {
                     clear_sliders(&mut webview);
                     for name in channel_names.iter() {
-                        add_slider(&mut webview, name)
+                        add_slider(&mut webview, name);
                     }
                     remove_alert(&mut webview, "loading_soundpack");
                     add_alert(&mut webview, "soundpack_loaded", "green", "&#x2714; Soundpack loaded!");
@@ -205,6 +205,7 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                     add_alert(&mut webview, "ignore_loaded", "green", "&#x2714; Ignore list loaded!");
                 }
                 UIMessage::SoundThreadPanicked(name, text) => {
+                    clear_sliders(&mut webview);
                     add_error(&mut webview, &name, &text);
                 }
             }
