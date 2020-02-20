@@ -80,73 +80,77 @@ pub struct SoundEntry {
 }
 
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
-    let mut manager : Option<SoundManager> = None;
-    let mut buf_reader : Option<BufReader<File>> = None;
 
-    let mut prev = Instant::now();
-    if let Err(error) = || -> Result<()> {
-        loop {
-            for message in sound_rx.try_iter() {
-                use SoundMessage::*;
-                match message {
-                    ChangeGamelog(path) => {
-                        let mut file0 = File::open(&path)?;
-                        file0.seek(SeekFrom::End(0))?;
-                        buf_reader = Some(BufReader::new(file0));
-                        ui_tx.send(UIMessage::LoadedGamelog)?;
-                    }
+    loop {
+        println!("(Re)Starting sound thread.");
+        let mut manager : Option<SoundManager> = None;
+        let mut buf_reader : Option<BufReader<File>> = None;
+        let mut prev = Instant::now();
+        if let Err(error) = || -> Result<()> {
+            loop {
+                for message in sound_rx.try_iter() {
+                    use SoundMessage::*;
+                    match message {
+                        ChangeGamelog(path) => {
+                            let mut file0 = File::open(&path)?;
+                            file0.seek(SeekFrom::End(0))?;
+                            buf_reader = Some(BufReader::new(file0));
+                            ui_tx.send(UIMessage::LoadedGamelog)?;
+                        }
 
-                    ChangeSoundpack(path) => {
-                        manager = Some(SoundManager::new(&path, ui_tx.clone())?);
-                    }
+                        ChangeSoundpack(path) => {
+                            manager = Some(SoundManager::new(&path, ui_tx.clone())?);
+                        }
 
-                    message => if let Some(manager) = manager.as_mut() {
-                        match message {
-                            ChangeIgnoreList(path) => {
-                                let file = &mut File::open(&path)?;
-                                let buf = &mut Vec::new();
-                                file.read_to_end(buf)?;
-                                let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
-                                    let processed = FAULTY_ESCAPE.replace_all(expr, "$1");
-                                    let processed = EMPTY_EXPR.replace_all(&processed, ")?");
-                                    Regex::new(&processed).ok()
-                                }).collect();
-                                manager.set_ignore_list(list)?;
+                        message => if let Some(manager) = manager.as_mut() {
+                            match message {
+                                ChangeIgnoreList(path) => {
+                                    let file = &mut File::open(&path)?;
+                                    let buf = &mut Vec::new();
+                                    file.read_to_end(buf)?;
+                                    let list: Vec<Regex> = String::from_utf8_lossy(&buf).lines().filter_map(|expr| {
+                                        let processed = FAULTY_ESCAPE.replace_all(expr, "$1");
+                                        let processed = EMPTY_EXPR.replace_all(&processed, ")?");
+                                        Regex::new(&processed).ok()
+                                    }).collect();
+                                    manager.set_ignore_list(list)?;
+                                }
+
+                                VolumeChange(channel,volume) => {
+                                    manager.set_volume(&channel, volume * 0.01)?;
+                                }
+
+                                SetCurrentVolumesAsDefault(file) => {
+                                    manager.set_current_volumes_as_default(file)?;
+                                }
+                                _ => (),
                             }
-
-                            VolumeChange(channel,volume) => {
-                                manager.set_volume(&channel, volume * 0.01)?;
-                            }
-
-                            SetCurrentVolumesAsDefault(file) => {
-                                manager.set_current_volumes_as_default(file)?;
-                            }
-                            _ => (),
                         }
                     }
                 }
-            }
-            let current = Instant::now();
-            if let Some(manager) = &mut manager {
-                if let Some(buf_reader) = &mut buf_reader {
-                    let dt = current.duration_since(prev).as_millis() as usize;
-                    for log in buf_reader
-                        .lines()
-                        .filter_map(|l| l.ok())
-                    {
-                        manager.process_log(&log)?;
+                let current = Instant::now();
+                if let Some(manager) = &mut manager {
+                    if let Some(buf_reader) = &mut buf_reader {
+                        let dt = current.duration_since(prev).as_millis() as usize;
+                        for log in buf_reader
+                            .lines()
+                            .filter_map(|l| l.ok())
+                        {
+                            manager.process_log(&log)?;
+                        }
+                        manager.maintain(dt)?;
                     }
-                    manager.maintain(dt)?;
                 }
+                prev = current;
             }
-            prev = current;
+        }(){ // Arguably the most front-heavy if statement I ever wrote.
+            ui_tx.send(
+                UIMessage::SoundThreadPanicked(
+                    "SoundThreadError".to_string(),
+                    error.to_string()
+                )
+            ).unwrap();
+            println!("SoundThreadError: {:?}", error);
         }
-    }(){ // Arguably the most front-heavy if statement I ever wrote.
-        ui_tx.send(
-            UIMessage::SoundThreadPanicked(
-                "SoundThreadError".to_string(),
-                error.to_string()
-            )
-        ).unwrap();
     }
 }
