@@ -24,6 +24,7 @@ impl SoundManager {
 		);
 
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)->Result<()>) -> Result<()> {
+            println!("Directory path: {:?}", dir);
             match fs::read_dir(dir) {
                 Ok(entries) => for entry in entries {
                     let entry = entry?;
@@ -41,6 +42,7 @@ impl SoundManager {
 
         let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
+            println!("File path: {:?}", file_path);
             let mut reader = Reader::from_file(file_path)?;
 
             let mut current_sound : Option<SoundEntry> = None;
