@@ -125,10 +125,12 @@ impl SoundManager {
                                 }
                             }
 
-                            trace!("  Sound {{");
+                            trace!("  Sound");
+                            let pattern = pattern.expect("SoundEntry must include a regex pattern!");
+                            trace!("-Pattern:{}", pattern);
                             current_sound = Some(
                                 SoundEntry{
-                                    pattern: pattern.unwrap(),
+                                    pattern,
                                     channel,
                                     loop_attr,
                                     concurency,
@@ -189,7 +191,7 @@ impl SoundManager {
                                     }
                                 }
                             }
-                            trace!("   SoundFile: {:?}", path);
+                            trace!("  -SoundFile: {:?}", path);
                             let r#type = if is_playlist {
                                 let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
@@ -216,7 +218,6 @@ impl SoundManager {
                             sounds.push( current_sound.take()
                                 .ok_or("Tried to finish a Sound, even though there is no Sound!")?
                             );
-                            trace!("  }}");
                         }
                     },
 
@@ -341,7 +342,7 @@ impl SoundManager {
                 let mut can_play = sound.current_timeout == 0;
                 if can_play {
                     if let Some(probability) = sound.probability {
-                        can_play &= probability >= rng.next_u32() as usize;
+                        can_play &= probability >= rng.gen_range(0usize, 100usize);
                         if !can_play {
                             trace!("  can't play: failed probability roll");
                         }
