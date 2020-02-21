@@ -24,7 +24,7 @@ impl SoundManager {
 		);
 
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)->Result<()>) -> Result<()> {
-            println!("Directory: {:?}", dir);
+            trace!("Directory: {:?}", dir);
             match fs::read_dir(dir) {
                 Ok(entries) => for entry in entries {
                     let entry = entry?;
@@ -34,15 +34,18 @@ impl SoundManager {
                     } else if path.is_file() && path.extension().map_or(false, |ext| ext=="xml") {
                         func(&path)?;
                     }
-                },
-                Err(e) => eprintln!("Error while visiting {}: {}", dir.display(), e),
+                }
+                Err(e) => {
+                    error!("Error while visiting {}: {}", dir.display(), e);
+                    error!("Will ignore this directory.");
+                }
             }
             Ok(())
 		}
 
         let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
-            println!(" XML: {:?}", file_path);
+            trace!(" XML: {:?}", file_path);
             let mut reader = Reader::from_file(file_path)?;
 
             let mut current_sound : Option<SoundEntry> = None;
@@ -112,15 +115,16 @@ impl SoundManager {
                                     b"ansiFormat" => (),
                                     b"ansiPattern" => (),
                                     _ => {
-                                        eprintln!(
+                                        error!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
+                                        error!("Will ignore this value.");
                                     }
                                 }
                             }
 
-                            println!("  Sound {{");
+                            trace!("  Sound {{");
                             current_sound = Some(
                                 SoundEntry{
                                     pattern: pattern.unwrap(),
@@ -176,14 +180,15 @@ impl SoundManager {
                                         is_playlist = true;
                                     }
                                     _ => {
-                                        eprintln!(
+                                        error!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
+                                        error!("Will ignore this value.");
                                     }
                                 }
                             }
-                            println!("   SoundFile: {:?}", path);
+                            trace!("   SoundFile: {:?}", path);
                             let r#type = if is_playlist {
                                 let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
@@ -210,13 +215,18 @@ impl SoundManager {
                             sounds.push( current_sound.take()
                                 .ok_or("Tried to finish a Sound, even though there is no Sound!")?
                             );
-                            println!("  }}");
+                            trace!("  }}");
                         }
                     },
 
                     Ok(Event::Eof) => return Ok(()),
 
-                    Err(e) => panic!("Error parsing xml at position {}: {:?}", reader.buffer_position(), e),
+                    Err(e) => {
+                        error!("Error parsing xml at position {}: {:?}", reader.buffer_position(), e);
+                        return Err(
+                            format!("Error parsing xml at position {}: {:?}", reader.buffer_position(), e).into()
+                        )
+                    },
 
                     _ => ()
                 }
@@ -237,7 +247,7 @@ impl SoundManager {
         channel_names.push("misc".into());
         ui_sender.send(UIMessage::LoadedSoundpack(channel_names))?;
 
-        println!("Soundpack loaded!");
+        info!("Soundpack loaded!");
         let mut manager = Self {
             sounds,
             recent: HashSet::new(),
@@ -293,8 +303,9 @@ impl SoundManager {
         Ok(())
     }
 
+    #[allow(clippy::cognitive_complexity)] // You flag this functions, but not `SoundManager::new`?!
     pub fn process_log(&mut self, log: &str) -> Result<()> {
-        println!("log: {}", log);
+        trace!("log: {}", log);
 
         for pattern in self.ignore_list.iter() {
             if pattern.is_match(log) {
@@ -308,7 +319,7 @@ impl SoundManager {
 
         for (i, sound) in sounds.iter_mut().enumerate() {
             if sound.pattern.is_match(log) {
-                println!("-pattern: {}", sound.pattern.as_str());
+                trace!("-pattern: {}", sound.pattern.as_str());
                 recent.insert(i);
                 sound.recent_call += 1;
 
@@ -317,11 +328,11 @@ impl SoundManager {
                     if let Some(probability) = sound.probability {
                         can_play &= probability >= rng.next_u32() as usize;
                         if !can_play {
-                            println!("  can't play: failed probability roll");
+                            trace!("  can't play: failed probability roll");
                         }
                     }
                 } else {
-                    println!("  can't play: current_timeout: {}", sound.current_timeout);
+                    trace!("  can't play: current_timeout: {}", sound.current_timeout);
                 }
 
                 if can_play {
@@ -330,7 +341,7 @@ impl SoundManager {
                         match WeightedIndex::new(&sound.weights) {
                             Ok(weight) => weight.sample(rng),
                             Err(e) => {
-                                eprintln!("Error while weighing files: {}", e);
+                                trace!("Error while weighing files: {}", e);
                                 0
                             }
                         }
@@ -339,11 +350,11 @@ impl SoundManager {
                     };
 
                     if let Some(chn) = &sound.channel {
-                        print!("  channel: {}", chn);
+                        trace!("  channel: {}", chn);
                         let channel = if let Some(channel) = self.channels.get_mut(chn) {
                             channel
                         } else {
-                            println!("   doesn't exist in current soundpack!");
+                            trace!("   doesn't exist in current soundpack!");
                             continue;
                         };
                         let chn_len = channel.len();
@@ -355,10 +366,10 @@ impl SoundManager {
                             
                             if let Some(is_loop_start) = sound.loop_attr {
                                 if is_loop_start {
-                                    print!("   loop=start");
+                                    trace!("   loop=start");
                                     channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
                                 } else {
-                                    print!("   loop=stop");
+                                    trace!("   loop=stop");
                                     channel.stop_loop(sound.delay.unwrap_or(0));
                                     if !sound.files.is_empty() {
                                         channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
@@ -368,15 +379,14 @@ impl SoundManager {
                             else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
                                 channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
                             }
-                            println!();
                         }
                         else {
-                            println!("   can't play: at concurency limit: limit {}, channel {}",
+                            trace!("   can't play: at concurency limit: limit {}, channel {}",
                                 sound.concurency.unwrap(), chn_len);
                         }
                     }
                     else if !sound.files.is_empty() {
-                        print!("  channel: misc");
+                        trace!("  channel: misc");
                         let channel = self.channels.get_mut("misc").unwrap();
                         let chn_len = channel.len();
                         if channel.len() < sound.concurency.unwrap_or(std::usize::MAX) {
@@ -386,10 +396,9 @@ impl SoundManager {
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
                         }
                         else {
-                            println!("   can't play: at concurency limit: limit {}, channel {}",
+                            trace!("   can't play: at concurency limit: limit {}, channel {}",
                                 sound.concurency.unwrap(), chn_len);
                         }
-                        println!();
                     }
                 }
 
@@ -460,14 +469,14 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
         {
             lazy_static! {
                 static ref M3U_PATTERN: Regex = Regex::new(
-                    r#"#EXT(.*)"#
+                    r"#EXT.*"
                 ).unwrap();
             }
 
             if !M3U_PATTERN.is_match(&line) {
                 let mut path = PathBuf::from(parent_path);
                 path.push(line);
-                println!("   Playlist Entry: {:?}", path);
+                trace!("   Playlist Entry: {:?}", path);
                 path_vec.push(path);
             }
         }
@@ -485,7 +494,7 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
             if let Some(caps) = PLS_PATTERN.captures(&line) {
                 let mut path = PathBuf::from(parent_path);
                 path.push(&caps[0]);
-                println!("   Playlist Entry: {:?}", path);
+                trace!("   Playlist Entry: {:?}", path);
                 path_vec.push(path);
             }
         }

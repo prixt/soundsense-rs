@@ -137,7 +137,8 @@ fn get_source(path: &Path) -> Option<rodio::decoder::Decoder<std::fs::File>> {
             Some(source)
         },
         Err(e) => {
-            eprintln!("Error while asserting {}: {}", path.display(), e);
+            error!("Error while asserting {}: {}", path.display(), e);
+            error!("Will ignore this source.");
             None
         }
     }

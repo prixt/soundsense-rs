@@ -108,16 +108,21 @@ impl LoopPlayer {
         for path in files.iter() {
             let f = match fs::File::open(path) {
                 Ok(f) => f,
-                Err(e) => panic!("Failed to open file {}\nError: {}", path.display(), e),
+                Err(e) => {
+                    error!("Failed to open file {}\nError: {}", path.display(), e);
+                    error!("Will ignore this file.");
+                    continue
+                }
             };
-            let source = Decoder::new(f);
-            match source {
+            match Decoder::new(f) {
                 Ok(source) => {
                     let balance = balance.unwrap_or_else(||rng.gen_range(-1.0, 1.0));
                     self.append_source(source, volume, balance)
                 }
-                Err(e) => 
-                    eprintln!("Error while asserting {}: {}", path.display(), e),
+                Err(e) => {
+                    error!("Error while asserting {}: {}", path.display(), e);
+                    error!("Will ignore this source.");
+                }
             }
         }
     }

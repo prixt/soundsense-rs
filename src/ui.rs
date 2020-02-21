@@ -83,21 +83,28 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                 }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
-                        eprintln!("webbrowser error: {}", e);
+                        error!("webbrowser error: {}", e);
+                        add_error(webview, "Webbrowser Error",
+                            "Failed to open link with the system's default browser.");
                     }
                 }
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
-                        eprintln!("webbrowser error: {}", e);
+                        error!("webbrowser error: {}", e);
+                        add_error(webview, "Webbrowser Error",
+                            "Failed to open link with the system's default browser.");
                     }
                 }
                 "link_source" => {
                     if let Err(e) = webbrowser::open("https://github.com/prixt/soundsense-rs") {
-                        eprintln!("webbrowser error: {}", e);
+                        error!("webbrowser error: {}", e);
+                        add_error(webview, "Webbrowser Error",
+                            "Failed to open link with the system's default browser.");
                     }
                 }
                 "set_default_paths" => {
-                    let mut conf_path = dirs::config_dir().unwrap();
+                    let mut conf_path = dirs::config_dir()
+                        .expect("Failed to get configuration directory.");
                     conf_path.push("soundsense-rs");
                     if !conf_path.is_dir() {
                         std::fs::create_dir(&conf_path)
@@ -119,7 +126,8 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                     add_alert(webview, "set_default_paths", "green", "&#x1F4BE; Default paths set.");
                 }
                 "set_default_volumes" => {
-                    let mut conf_path = dirs::config_dir().unwrap();
+                    let mut conf_path = dirs::config_dir()
+                        .expect("Failed to get configuration directory.");
                     conf_path.push("soundsense-rs");
                     if !conf_path.is_dir() {
                         fs::create_dir(&conf_path)
