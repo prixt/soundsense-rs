@@ -9,7 +9,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 
 ## Why?
 1. To see if I could do it.
-2. Attempt to create a standalone application that doesn't require bloat (Java VM, C# VM, gtk, etc...).
+2. Attempt to create a standalone application that doesn't require bloat.
    * Ultimately, you should only need one executable, the soundpack folder, and DF.
    * Recommended soundpack fork: https://github.com/jecowa/soundsensepack
 
