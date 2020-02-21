@@ -5,15 +5,17 @@ use std::env;
 use std::sync::mpsc::channel;
 use std::path::PathBuf;
 use regex::Regex;
-#[macro_use]
-extern crate log;
+#[macro_use] extern crate log;
 
 mod sound;
 mod ui;
 mod message;
 
 fn main() {
-    env_logger::init();
+    let env = env_logger::Env::default()
+        .filter_or("SOUNDSENSE_RS_LOG", "warn")
+        .write_style_or("SOUNDSENSE_RS_LOG_STYLE", "always");
+    env_logger::init_from_env(env);
     info!("Starting SoundSense-RS");
     let args: Vec<String> = env::args().collect();
     let mut opts = getopts::Options::new();

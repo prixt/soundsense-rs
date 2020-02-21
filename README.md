@@ -43,6 +43,11 @@ This pattern will make soundsense-rs ignore any cancallations related to water.
 
 The regex pattern uses the [regex crate](https://docs.rs/regex/) syntax.
 
+## Logging
+You can set the following environment variables to set the logging parameters. (Disabled on Windows releases)
+* __SOUNDSENSE_RS_LOG__: set the level of logging. _(trace, debug, info, warn, error; default: warn)_
+* __SOUNDSENSE_RS_LOG_STYLE__: st the level of the log style. _(always, never; default: always)_
+
 ## Dependencies
 Linux: libasound2, libgtk-3, libwebkit2gtk-4.0
 
