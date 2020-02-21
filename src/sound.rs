@@ -80,7 +80,6 @@ pub struct SoundEntry {
 }
 
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
-
     loop {
         info!("(Re)Starting sound thread.");
         let mut manager : Option<SoundManager> = None;
