@@ -21,11 +21,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 		.replace("{range}"			, range_css)
 		.replace("{w3}"				, include_str!("web/w3.css"))
 		.replace("{js}"				, include_str!("web/script.js"));
-	let mut html_minifier = html_minifier::HTMLMinifier::new();
-	html_minifier.digest(index_html)?;
+	let index_html = html_minifier::minify(index_html)?;
 
 	File::create(dest_dir)?
-		.write_all( html_minifier.get_html().as_bytes() )?;
+		.write_all( index_html.as_bytes() )?;
 	
 	#[cfg(target_os="windows")]
 	{

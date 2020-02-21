@@ -29,7 +29,7 @@ fn main() {
     let matches = match opts.parse(&args[1..]) {
         Ok(matches) => matches,
         Err(e) => {
-            eprintln!("{}", e);
+            error!("{}", e);
             println!("{}", opts.usage("SoundSense-rs"));
             return
         }

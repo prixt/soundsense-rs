@@ -82,7 +82,7 @@ pub struct SoundEntry {
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
 
     loop {
-        println!("(Re)Starting sound thread.");
+        info!("(Re)Starting sound thread.");
         let mut manager : Option<SoundManager> = None;
         let mut buf_reader : Option<BufReader<File>> = None;
         let mut prev = Instant::now();
@@ -144,13 +144,15 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                 prev = current;
             }
         }(){ // Arguably the most front-heavy if statement I ever wrote.
+            let mut error_message = "The soundthread restarted due to this error:\n".to_string();
+            error_message.push_str(&error.to_string());
             ui_tx.send(
                 UIMessage::SoundThreadPanicked(
-                    "SoundThreadError".to_string(),
-                    error.to_string()
+                    "SoundThread Error".to_string(),
+                    error_message,
                 )
             ).unwrap();
-            println!("SoundThreadError: {:?}", error);
+            error!("SoundThreadError: {:?}", error);
         }
     }
 }
