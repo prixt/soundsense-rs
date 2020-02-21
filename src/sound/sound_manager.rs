@@ -37,8 +37,8 @@ impl SoundManager {
                     }
                 }
                 Err(e) => {
-                    error!("Error while visiting {}: {}", dir.display(), e);
-                    error!("Will ignore this directory.");
+                    warn!("Error while visiting {}: {}", dir.display(), e);
+                    warn!("Will ignore this directory.");
                 }
             }
             Ok(())
@@ -116,11 +116,11 @@ impl SoundManager {
                                     b"ansiFormat" => (),
                                     b"ansiPattern" => (),
                                     _ => {
-                                        error!(
+                                        warn!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
-                                        error!("Will ignore this value.");
+                                        warn!("Will ignore this value.");
                                     }
                                 }
                             }
@@ -181,11 +181,11 @@ impl SoundManager {
                                         is_playlist = true;
                                     }
                                     _ => {
-                                        error!(
+                                        warn!(
                                             "Unknown sound value: {}",
                                             unsafe {std::str::from_utf8_unchecked(attr.key)}
                                         );
-                                        error!("Will ignore this value.");
+                                        warn!("Will ignore this value.");
                                     }
                                 }
                             }
@@ -311,7 +311,7 @@ impl SoundManager {
         let mut log = log;
         lazy_static!{
             static ref REPEAT_PATTERN: Regex = Regex::new(
-                r"x[[:digit:]]+"
+                r"^x[0-9]+$"
             ).unwrap();
         }
         if REPEAT_PATTERN.is_match(&log) {

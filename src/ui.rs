@@ -83,21 +83,21 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                 }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
-                        error!("webbrowser error: {}", e);
+                        warn!("Failed to open link with system's default browser: {}", e);
                         add_error(webview, "Webbrowser Error",
                             "Failed to open link with the system's default browser.");
                     }
                 }
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
-                        error!("webbrowser error: {}", e);
+                        warn!("Failed to open link with system's default browser: {}", e);
                         add_error(webview, "Webbrowser Error",
                             "Failed to open link with the system's default browser.");
                     }
                 }
                 "link_source" => {
                     if let Err(e) = webbrowser::open("https://github.com/prixt/soundsense-rs") {
-                        error!("webbrowser error: {}", e);
+                        warn!("Failed to open link with system's default browser: {}", e);
                         add_error(webview, "Webbrowser Error",
                             "Failed to open link with the system's default browser.");
                     }

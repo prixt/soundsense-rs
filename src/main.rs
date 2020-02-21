@@ -15,8 +15,12 @@ fn main() {
     let env = env_logger::Env::default()
         .filter_or("SOUNDSENSE_RS_LOG", "warn")
         .write_style_or("SOUNDSENSE_RS_LOG_STYLE", "always");
-    env_logger::init_from_env(env);
+    env_logger::Builder::from_env(env)
+        .format_module_path(false)
+        .format_timestamp_millis()
+        .init();
     info!("Starting SoundSense-RS");
+    
     let args: Vec<String> = env::args().collect();
     let mut opts = getopts::Options::new();
     opts.optopt("l", "gamelog", 
