@@ -41,7 +41,7 @@ fn main() {
         }
     };
 
-    let conf = if !matches.opt_present("no-config") {
+    let config = if !matches.opt_present("no-config") {
         dirs::config_dir()
             .and_then(|mut p| {
                 p.push("soundsense-rs/default-paths.ini");
@@ -56,10 +56,10 @@ fn main() {
             if path.is_file() {Some(path)} else {None}
         })
         .or_else(||
-            conf.as_ref()
-                .and_then(|conf_txt|
+            config.as_ref()
+                .and_then(|config_txt|
                         Regex::new("gamelog=(.+)").unwrap()
-                            .captures(&conf_txt)
+                            .captures(&config_txt)
                             .and_then(|c| c.get(1))
                             .map(|m| PathBuf::from(m.as_str()))
                             .filter(|p| p.is_file())
@@ -78,10 +78,10 @@ fn main() {
             if path.is_dir() {Some(path)} else {None}
         })
         .or_else(||
-            conf.as_ref()
-                .and_then(|conf_txt|
+            config.as_ref()
+                .and_then(|config_txt|
                     Regex::new("soundpack=(.+)").unwrap()
-                        .captures(&conf_txt)
+                        .captures(&config_txt)
                         .and_then(|c| c.get(1))
                         .map(|m| PathBuf::from(m.as_str()))
                         .filter(|p| p.is_dir())
@@ -100,10 +100,10 @@ fn main() {
             if path.is_file() {Some(path)} else {None}
         })
         .or_else(||
-            conf.as_ref()
-                .and_then(|conf_txt|
+            config.as_ref()
+                .and_then(|config_txt|
                     Regex::new("ignore=(.+)").unwrap()
-                        .captures(&conf_txt)
+                        .captures(&config_txt)
                         .and_then(|c| c.get(1))
                         .map(|m| PathBuf::from(m.as_str()))
                         .filter(|p| p.is_file())

@@ -223,13 +223,13 @@ A sound-engine utility for Dwarf Fortress, written in Rust
 
 fn add_slider(webview: &mut WebView<()>, name: &str) {
     webview.eval(
-        &format!(r#"addSlider("{channel_name}")"#, channel_name=&name)
+        &format!(r#"addSlider("{channel_name}")"#, channel_name=name)
     ).unwrap();
 }
 fn set_slider_value(webview: &mut WebView<()>, name: Box<str>, value: f32) {
     webview.eval(&format!(
         r#"setSliderValue("{channel_name}", {value})"#,
-        channel_name=&name,
+        channel_name=name,
         value=value as u32
     )).unwrap();
 }
