@@ -127,7 +127,7 @@ impl SoundManager {
 
                             trace!("  Sound");
                             let pattern = pattern.expect("SoundEntry must include a regex pattern!");
-                            trace!("-Pattern:{}", pattern);
+                            trace!("  -Pattern: {}", pattern);
                             current_sound = Some(
                                 SoundEntry{
                                     pattern,
@@ -191,7 +191,7 @@ impl SoundManager {
                                     }
                                 }
                             }
-                            trace!("  -SoundFile: {:?}", path);
+                            trace!("  --SoundFile: {:?}", path);
                             let r#type = if is_playlist {
                                 let path_vec = parse_playlist(&path)?;
                                 SoundFileType::IsPlaylist(path_vec)
