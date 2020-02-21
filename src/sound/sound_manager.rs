@@ -3,6 +3,7 @@ use super::*;
 pub struct SoundManager {
     sounds: Vec<SoundEntry>,
     recent: HashSet<usize>,
+    previous_log: String,
     ignore_list: Vec<Regex>,
     device: Device,
     channels: BTreeMap<Box<str>, SoundChannel>,
@@ -251,6 +252,7 @@ impl SoundManager {
         let mut manager = Self {
             sounds,
             recent: HashSet::new(),
+            previous_log: String::with_capacity(50),
             ignore_list: Vec::new(),
             device,
             channels,
@@ -306,6 +308,19 @@ impl SoundManager {
     #[allow(clippy::cognitive_complexity)] // You flag this functions, but not `SoundManager::new`?!
     pub fn process_log(&mut self, log: &str) -> Result<()> {
         trace!("log: {}", log);
+        let mut log = log;
+        lazy_static!{
+            static ref REPEAT_PATTERN: Regex = Regex::new(
+                r"x[[:digit:]]+"
+            ).unwrap();
+        }
+        if REPEAT_PATTERN.is_match(&log) {
+            log = self.previous_log.as_str();
+            trace!(" swapped: {}", log);
+        }
+        else {
+            self.previous_log = log.to_string();
+        }
 
         for pattern in self.ignore_list.iter() {
             if pattern.is_match(log) {
@@ -319,7 +334,7 @@ impl SoundManager {
 
         for (i, sound) in sounds.iter_mut().enumerate() {
             if sound.pattern.is_match(log) {
-                trace!("-pattern: {}", sound.pattern.as_str());
+                trace!(" pattern: {}", sound.pattern.as_str());
                 recent.insert(i);
                 sound.recent_call += 1;
 
