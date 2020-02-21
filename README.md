@@ -49,7 +49,7 @@ You can set the following environment variables to set the logging parameters. (
 * __SOUNDSENSE_RS_LOG_STYLE__: st the level of the log style. _(always, never; default: always)_
 
 ## Dependencies
-Linux: libasound2, libgtk-3, libwebkit2gtk-4.0
+__Linux__: libasound2, libgtk-3, libgdk-3, libwebkit2gtk-4.0, libjavascriptcregtk-4.0
 
 ## [MIT License](./LICENSE)
 
