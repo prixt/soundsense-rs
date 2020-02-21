@@ -109,8 +109,8 @@ impl LoopPlayer {
             let f = match fs::File::open(path) {
                 Ok(f) => f,
                 Err(e) => {
-                    error!("Failed to open file {}\nError: {}", path.display(), e);
-                    error!("Will ignore this file.");
+                    warn!("Failed to open file {}: {}", path.display(), e);
+                    warn!("Will ignore this file.");
                     continue
                 }
             };
@@ -120,8 +120,8 @@ impl LoopPlayer {
                     self.append_source(source, volume, balance)
                 }
                 Err(e) => {
-                    error!("Error while asserting {}: {}", path.display(), e);
-                    error!("Will ignore this source.");
+                    warn!("Error while asserting {}: {}", path.display(), e);
+                    warn!("Will ignore this source.");
                 }
             }
         }
