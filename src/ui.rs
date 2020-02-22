@@ -71,8 +71,7 @@ pub fn run(
                         .info(
                             "About SoundSense-RS",
                             &format!(
-r"
-A sound-engine utility for Dwarf Fortress, written in Rust
+r"A sound-engine utility for Dwarf Fortress, written in Rust
     Version {}
     Created by prixt
     Original SoundSense created by zwei:
@@ -141,7 +140,8 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                     add_alert(webview, "set_default_volumes", "green", "&#x1F4BE; Default volumes set.");
                 }
                 "remove_default_paths" => {
-                    let mut conf_path = dirs::config_dir().unwrap();
+                    let mut conf_path = dirs::config_dir()
+                        .expect("Failed to get configuration directory.");
                     conf_path.push("soundsense-rs");
                     if conf_path.is_dir() {
                         conf_path.push("default-paths.ini");
@@ -174,6 +174,9 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                         sound_tx.send(
                             SoundMessage::VolumeChange(channel_name, channel_volume)
                         ).unwrap();
+                    }
+                    else if parts[0] == "test_message" {
+                        trace!("UI test message: {}", parts[1]);
                     }
                     else {
                         unimplemented!("Unimplemented webview argument: {}", other);
