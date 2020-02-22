@@ -32,12 +32,16 @@ lazy_static! {
     ).unwrap();
 }
 
+/// Show if the SoundFile is a single sound, or a playlist of multiple sounds.
 #[derive(Clone)]
 pub enum SoundFileType {
+    /// Contains a single file path.
     IsPath(PathBuf),
+    /// Contains multiple file paths.
     IsPlaylist(Vec<PathBuf>)
 }
 
+/// A struct containing all the information about a SoundFile.
 #[derive(Clone)]
 pub struct SoundFile {
     pub r#type: SoundFileType,	// path to audio file with sound. OR list of paths
@@ -48,6 +52,8 @@ pub struct SoundFile {
     pub balance: f32,	// adjusts stereo channel, can range for -1 (full left) to 1 (full right).
 }
 
+/// A thread-safe wrapper around a volume(f32) volume.
+/// Intended to be used by LoopPlayers and OneshotPlayers.
 #[derive(Clone)]
 pub struct VolumeLock(Arc<RwLock<f32>>);
 impl VolumeLock {
@@ -62,6 +68,7 @@ impl VolumeLock {
     }
 }
 
+/// A struct containing all the information about a Sound, such as regex patterns, channel, loopability, etc.
 pub struct SoundEntry {
     pub pattern: regex::Regex,	// regular expression matching log line
     pub channel: Option<Box<str>>,	// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
@@ -79,6 +86,7 @@ pub struct SoundEntry {
     pub recent_call: usize,
 }
 
+/// The sound thread function.
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
     loop {
         info!("(Re)Starting sound thread.");
@@ -151,7 +159,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                     error_message,
                 )
             ).unwrap();
-            error!("SoundThreadError: {:?}", error);
+            error!("SoundThreadError:\n{:?}", error);
         }
     }
 }

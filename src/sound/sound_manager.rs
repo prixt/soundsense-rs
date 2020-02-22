@@ -1,18 +1,23 @@
 use super::*;
 
+/// The struct that parses the log entries.
+/// Plays appropriate sounds on appropriate channels; checks for concurrency, delays, and probability;
+/// Sends messages to the UI after loading soundpack and ignore list.
 pub struct SoundManager {
-    sounds: Vec<SoundEntry>,
-    recent: HashSet<usize>,
-    previous_log: String,
-    ignore_list: Vec<Regex>,
-    device: Device,
-    channels: BTreeMap<Box<str>, SoundChannel>,
-    total_volume: VolumeLock,
-    ui_sender: Sender<UIMessage>,
-    rng: ThreadRng,
+    sounds: Vec<SoundEntry>,        // All the Sounds loaded from the soundpack.
+    recent: HashSet<usize>,         // The indices of the recently played Sounds.
+    previous_log: String,           // The previous log message. Replaces `x[0-9]+` messages. 
+    ignore_list: Vec<Regex>,        // The patterns that SoundManager shouldn't process.
+    device: Device,                 // The sound device of the system.
+    channels: BTreeMap<Box<str>, SoundChannel>, // All the channels, sorted alphabetically.
+    total_volume: VolumeLock,       // The total volume.
+    ui_sender: Sender<UIMessage>,   // Sender for UIMessage sent to the UI.
+    rng: ThreadRng,                 // RNG for probability and randomly choosing a soundfile from many.
 }
 
 impl SoundManager {
+    /// Create a new manager.
+    /// A new manager is created every time the user reloads a soundpack.
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Result<Self> {
         let total_volume = VolumeLock::new();
 		let mut sounds = Vec::new();
@@ -24,6 +29,7 @@ impl SoundManager {
 			SoundChannel::new(&device, "misc", total_volume.clone())
 		);
 
+        // Traverse the soundpack in DFS. Parses XML files.
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)->Result<()>) -> Result<()> {
             trace!("Directory: {:?}", dir);
             match fs::read_dir(dir) {
@@ -44,16 +50,16 @@ impl SoundManager {
             Ok(())
 		}
 
+        // Parse an XML file.
         let mut func = |file_path: &Path| -> Result<()> {
             use quick_xml::{Reader, events::Event};
             trace!(" XML: {:?}", file_path);
             let mut reader = Reader::from_file(file_path)?;
-
             let mut current_sound : Option<SoundEntry> = None;
-
             let buf = &mut Vec::new();
             loop {
                 match reader.read_event(buf) {
+                    // <Sound>                               // <Sound/>
                     Ok(Event::Start(ref data)) | Ok(Event::Empty(ref data)) => {
                         let local_name = data.local_name();
                         if local_name == b"sound" {
@@ -217,6 +223,7 @@ impl SoundManager {
                         }
                     },
 
+                    // </Sound>
                     Ok(Event::End(data)) => {
                         if current_sound.is_some() && data.local_name() == b"sound" {
                             sounds.push( current_sound.take()
@@ -239,8 +246,9 @@ impl SoundManager {
             }
         };
 
-        visit_dir(sound_dir, &mut func)?;
+        visit_dir(sound_dir, &mut func)?; // Run the DFS!
 
+        // Add the default channels "all" and "music"
         let mut channel_names: Vec<Box<str>> = vec![
             "all".into(),
             "music".into(),
@@ -250,6 +258,7 @@ impl SoundManager {
                 channel_names.push(channel_name.clone());
             }
         }
+        // Add the "misc" channel last, so it comes last in the UI.
         channel_names.push("misc".into());
         ui_sender.send(UIMessage::LoadedSoundpack(channel_names))?;
 
@@ -257,7 +266,7 @@ impl SoundManager {
         let mut manager = Self {
             sounds,
             recent: HashSet::new(),
-            previous_log: String::with_capacity(50),
+            previous_log: String::new(),
             ignore_list: Vec::new(),
             device,
             channels,
@@ -268,7 +277,7 @@ impl SoundManager {
 
         let mut conf_path = dirs::config_dir().ok_or("No configuration directory found!")?;
         conf_path.push("soundsense-rs/default-volumes.ini");
-        if conf_path.is_file() {
+        if conf_path.is_file() { // Check if there are default volumes.
             let file = fs::File::open(conf_path)?;
             manager.get_default_volume(file)?;
         }
@@ -276,6 +285,7 @@ impl SoundManager {
         Ok(manager)
     }
 
+    /// Tick down timers on recently called SoundEntries. Maintain the channels.
 	pub fn maintain(&mut self, dt: usize) -> Result<()> {
 		{
 			let sounds = &mut self.sounds;
