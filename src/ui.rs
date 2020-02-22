@@ -5,6 +5,7 @@ use std::io::Write;
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
 
+/// The UI thread function.
 pub fn run(
     sound_tx: Sender<SoundMessage>, ui_rx: Receiver<UIMessage>,
     gamelog_path: Option<PathBuf>,
@@ -71,8 +72,7 @@ pub fn run(
                         .info(
                             "About SoundSense-RS",
                             &format!(
-r"
-A sound-engine utility for Dwarf Fortress, written in Rust
+r"A sound-engine utility for Dwarf Fortress, written in Rust
     Version {}
     Created by prixt
     Original SoundSense created by zwei:
@@ -83,21 +83,21 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                 }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
-                        error!("webbrowser error: {}", e);
+                        warn!("Failed to open link with system's default browser: {}", e);
                         add_error(webview, "Webbrowser Error",
                             "Failed to open link with the system's default browser.");
                     }
                 }
                 "link_fork" => {
                     if let Err(e) = webbrowser::open("https://github.com/jecowa/soundsensepack") {
-                        error!("webbrowser error: {}", e);
+                        warn!("Failed to open link with system's default browser: {}", e);
                         add_error(webview, "Webbrowser Error",
                             "Failed to open link with the system's default browser.");
                     }
                 }
                 "link_source" => {
                     if let Err(e) = webbrowser::open("https://github.com/prixt/soundsense-rs") {
-                        error!("webbrowser error: {}", e);
+                        warn!("Failed to open link with system's default browser: {}", e);
                         add_error(webview, "Webbrowser Error",
                             "Failed to open link with the system's default browser.");
                     }
@@ -141,7 +141,8 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                     add_alert(webview, "set_default_volumes", "green", "&#x1F4BE; Default volumes set.");
                 }
                 "remove_default_paths" => {
-                    let mut conf_path = dirs::config_dir().unwrap();
+                    let mut conf_path = dirs::config_dir()
+                        .expect("Failed to get configuration directory.");
                     conf_path.push("soundsense-rs");
                     if conf_path.is_dir() {
                         conf_path.push("default-paths.ini");
@@ -175,6 +176,9 @@ A sound-engine utility for Dwarf Fortress, written in Rust
                             SoundMessage::VolumeChange(channel_name, channel_volume)
                         ).unwrap();
                     }
+                    else if parts[0] == "test_message" {
+                        trace!("UI test message: {}", parts[1]);
+                    }
                     else {
                         unimplemented!("Unimplemented webview argument: {}", other);
                     }
@@ -187,6 +191,7 @@ A sound-engine utility for Dwarf Fortress, written in Rust
     
     webview.step().unwrap().unwrap();
     
+    // Keep activating the webview event loop.
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
@@ -221,33 +226,39 @@ A sound-engine utility for Dwarf Fortress, written in Rust
     }
 }
 
+/// add a slider for a channel with the give name
 fn add_slider(webview: &mut WebView<()>, name: &str) {
     webview.eval(
-        &format!(r#"addSlider("{channel_name}")"#, channel_name=&name)
+        &format!(r#"addSlider("{channel_name}")"#, channel_name=name)
     ).unwrap();
 }
+/// set the slider value for the named channel
 fn set_slider_value(webview: &mut WebView<()>, name: Box<str>, value: f32) {
     webview.eval(&format!(
         r#"setSliderValue("{channel_name}", {value})"#,
-        channel_name=&name,
+        channel_name=name,
         value=value as u32
     )).unwrap();
 }
+/// remove all sliders
 fn clear_sliders(webview: &mut WebView<()>) {
     webview.eval("clearSliders()").unwrap();
 }
+/// display a notice for the user.
 fn add_alert(webview: &mut WebView<()>, name: &str, color: &str, text: &str) {
     webview.eval(&format!(
         r#"addAlert("{}", "{}", "{}")"#,
         name, color, text
     )).unwrap();
 }
+/// remove a notice if it exists.
 fn remove_alert(webview: &mut WebView<()>, name: &str) {
     webview.eval(&format!(
         r#"removeAlert("{}")"#,
         name
     )).unwrap();
 }
+/// display an error message for the user.
 fn add_error(webview: &mut WebView<()>, name: &str, text: &str) {
     webview.eval(&format!(
         r#"addError("{}", "{}")"#,
