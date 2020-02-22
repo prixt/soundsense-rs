@@ -5,6 +5,7 @@ use std::io::Write;
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
 
+/// The UI thread function.
 pub fn run(
     sound_tx: Sender<SoundMessage>, ui_rx: Receiver<UIMessage>,
     gamelog_path: Option<PathBuf>,
@@ -190,6 +191,7 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
     
     webview.step().unwrap().unwrap();
     
+    // Keep activating the webview event loop.
     while let Some(result) = webview.step() {
         result.unwrap();
         for ui_message in ui_rx.try_iter() {
@@ -224,11 +226,13 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
     }
 }
 
+/// add a slider for a channel with the give name
 fn add_slider(webview: &mut WebView<()>, name: &str) {
     webview.eval(
         &format!(r#"addSlider("{channel_name}")"#, channel_name=name)
     ).unwrap();
 }
+/// set the slider value for the named channel
 fn set_slider_value(webview: &mut WebView<()>, name: Box<str>, value: f32) {
     webview.eval(&format!(
         r#"setSliderValue("{channel_name}", {value})"#,
@@ -236,21 +240,25 @@ fn set_slider_value(webview: &mut WebView<()>, name: Box<str>, value: f32) {
         value=value as u32
     )).unwrap();
 }
+/// remove all sliders
 fn clear_sliders(webview: &mut WebView<()>) {
     webview.eval("clearSliders()").unwrap();
 }
+/// display a notice for the user.
 fn add_alert(webview: &mut WebView<()>, name: &str, color: &str, text: &str) {
     webview.eval(&format!(
         r#"addAlert("{}", "{}", "{}")"#,
         name, color, text
     )).unwrap();
 }
+/// remove a notice if it exists.
 fn remove_alert(webview: &mut WebView<()>, name: &str) {
     webview.eval(&format!(
         r#"removeAlert("{}")"#,
         name
     )).unwrap();
 }
+/// display an error message for the user.
 fn add_error(webview: &mut WebView<()>, name: &str, text: &str) {
     webview.eval(&format!(
         r#"addError("{}", "{}")"#,
