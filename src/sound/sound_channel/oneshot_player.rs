@@ -2,16 +2,25 @@
 
 use super::*;
 
+/// Struct responsible for one playing oneshot source.
 struct Control {
+    /// This volume is independent from Channel's local_volume and SoundManager's total_volume. 
     volume: VolumeLock,
+    /// Whether the source is stopped.
     stopped: AtomicBool,
+    /// Marker to check whether the sound has stopped playing.
     count: Arc<AtomicUsize>,
 }
 
+/// Struct responsible of playing oneshot sounds.
 pub struct OneshotPlayer {
+    /// Whether the oneshot player is paused.
     paused: Arc<AtomicBool>,
+    /// Vector of controls, each responsible for a different source.
     controls: Vec<Arc<Control>>,
+    /// Channel's local_volume.
     local_volume: VolumeLock,
+    /// SoundManager's total_volume.
     total_volume: VolumeLock,
 }
 
@@ -41,6 +50,7 @@ impl OneshotPlayer {
         self.paused.load(Ordering::Relaxed);
     }
 
+    /// Make all playing sources stop. 
     #[inline]
     pub fn stop(&self) {
         for control in self.controls.iter() {
@@ -68,6 +78,9 @@ impl OneshotPlayer {
         self.controls[idx].volume.set(volume);
     }
 
+    /// Add a oneshot source.
+    /// Generate a control for the source.
+    /// Wraps the source in appropriate control wraps plays it.
     pub fn add_source<S>(
         &mut self,
         device: &Device,
@@ -132,6 +145,7 @@ impl OneshotPlayer {
         self.controls.push(control);
     }
 
+    /// Remove all controls if stopped, or if the source has finished playing.
     pub fn maintain(&mut self) {
         self.controls.retain(|c| 
             !c.stopped.load(Ordering::Relaxed)

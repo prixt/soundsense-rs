@@ -1,18 +1,28 @@
 use super::*;
 
 /// The struct that parses the log entries.
-/// Plays appropriate sounds on appropriate channels; checks for concurrency, delays, and probability;
+/// Plays appropriate sounds on appropriate channels;
+/// checks for concurrency, delays, and probability;
 /// Sends messages to the UI after loading soundpack and ignore list.
 pub struct SoundManager {
-    sounds: Vec<SoundEntry>,        // All the Sounds loaded from the soundpack.
-    recent: HashSet<usize>,         // The indices of the recently played Sounds.
-    previous_log: String,           // The previous log message. Replaces `x[0-9]+` messages. 
-    ignore_list: Vec<Regex>,        // The patterns that SoundManager shouldn't process.
-    device: Device,                 // The sound device of the system.
-    channels: BTreeMap<Box<str>, SoundChannel>, // All the channels, sorted alphabetically.
-    total_volume: VolumeLock,       // The total volume.
-    ui_sender: Sender<UIMessage>,   // Sender for UIMessage sent to the UI.
-    rng: ThreadRng,                 // RNG for probability and randomly choosing a soundfile from many.
+    /// All the Sounds loaded from the soundpack.
+    sounds: Vec<SoundEntry>,
+    /// The indices of the recently played Sounds.
+    recent: HashSet<usize>,
+    /// The previous log message. Replaces `x[0-9]+` messages. 
+    previous_log: String,
+    /// The patterns that SoundManager shouldn't process.
+    ignore_list: Vec<Regex>,
+    /// The sound device of the system.
+    device: Device,
+    /// All the channels, sorted alphabetically.
+    channels: BTreeMap<Box<str>, SoundChannel>,
+    /// The total volume.
+    total_volume: VolumeLock,
+    /// Sender for UIMessage sent to the UI.
+    ui_sender: Sender<UIMessage>,
+    /// RNG for probability and randomly choosing a soundfile from many.
+    rng: ThreadRng,
 }
 
 impl SoundManager {
@@ -29,7 +39,7 @@ impl SoundManager {
 			SoundChannel::new(&device, "misc", total_volume.clone())
 		);
 
-        // Traverse the soundpack in DFS. Parses XML files.
+        /// Traverse the soundpack in DFS. Parses XML files.
 		fn visit_dir(dir: &Path, func: &mut dyn FnMut(&Path)->Result<()>) -> Result<()> {
             trace!("Directory: {:?}", dir);
             match fs::read_dir(dir) {
@@ -59,9 +69,10 @@ impl SoundManager {
             let buf = &mut Vec::new();
             loop {
                 match reader.read_event(buf) {
-                    // <Sound>                               // <Sound/>
+                    // <...> or <.../>
                     Ok(Event::Start(ref data)) | Ok(Event::Empty(ref data)) => {
                         let local_name = data.local_name();
+                        // <sound> or <sound/>
                         if local_name == b"sound" {
 
                             let mut pattern: Option<Regex> = None;
@@ -80,6 +91,7 @@ impl SoundManager {
 
                             for attr in data.attributes().with_checks(false) {
                                 let attr = attr?;
+                                // This value came from an XML file, so it must be utf8.
                                 let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
                                 match attr.key {
                                     b"logPattern" => {
@@ -155,7 +167,8 @@ impl SoundManager {
                                 }
                             );
                         }
-
+                        
+                        // <soundFile> or <soundFile/>
                         else if local_name == b"soundFile" {
                             current_sound.as_ref().ok_or_else(||
                                 format!("A SoundFile in {:?} was declared outside of Sound!", file_path)
@@ -241,7 +254,7 @@ impl SoundManager {
                         )
                     },
 
-                    _ => ()
+                    _ => () // Other Reader::Events aren't used, just ignore them.
                 }
             }
         };
@@ -289,7 +302,9 @@ impl SoundManager {
 	pub fn maintain(&mut self, dt: usize) -> Result<()> {
 		{
 			let sounds = &mut self.sounds;
-			let recent = &mut self.recent;
+            let recent = &mut self.recent;
+            // Tick down timeout and recent_call.
+            // If the timeout == 0, remove from recent list.
 			recent.retain(|&i| {
 				let timeout = sounds[i].current_timeout.saturating_sub(dt);
 				let recent_call = sounds[i].recent_call.saturating_sub(1);
@@ -304,6 +319,7 @@ impl SoundManager {
         Ok(())
 	}
 
+    /// Set the volume of all, or specific channels.
     pub fn set_volume(&mut self, channel_name: &str, volume: f32) -> Result<()> {
         if channel_name == "all" {
             self.total_volume.set(volume);
@@ -314,6 +330,7 @@ impl SoundManager {
         Ok(())
     }
 
+    /// Reload the ignore list.
     pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) -> Result<()> {
         self.ignore_list = ignore_list;
         self.ui_sender.send(UIMessage::LoadedIgnoreList)?;
@@ -321,6 +338,7 @@ impl SoundManager {
     }
 
     #[allow(clippy::cognitive_complexity)] // You flag this functions, but not `SoundManager::new`?!
+    /// Process one line of log message, and make channels play/pause/stop sounds appropriately.
     pub fn process_log(&mut self, log: &str) -> Result<()> {
         trace!("log: {}", log);
         let mut log = log;
@@ -348,6 +366,7 @@ impl SoundManager {
         let recent = &mut self.recent;
 
         for (i, sound) in sounds.iter_mut().enumerate() {
+            // Activate the Sound if the log matches its pattern.
             if sound.pattern.is_match(log) {
                 trace!(" pattern: {}", sound.pattern.as_str());
                 recent.insert(i);
@@ -367,6 +386,10 @@ impl SoundManager {
 
                 if can_play {
                     let files = &sound.files;
+                    // Choose index.
+                    // If there are more than one soundfiles,
+                    //      and the sound doesn't loop, choose based on weighted distribution.
+                    // Else, 0.
                     let idx : usize = if files.len() > 1 && !sound.loop_attr.unwrap_or(false) {
                         match WeightedIndex::new(&sound.weights) {
                             Ok(weight) => weight.sample(rng),
@@ -379,6 +402,7 @@ impl SoundManager {
                         0
                     };
 
+                    // Play on a given channel.
                     if let Some(chn) = &sound.channel {
                         trace!("  channel: {}", chn);
                         let channel = if let Some(channel) = self.channels.get_mut(chn) {
@@ -388,17 +412,21 @@ impl SoundManager {
                             continue;
                         };
                         let chn_len = channel.len();
+                        // Check if there are too many sounds playing on this channel (concurrency).
                         if chn_len < sound.concurency.unwrap_or(std::usize::MAX) {
+                            // Set current_timeout if the sound has a timeout value.
                             if let Some(timeout) = sound.timeout {
                                 sound.current_timeout = timeout;
                             }
                             let device = &self.device;
                             
+                            // Check if the sound starts a loop
                             if let Some(is_loop_start) = sound.loop_attr {
                                 if is_loop_start {
                                     trace!("   loop=start");
                                     channel.change_loop(device, sound.files.as_slice(), sound.delay.unwrap_or(0), rng);
                                 } else {
+                                    // If loop=stop, add the sound to the oneshot player.
                                     trace!("   loop=stop");
                                     channel.stop_loop(sound.delay.unwrap_or(0));
                                     if !sound.files.is_empty() {
@@ -406,6 +434,7 @@ impl SoundManager {
                                     }
                                 }
                             }
+                            // Otherwise, add to oneshot player.
                             else if !sound.files.is_empty() && channel.len() <= sound.concurency.unwrap_or(std::usize::MAX) {
                                 channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
                             }
@@ -440,6 +469,7 @@ impl SoundManager {
         Ok(())
     }
 
+    /// Write the current slider values into the soundsense-rs/default-volumes.ini file.
     pub fn set_current_volumes_as_default(&self, mut file: File) -> Result<()> {
         use std::io::Write;
         writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)?;
@@ -449,6 +479,7 @@ impl SoundManager {
         Ok(())
     }
 
+    /// Get the volume from the soundsense-rs/default-volumes.ini file.
     fn get_default_volume(&mut self, mut file: File) -> Result<()> {
         lazy_static! {
             static ref INI_ENTRY: Regex = Regex::new("([[:word:]]+)=(.+)").unwrap();
@@ -474,18 +505,22 @@ impl SoundManager {
                 entries.push((name.to_string().into_boxed_str(), volume));
             }
         }
+        // Tell the UI to change the slider values.
         self.ui_sender
             .send(UIMessage::LoadedVolumeSettings(entries))?;
         Ok(())
     }
 }
 
+/// Convert a playlist into a list or file paths.
 fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
     let parent_path = path.parent().unwrap();
 
     let mut path_vec = Vec::new();
     let f = File::open(path)?;
     let f = BufReader::new(f);
+    // Check if the path contains the m3u or pls extension.
+    // Else, error out.
     let extension = path.extension()
         .filter(|ext| *ext=="m3u" || *ext=="pls")
         .ok_or_else(|| format!(
@@ -493,7 +528,6 @@ fn parse_playlist(path: &Path) -> Result<Vec<PathBuf>> {
             path
         ))?;
     if extension == "m3u" {
-        // f.read_to_string(buf)?;
         for line in f.lines()
             .filter_map(|l| l.ok())
         {

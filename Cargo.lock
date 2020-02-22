@@ -292,9 +292,9 @@ checksum = "8a164bb2ceaeff4f42542bdb847c41517c78a60f5649671b2a07312b6e117549"
 
 [[package]]
 name = "html-minifier"
-version = "1.1.14"
+version = "1.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4adb165cd7620beaa92a890a16c4e6ae9e790c629e46c80bbfe54c049a7b491f"
+checksum = "36b7f88b907af882d529ac5f1d2191e3e78869db20ddace679f4deaac9ca698a"
 dependencies = [
  "minifier",
 ]
@@ -373,9 +373,9 @@ checksum = "3728d817d99e5ac407411fa471ff9800a778d88a24685968b36824eaf4bee400"
 
 [[package]]
 name = "minifier"
-version = "0.0.33"
+version = "0.0.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70bf0db2475f5e627787da77ca52fe33c294063f49f4134b8bc662eedb5e7332"
+checksum = "e981853febba4b086c4464067ac78815231e52c2b6249d28a5c814334a111b0c"
 dependencies = [
  "macro-utils",
 ]
