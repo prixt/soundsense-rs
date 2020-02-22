@@ -346,7 +346,7 @@ impl SoundManager {
                 let mut can_play = sound.current_timeout == 0;
                 if can_play {
                     if let Some(probability) = sound.probability {
-                        can_play &= probability >= rng.gen_range(0usize, 100usize);
+                        can_play &= probability > rng.gen_range(0usize, 100usize);
                         if !can_play {
                             trace!("  can't play: failed probability roll");
                         }
