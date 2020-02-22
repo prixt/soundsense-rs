@@ -88,13 +88,21 @@ pub struct SoundEntry {
 
 /// The sound thread function.
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
+    // Outer loop. Restarts the inner loop if an error occured, but didn't panic.
     loop {
         info!("(Re)Starting sound thread.");
+        // SoundManager
         let mut manager : Option<SoundManager> = None;
+        // BufReader for the gamelog.
         let mut buf_reader : Option<BufReader<File>> = None;
+        // Current time for delta time calculation.
         let mut prev = Instant::now();
+
+        // Arguably the most front-heavy if statement I ever wrote.
         if let Err(error) = || -> Result<()> {
+            // Inner loop. Will return an Error if something wrong happens.
             loop {
+                // Read SoundMessages sent from the UI.
                 for message in sound_rx.try_iter() {
                     use SoundMessage::*;
                     match message {
@@ -109,6 +117,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                             manager = Some(SoundManager::new(&path, ui_tx.clone())?);
                         }
 
+                        // These types of messages require a manager.
                         message => if let Some(manager) = manager.as_mut() {
                             match message {
                                 ChangeIgnoreList(path) => {
@@ -150,7 +159,9 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                 }
                 prev = current;
             }
-        }(){ // Arguably the most front-heavy if statement I ever wrote.
+        }(){// LOOK, A BUTTERFLY!
+            // If an error occurred and was caugth, send the error message to the UI.
+            // Return to the outer loop, which will then restart the inner loop.
             let mut error_message = "The soundthread restarted due to this error:\n".to_string();
             error_message.push_str(&error.to_string());
             ui_tx.send(

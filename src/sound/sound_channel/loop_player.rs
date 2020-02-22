@@ -1,14 +1,30 @@
 use super::*;
 use std::collections::VecDeque;
 
+/// Struct responsible of playing looping sounds.
 pub struct LoopPlayer {
+    /// Atomic reference cell to the SourceQueueInput.
+    /// Sources are input here to be played.
     queue_tx: Arc<queue::SourcesQueueInput<f32>>,
+    /// Count of how many sources are in the SourceQueue.
+    queue_count: usize,
+    /// Whether the loop is stopped.
+    /// Playing will cause a new source to be played.
     stopped: Arc<AtomicBool>,
+    /// Whether the loop is paused.
+    /// Playing will resume the source.
     paused: Arc<AtomicBool>,
+    /// LoopPlayer's volume.
+    /// This is different from local_volume. This is for dynamic volume changes.
     volume: VolumeLock,
+    /// Channel's volume.
     local_volume: VolumeLock,
+    /// Total volume (SoundManager's volume).
     total_volume: VolumeLock,
+    /// Option for Receiver that checks if the current source has finished playing.
     sleep_until_end: Option<Receiver<()>>,
+    /// SoundFile deque.
+    /// Whenever a source finishes playing, the first file will play, then the deque rotates.
     files: VecDeque<SoundFile>,
 }
 impl LoopPlayer {
@@ -22,6 +38,7 @@ impl LoopPlayer {
         play_raw(device, queue_rx);
         Self {
             queue_tx,
+            queue_count: 0,
             local_volume,
             total_volume,
             stopped: Arc::new(AtomicBool::new(false)),
@@ -69,11 +86,14 @@ impl LoopPlayer {
         self.volume.get()
     }
 
+    /// Number of sources currently playing. Will always be 0 or 1.
     #[inline]
     pub fn len(&self) -> usize {
-        (!self.is_paused() && !self.is_stopped() && !self.files.is_empty()) as usize
+        !(self.is_paused() || self.is_stopped() || self.files.is_empty()) as usize
     }
 
+    /// Change the loop.
+    /// Replaces the current set of files with another one.
     pub fn change_loop(
         &mut self,
         device: &Device,
@@ -93,6 +113,7 @@ impl LoopPlayer {
         self.append_file(rng);
     }
 
+    /// Gets sound source(s) from the first file path, and append to the SourceQueue.
     fn append_file(&mut self, rng: &mut ThreadRng) {
         let file = self.files.front_mut().unwrap();
         let files = match &file.r#type {
@@ -120,13 +141,14 @@ impl LoopPlayer {
                     self.append_source(source, volume, balance)
                 }
                 Err(e) => {
-                    warn!("Error while asserting {}: {}", path.display(), e);
+                    warn!("Error while decoding {}: {}", path.display(), e);
                     warn!("Will ignore this source.");
                 }
             }
         }
     }
 
+    /// Wraps the source with the appropriate control wrappers, then adds it to the queue.
     fn append_source<S>(&mut self, source: S, source_volume: f32, balance: f32)
     where
         S: Source + Send + 'static,
@@ -160,9 +182,11 @@ impl LoopPlayer {
                     }
                 }
             ).convert_samples::<f32>();
+        // If balance is equal, just append it to queue.
         if balance == 0.0 {
             self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
         }
+        // If not, add a Spatial wrapper around the source, then append it to queue.
         else {
             let source = source.buffered();
             let source = Spatial::new(
@@ -173,8 +197,10 @@ impl LoopPlayer {
             );
             self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
         }
+        self.queue_count+=1;
     }
 
+    /// Maintain the loop.
     pub fn maintain(&mut self, rng: &mut ThreadRng) {
         use std::sync::mpsc::TryRecvError;
         if self.stopped.load(Ordering::Relaxed) {return}
@@ -188,8 +214,11 @@ impl LoopPlayer {
         }
     }
 
+    /// Triggerd when the current source ends.
+    /// If there are no more sources in queue, rotated the files deque, and appends the first file.
     fn on_source_end(&mut self, rng: &mut ThreadRng) {
-        if !self.files.is_empty() && !self.stopped.load(Ordering::Relaxed)
+        self.queue_count-=1;
+        if self.queue_count == 0 && !self.files.is_empty() && !self.stopped.load(Ordering::Relaxed)
         {
             self.files.rotate_left(1);
             self.append_file(rng);
