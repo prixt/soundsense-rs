@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 let is_windows = null;
 let channels = null;
