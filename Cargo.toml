@@ -26,7 +26,7 @@ env_logger = "0.7.1"
 
 [build-dependencies]
 winres = "0.1"
-html-minifier = "1.1.14"
+html-minifier = "=1.1.14"
 
 [profile.dev.package.rodio]
 debug-assertions = false
@@ -40,3 +40,6 @@ panic = "abort"
 
 [profile.release.build-override]
 opt-level = 0
+
+[package.metadata.winres]
+LegalCopyright = "© 2019-2020 prixt"

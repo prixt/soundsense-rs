@@ -125,8 +125,10 @@ impl SoundManager {
                                 }
                             }
 
-                            trace!("  Sound");
-                            let pattern = pattern.expect("SoundEntry must include a regex pattern!");
+                            trace!("  SoundEntry");
+                            let pattern = pattern.ok_or_else(||
+                                format!("A SoundEntry in {:?} doesn't have a pattern!", file_path)
+                            )?;
                             trace!("  -Pattern: {}", pattern);
                             current_sound = Some(
                                 SoundEntry{
@@ -149,7 +151,9 @@ impl SoundManager {
                         }
 
                         else if local_name == b"soundFile" {
-                            assert!(current_sound.is_some(), "SoundFile must be declared inside a Sound!");
+                            current_sound.as_ref().ok_or_else(||
+                                format!("A SoundFile in {:?} was declared outside of Sound!", file_path)
+                            )?;
                             let mut path = PathBuf::from(file_path);
                             let mut is_playlist = false;
                             let mut weight: f32 = 100.0;		
