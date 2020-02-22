@@ -9,7 +9,7 @@ My attempt at recreating [SoundSense](http://df.zweistein.cz/soundsense/), a sou
 
 ## Why?
 1. To see if I could do it.
-2. Attempt to create a standalone application that doesn't require bloat (Java VM, C# VM, gtk, etc...).
+2. Attempt to create a standalone application that doesn't require bloat.
    * Ultimately, you should only need one executable, the soundpack folder, and DF.
    * Recommended soundpack fork: https://github.com/jecowa/soundsensepack
 
@@ -49,7 +49,7 @@ You can set the following environment variables to set the logging parameters. (
 * __SOUNDSENSE_RS_LOG_STYLE__: st the level of the log style. _(always, never; default: always)_
 
 ## Dependencies
-Linux: libasound2, libgtk-3, libwebkit2gtk-4.0
+__Linux__: libasound2, libgtk-3, libgdk-3, libwebkit2gtk-4.0, libjavascriptcregtk-4.0
 
 ## [MIT License](./LICENSE)
 

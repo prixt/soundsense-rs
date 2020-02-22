@@ -24,14 +24,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 	let index_html = html_minifier::minify(index_html)?;
 
 	File::create(dest_dir)?
-		.write_all( index_html.as_bytes() )?;
+		.write_all(index_html.as_bytes())?;
 	
 	#[cfg(target_os="windows")]
-	{
-		let mut res = winres::WindowsResource::new();
-		res.set_icon("icons/icon.ico");
-		res.compile().unwrap();
-	}
+	winres::WindowsResource::new()
+		.set_icon("icons/icon.ico")
+		.compile()?;
 
 	Ok(())
 }

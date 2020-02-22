@@ -32,12 +32,16 @@ lazy_static! {
     ).unwrap();
 }
 
+/// Show if the SoundFile is a single sound, or a playlist of multiple sounds.
 #[derive(Clone)]
 pub enum SoundFileType {
+    /// Contains a single file path.
     IsPath(PathBuf),
+    /// Contains multiple file paths.
     IsPlaylist(Vec<PathBuf>)
 }
 
+/// A struct containing all the information about a SoundFile.
 #[derive(Clone)]
 pub struct SoundFile {
     pub r#type: SoundFileType,	// path to audio file with sound. OR list of paths
@@ -48,6 +52,8 @@ pub struct SoundFile {
     pub balance: f32,	// adjusts stereo channel, can range for -1 (full left) to 1 (full right).
 }
 
+/// A thread-safe wrapper around a volume(f32) volume.
+/// Intended to be used by LoopPlayers and OneshotPlayers.
 #[derive(Clone)]
 pub struct VolumeLock(Arc<RwLock<f32>>);
 impl VolumeLock {
@@ -62,6 +68,7 @@ impl VolumeLock {
     }
 }
 
+/// A struct containing all the information about a Sound, such as regex patterns, channel, loopability, etc.
 pub struct SoundEntry {
     pub pattern: regex::Regex,	// regular expression matching log line
     pub channel: Option<Box<str>>,	// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
@@ -79,14 +86,23 @@ pub struct SoundEntry {
     pub recent_call: usize,
 }
 
+/// The sound thread function.
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
+    // Outer loop. Restarts the inner loop if an error occured, but didn't panic.
     loop {
         info!("(Re)Starting sound thread.");
+        // SoundManager
         let mut manager : Option<SoundManager> = None;
+        // BufReader for the gamelog.
         let mut buf_reader : Option<BufReader<File>> = None;
+        // Current time for delta time calculation.
         let mut prev = Instant::now();
+
+        // Arguably the most front-heavy if statement I ever wrote.
         if let Err(error) = || -> Result<()> {
+            // Inner loop. Will return an Error if something wrong happens.
             loop {
+                // Read SoundMessages sent from the UI.
                 for message in sound_rx.try_iter() {
                     use SoundMessage::*;
                     match message {
@@ -101,6 +117,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                             manager = Some(SoundManager::new(&path, ui_tx.clone())?);
                         }
 
+                        // These types of messages require a manager.
                         message => if let Some(manager) = manager.as_mut() {
                             match message {
                                 ChangeIgnoreList(path) => {
@@ -142,7 +159,9 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                 }
                 prev = current;
             }
-        }(){ // Arguably the most front-heavy if statement I ever wrote.
+        }(){// LOOK, A BUTTERFLY!
+            // If an error occurred and was caugth, send the error message to the UI.
+            // Return to the outer loop, which will then restart the inner loop.
             let mut error_message = "The soundthread restarted due to this error:\n".to_string();
             error_message.push_str(&error.to_string());
             ui_tx.send(
@@ -151,7 +170,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                     error_message,
                 )
             ).unwrap();
-            error!("SoundThreadError: {:?}", error);
+            error!("SoundThreadError:\n{:?}", error);
         }
     }
 }
