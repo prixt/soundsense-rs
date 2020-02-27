@@ -36,7 +36,6 @@ impl LoopPlayer {
         play_raw(device, queue_rx);
         Self {
             queue_tx,
-            queue_count: 0,
             local_volume,
             total_volume,
             stopped: Arc::new(AtomicBool::new(false)),
@@ -195,7 +194,6 @@ impl LoopPlayer {
             );
             self.sleep_until_end = Some(self.queue_tx.append_with_signal(source));
         }
-        self.queue_count+=1;
     }
 
     /// Maintain the loop.
@@ -215,8 +213,7 @@ impl LoopPlayer {
     /// Triggerd when the current source ends.
     /// If there are no more sources in queue, rotated the files deque, and appends the first file.
     fn on_source_end(&mut self, rng: &mut ThreadRng) {
-        self.queue_count-=1;
-        if self.queue_count == 0 && !self.files.is_empty() && !self.stopped.load(Ordering::Relaxed)
+        if !self.files.is_empty() && !self.stopped.load(Ordering::Relaxed)
         {
             self.files.rotate_left(1);
             self.append_file(rng);
