@@ -6,8 +6,6 @@ pub struct LoopPlayer {
     /// Atomic reference cell to the SourceQueueInput.
     /// Sources are input here to be played.
     queue_tx: Arc<queue::SourcesQueueInput<f32>>,
-    /// Count of how many sources are in the SourceQueue.
-    queue_count: usize,
     /// Whether the loop is stopped.
     /// Playing will cause a new source to be played.
     stopped: Arc<AtomicBool>,

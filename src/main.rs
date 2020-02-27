@@ -17,8 +17,8 @@ mod message;
 /// 3. The SoundManager iterates through the SoundEntries, and checks if any of their patterns match.
 /// 4. If a pattern matches, play the SoundEntry's SoundFiles on the appropriate SoundChannel.
 /// 
-/// All the while the UI thread handles user input and send SoundMessage to the SoundThread
-/// through a Sender<SoundMessage>, while the Sound thread send UIMessages to the UI through
+/// All the while the UI thread handles user input and sends SoundMessage to the SoundThread
+/// through a Sender<SoundMessage>, while the Sound thread sends UIMessages to the UI through
 /// a Sender<UIMessage>.
 
 fn main() {
