@@ -181,6 +181,7 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                     }
                 }
                 prev = current;
+                std::thread::sleep(std::time::Duration::from_millis(10));
             }
         }(){// LOOK, A BUTTERFLY!
             // If an error occurred and was caught, send the error message to the UI.
