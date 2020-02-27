@@ -44,12 +44,18 @@ pub enum SoundFileType {
 /// A struct containing all the information about a SoundFile.
 #[derive(Clone)]
 pub struct SoundFile {
-    pub r#type: SoundFileType,	// path to audio file with sound. OR list of paths
-    pub weight: f32,	// controls likelihood of sound to be chosen. Default is 100.
-    pub volume: f32,	// adjusts volume of sample. Can range from -40 to +6 decibles, default 0.
-    pub random_balance: bool,	// if set to true will randomply distribute sound between stereo channels.
-    pub delay: usize,	// number, delay before sound is played. In miliseconds, default 0.
-    pub balance: f32,	// adjusts stereo channel, can range for -1 (full left) to 1 (full right).
+    /// Path to audio file with sound. OR list of paths
+    pub r#type: SoundFileType,
+    /// Controls likelihood of sound to be chosen. Default is 100.
+    pub weight: f32,
+    /// Adjusts volume of sample. Can range from -40 to +6 decibles, default 0.
+    pub volume: f32,
+    /// If set to true will randomply distribute sound between stereo channels.
+    pub random_balance: bool,
+    /// number, delay before sound is played. In miliseconds, default 0.
+    pub delay: usize,
+    /// Adjusts stereo channel, can range for -1 (full left) to 1 (full right).
+    pub balance: f32,
 }
 
 /// A thread-safe wrapper around a volume(f32) volume.
@@ -70,19 +76,36 @@ impl VolumeLock {
 
 /// A struct containing all the information about a Sound, such as regex patterns, channel, loopability, etc.
 pub struct SoundEntry {
-    pub pattern: regex::Regex,	// regular expression matching log line
-    pub channel: Option<Box<str>>,	// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
-    pub loop_attr: Option<bool>,	// "start" - sound start loop on channel until different sound is played on channel (if it is non-looped sound, loop will resume when it is done playing) or sound with "stop" is triggered.
-    pub concurency: Option<usize>,	// number of councured sounds allowed to be played besides this sound. If currenty playing more than that, sound is ignored. In miliseconds, default unlimited.
-    pub timeout: Option<usize>,	// number, timeout during which is sound going to be prevented from playing again. In miliseconds default 0.
-    pub probability: Option<usize>,	 // percentage, Propablity that sound will be played. Default is always played.
-    pub delay: Option<usize>,	// number, delay before sound is played. In miliseconds, default 0.
-    pub halt_on_match: bool,	// boolean, if set to true, sound sense will stop processing long line after it was matched to this sound. Default false
-    pub random_balance: bool,	// boolean, if set to true will randomply distribute sound betweem stereo channels.
+    /// regular expression matching log line
+    pub pattern: regex::Regex,
+    /// channel on which sound is played. sounds played on channel can be looped/stopped prematurely
+    pub channel: Option<Box<str>>,
+    /// "start" - sound start loop on channel until different sound is played on channel
+    /// (if it is non-looped sound, loop will resume when it is done playing) or sound with "stop" is triggered.
+    pub loop_attr: Option<bool>,
+    /// number of councured sounds allowed to be played besides this sound.
+    /// If currenty playing more than that, sound is ignored. In miliseconds, default unlimited.
+    pub concurency: Option<usize>,
+    /// number, timeout during which is sound going to be prevented from playing again. In miliseconds default 0.
+    pub timeout: Option<usize>,
+    /// percentage, Propablity that sound will be played. Default is always played.
+    pub probability: Option<usize>,
+    /// number, delay before sound is played. In miliseconds, default 0.
+    pub delay: Option<usize>,
+    /// boolean, if set to true, sound sense will stop processing long line after it was matched to this sound.
+    /// Default false
+    pub halt_on_match: bool,
+    /// boolean, if set to true will randomply distribute sound betweem stereo channels.
+    pub random_balance: bool,
+    /// number, threashold used when filtering sound depending on level (currently not used)
     pub playback_threshold: u8,
+    /// Collection of SoundFiles
     pub files: Vec<SoundFile>,
+    /// Collection of each SoundFile's weight.
     pub weights: Vec<f32>,
+    /// Timeout. While timeout, can't be played.
     pub current_timeout: usize,
+    /// Number of times this SoundEntry has been called.
     pub recent_call: usize,
 }
 
@@ -158,9 +181,10 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                     }
                 }
                 prev = current;
+                std::thread::sleep(std::time::Duration::from_millis(10));
             }
         }(){// LOOK, A BUTTERFLY!
-            // If an error occurred and was caugth, send the error message to the UI.
+            // If an error occurred and was caught, send the error message to the UI.
             // Return to the outer loop, which will then restart the inner loop.
             let mut error_message = "The soundthread restarted due to this error:\n".to_string();
             error_message.push_str(&error.to_string());
