@@ -27,7 +27,7 @@ env_logger = "0.7.1"
 
 [build-dependencies]
 winres = "0.1"
-html-minifier = "=1.1.9"
+html-minifier = "1.1.16"
 
 [profile.dev.package.rodio]
 debug-assertions = false
