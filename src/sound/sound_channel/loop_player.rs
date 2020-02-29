@@ -99,6 +99,8 @@ impl LoopPlayer {
     ) {
         self.stop();
         self.files = files.iter().cloned().collect();
+        let (front, back) = self.files.as_mut_slices();
+        front.shuffle(rng); back.shuffle(rng);
         let (queue_tx, queue_rx) = queue::queue(true);
         play_raw(device, queue_rx);
         let volume = self.volume.get();
@@ -213,8 +215,10 @@ impl LoopPlayer {
     /// Triggerd when the current source ends.
     /// If there are no more sources in queue, rotated the files deque, and appends the first file.
     fn on_source_end(&mut self, rng: &mut ThreadRng) {
+        trace!("Song finished.");
         if !self.files.is_empty() && !self.stopped.load(Ordering::Relaxed)
         {
+            trace!("  Playing next song.");
             self.files.rotate_left(1);
             self.append_file(rng);
         }
