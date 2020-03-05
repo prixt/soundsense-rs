@@ -128,6 +128,18 @@ pub struct SoundEntry {
     pub recent_call: usize,
 }
 
+#[non_exhaustive]
+#[derive(Copy, Clone, PartialEq)]
+pub enum ChannelPlayType {
+    All,
+    SingleEager,
+    SingleLazy,
+}
+
+pub struct ChannelSetting {
+    play_type: ChannelPlayType,
+}
+
 /// The sound thread function.
 pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
     // Outer loop. Restarts the inner loop if an error occured, but didn't panic.
