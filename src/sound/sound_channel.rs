@@ -24,16 +24,29 @@ pub struct SoundChannel {
     local_volume: VolumeLock,
     delay: usize,
     play_type: ChannelPlayType,
+    local_is_paused: IsPausedLock,
 }
 
 impl SoundChannel {
     /// Create a new SoundChannel.
     #[inline]
-    pub fn new(device: &Device, name: &str, total_volume: VolumeLock) -> Self {
+    pub fn new(device: &Device, name: &str, total_volume: VolumeLock, total_is_paused: IsPausedLock) -> Self {
         let local_volume = VolumeLock::new();
+        let local_is_paused = IsPausedLock::new();
         Self {
-            looping : LoopPlayer::new(device, local_volume.clone(), total_volume.clone()),
-            one_shots : OneshotPlayer::new(local_volume.clone(), total_volume),
+            looping : LoopPlayer::new(
+                device,
+                local_volume.clone(),
+                total_volume.clone(),
+                local_is_paused.clone(),
+                total_is_paused.clone(),
+            ),
+            one_shots : OneshotPlayer::new(
+                local_volume.clone(),
+                total_volume,
+                local_is_paused.clone(),
+                total_is_paused,
+            ),
             local_volume,
             delay : 0,
             play_type: {
@@ -43,7 +56,8 @@ impl SoundChannel {
                 else {
                     ChannelPlayType::All
                 }
-            }
+            },
+            local_is_paused,
         }
     }
 
@@ -70,12 +84,17 @@ impl SoundChannel {
     /// Change the loop.
     /// If "music" or "weather", stop all oneshots.
     pub fn change_loop(&mut self, device: &Device, files: &[SoundFile], delay: usize, rng: &mut ThreadRng) {
+        if self.play_type == ChannelPlayType::SingleLazy {
+            if self.len() != 0 {
+                return
+            }
+        }
+        else if self.play_type == ChannelPlayType::SingleEager {
+            self.one_shots.stop();
+        }
         self.looping.change_loop(device, files, rng);
         self.delay = delay;
         self.maintain(rng, 0);
-        if self.play_type == ChannelPlayType::SingleEager {
-            self.one_shots.stop();
-        }
     }
 
     pub fn stop_loop(&mut self, delay: usize) {
@@ -84,23 +103,37 @@ impl SoundChannel {
     }
 
     pub fn skip(&mut self) {
-        if self.looping.len() != 0 {
-            self.looping.skip();
-        }
+        self.looping.skip();
+        self.one_shots.stop();
+    }
+
+    pub fn play_pause(&mut self) {
+        self.local_is_paused.flip();
+    }
+
+    pub fn finish(&mut self) {
+        self.looping.stop();
+        self.one_shots.stop();
     }
 
     /// Play a oneshot.
-    /// Will make other oneshots 25% quieter.
+    /// Will make other oneshots 50% quieter.
     /// If "music" or "weather", pauses loop and stops other oneshots. 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
-        if self.play_type == ChannelPlayType::SingleEager {
+        if self.play_type == ChannelPlayType::SingleLazy {
+            if self.len() != 0 {
+                return
+            }
+        }
+        else if self.play_type == ChannelPlayType::SingleEager {
             self.looping.pause();
             self.one_shots.stop();
         }
+
         self.one_shots.play();
         for idx in 0..self.one_shots.len() {
             let current_vol = self.one_shots.get_volume(idx);
-            self.one_shots.set_volume(idx, current_vol * 0.75);
+            self.one_shots.set_volume(idx, current_vol * 0.5);
         }
         self.looping.set_volume(0.25);
         let mut data = get_soundfiles(file, rng);

@@ -19,6 +19,8 @@ pub struct SoundManager {
     channels: BTreeMap<Box<str>, SoundChannel>,
     /// The total volume.
     total_volume: VolumeLock,
+    /// Total is_paused.
+    total_is_paused: IsPausedLock,
     /// Sender for UIMessage sent to the UI.
     ui_sender: Sender<UIMessage>,
     /// RNG for probability and randomly choosing a soundfile from many.
@@ -30,13 +32,19 @@ impl SoundManager {
     /// A new manager is created every time the user reloads a soundpack.
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Result<Self> {
         let total_volume = VolumeLock::new();
+        let total_is_paused = IsPausedLock::new();
 		let mut sounds = Vec::new();
         let device = default_output_device()
             .ok_or("Failed to get default audio output device.")?;
 		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
 		channels.insert(
 			String::from("misc").into_boxed_str(),
-			SoundChannel::new(&device, "misc", total_volume.clone())
+			SoundChannel::new(
+                &device,
+                "misc",
+                total_volume.clone(),
+                total_is_paused.clone()
+            )
 		);
 
         /// Traverse the soundpack in DFS. Parses XML files.
@@ -102,7 +110,15 @@ impl SoundManager {
                                     b"channel" => {
                                         let channel_name : Box<str> = attr_value.into();
                                         if !channels.contains_key(&channel_name) {
-                                            channels.insert(channel_name.clone(), SoundChannel::new(&device, &channel_name, total_volume.clone()));
+                                            channels.insert(
+                                                channel_name.clone(),
+                                                SoundChannel::new(
+                                                    &device,
+                                                    &channel_name,
+                                                    total_volume.clone(),
+                                                    total_is_paused.clone(),
+                                                )
+                                            );
                                         }
                                         channel = Some(channel_name);
                                     }
@@ -283,7 +299,8 @@ impl SoundManager {
             ignore_list: Vec::new(),
             device,
             channels,
-            total_volume: total_volume.clone(),
+            total_volume,
+            total_is_paused,
             ui_sender,
             rng: thread_rng(),
         };
@@ -331,10 +348,31 @@ impl SoundManager {
     }
 
     pub fn skip(&mut self, channel_name: &str) -> Result<()> {
-        if let Some(channel) = self.channels.get_mut(channel_name) {
+        if channel_name == "all" {
+            for (_, channel) in self.channels.iter_mut() {
+                channel.skip();
+            }
+        }
+        else if let Some(channel) = self.channels.get_mut(channel_name) {
             channel.skip();
         }
         Ok(())
+    }
+
+    pub fn play_pause(&mut self, channel_name: &str) -> Result<()> {
+        if channel_name == "all" {
+            self.total_is_paused.flip();
+        }
+        else if let Some(channel) = self.channels.get_mut(channel_name) {
+            channel.play_pause();
+        }
+        Ok(())
+    }
+
+    pub fn finish(mut self) {
+        for (_,channel) in self.channels.iter_mut() {
+            channel.finish();
+        }
     }
 
     /// Reload the ignore list.
