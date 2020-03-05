@@ -111,7 +111,7 @@ impl OneshotPlayer {
             .stoppable()
             .periodic_access(Duration::from_millis(5),
                 move |src| {
-                    if control_a.stopped.load(Ordering::SeqCst) {
+                    if control_a.stopped.load(Ordering::Relaxed) {
                         src.stop();
                     }
                     else {
@@ -124,7 +124,7 @@ impl OneshotPlayer {
                             );
                         src.inner_mut()
                             .inner_mut()
-                            .set_paused(paused.load(Ordering::SeqCst));
+                            .set_paused(paused.load(Ordering::Relaxed));
                     }
                 }
             ).convert_samples::<f32>();

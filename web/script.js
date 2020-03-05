@@ -8,12 +8,17 @@ function addSlider(channel_name) {
         createSlider(channel_name)
     );
     let slider = document.getElementById(channel_name+"_slider");
-    slider.style.cssText="padding: 0px 10px 0px 0px;";
     slider.addEventListener(is_windows?'change':'input',function(){
             external.invoke("change_volume:"+channel_name+":"+this.value);
         },
         false
     );
+    let skip_button = document.getElementById(channel_name+"_skip_button");
+    skip_button.addEventListener('click',function(){
+            external.invoke("skip_current_sound:"+channel_name);
+        },
+        false
+    )
 }
 function createSlider(channel_name) {
     let slider = document.createElement("div");
@@ -23,6 +28,10 @@ function createSlider(channel_name) {
         "<div class='w3-cell w3-cell-middle w3-center w3-padding-small' style='width:10%;min-width:90px'>"+
             "<h4>"+channel_name+"</h4>"+
         "</div>"+
+        "<button class='w3-button w3-round w3-cell w3-cell-middle w3-grey w3-small' style='width:2%;min-width:10px'"+
+            "id='"+channel_name+"_skip_button'>"+
+            "<h4>&#x23ED;</h4>"+
+        "</button>"+
         "<div class='w3-cell w3-cell-middle w3-rest w3-container w3-padding-small'>"+
             "<input type='range' id='"+channel_name+"_slider'"+
                 "min='0' max='100' value='100'>"+

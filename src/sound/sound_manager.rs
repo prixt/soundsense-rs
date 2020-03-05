@@ -330,6 +330,13 @@ impl SoundManager {
         Ok(())
     }
 
+    pub fn skip(&mut self, channel_name: &str) -> Result<()> {
+        if let Some(channel) = self.channels.get_mut(channel_name) {
+            channel.skip();
+        }
+        Ok(())
+    }
+
     /// Reload the ignore list.
     pub fn set_ignore_list(&mut self, ignore_list: Vec<Regex>) -> Result<()> {
         self.ignore_list = ignore_list;

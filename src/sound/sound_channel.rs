@@ -7,6 +7,15 @@ mod oneshot_player;
 use loop_player::LoopPlayer;
 use oneshot_player::OneshotPlayer;
 
+#[allow(dead_code)]
+#[non_exhaustive]
+#[derive(PartialEq)]
+enum ChannelPlayType {
+    All,
+    SingleEager,
+    SingleLazy,
+}
+
 /// Struct responsible for containing currently playing sounds.
 /// "music" and "weather" channels can play only one sound at a time.
 pub struct SoundChannel {
@@ -14,7 +23,7 @@ pub struct SoundChannel {
     one_shots: OneshotPlayer,
     local_volume: VolumeLock,
     delay: usize,
-    only_one_sound: bool,
+    play_type: ChannelPlayType,
 }
 
 impl SoundChannel {
@@ -27,7 +36,14 @@ impl SoundChannel {
             one_shots : OneshotPlayer::new(local_volume.clone(), total_volume),
             local_volume,
             delay : 0,
-            only_one_sound: name == "weather" || name == "music",
+            play_type: {
+                if name == "weather" || name == "music" {
+                    ChannelPlayType::SingleEager
+                }
+                else {
+                    ChannelPlayType::All
+                }
+            }
         }
     }
 
@@ -57,7 +73,7 @@ impl SoundChannel {
         self.looping.change_loop(device, files, rng);
         self.delay = delay;
         self.maintain(rng, 0);
-        if self.only_one_sound {
+        if self.play_type == ChannelPlayType::SingleEager {
             self.one_shots.stop();
         }
     }
@@ -67,11 +83,17 @@ impl SoundChannel {
         self.delay = delay;
     }
 
+    pub fn skip(&mut self) {
+        if self.looping.len() != 0 {
+            self.looping.skip();
+        }
+    }
+
     /// Play a oneshot.
     /// Will make other oneshots 25% quieter.
     /// If "music" or "weather", pauses loop and stops other oneshots. 
     pub fn add_oneshot(&mut self, device: &Device, file: &SoundFile, delay: usize, rng: &mut ThreadRng) {
-        if self.only_one_sound {
+        if self.play_type == ChannelPlayType::SingleEager {
             self.looping.pause();
             self.one_shots.stop();
         }
@@ -142,7 +164,14 @@ fn get_soundfiles(soundfile: &SoundFile, rng: &mut ThreadRng)
 /// Check if the file at the give path is a valid sound source.
 /// Otherwise, return a None. 
 fn get_source(path: &Path) -> Option<rodio::decoder::Decoder<std::fs::File>> {
-    let f = fs::File::open(path).expect("Invalid sound source path!");
+    let f = match fs::File::open(path) {
+        Ok(f) => f,
+        Err(e) => {
+            warn!("Path {} is invalid: {}", path.display(), e);
+            warn!("Will ignore this source.");
+            return None
+        }
+    };
     let source = Decoder::new(f);
     match source {
         Ok(source) => {
