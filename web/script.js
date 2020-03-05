@@ -31,8 +31,18 @@ function createSlider(channel_name) {
     slider.className="w3-cell-row w3-border-bottom";
     slider.insertAdjacentHTML(
         'afterbegin',
-        "<div class='w3-cell w3-cell-middle w3-center w3-padding-small' style='width:10%;min-width:90px'"+
+        "<div class='w3-cell w3-cell-middle w3-center w3-padding-small overlay-container' style='width:10%;min-width:90px'"+
             "id='"+channel_name+"_head'>"+
+            "<div class='overlay-content w3-container w3-padding-small w3-animate-opacity w3-grey w3-center'>"+
+                "<span>Threshold</span><br>"+
+                "<select id='"+channel_name+"_selector' onchange='thresholdSelect(\""+channel_name+"\",this.value)'>"+
+                    "<option value='4'>Evertyhing</option>"+
+                    "<option value='3'>Fluff</option>"+
+                    "<option value='2'>Important</option>"+
+                    "<option value='1'>Critical</option>"+
+                    "<option value='0'>Nothing</option>"+
+                "</select>"+
+            "</div>"+
             "<h4>"+channel_name+"</h4>"+
         "</div>"+
         "<div class='w3-cell w3-cell-middle w3-rest w3-container w3-padding-small'>"+
@@ -138,6 +148,10 @@ function createError(name, text) {
     error.insertAdjacentElement('afterbegin',cross);
 
     return error;
+}
+
+function thresholdSelect(channel_name, value) {
+    external.invoke("change_threshold:"+channel_name+":"+value);
 }
 
 function main() {

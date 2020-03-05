@@ -233,3 +233,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 
 .w3-closebtn{margin-left:15px;color:white;font-weight:bold;float:right;font-size:22px;line-height:20px;cursor:pointer;}
 .w3-closebtn:hover{color:black;}
+
+.overlay-container{position:relative;}
+.overlay-content{position:absolute;left:0;top:0;display:none;min-width:100%}
+.overlay-container:hover .overlay-content{display:inline-block;}

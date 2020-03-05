@@ -42,7 +42,7 @@ Example:
 ```
 (.+) cancels (.+): (.*)(Water|water)(.*)\.
 ```
-This pattern will make soundsense-rs ignore any cancallations related to water.
+This pattern will make soundsense-rs ignore any cancellations related to water.
 
 The regex pattern uses the [regex crate](https://docs.rs/regex/) syntax.
 

@@ -8,8 +8,11 @@ pub enum SoundMessage {
     /// Reload the ignore list with this path.
     ChangeIgnoreList(std::path::PathBuf),
     /// Change the volume of a channel.
-    /// "all" is total volume, other values are specific channels.
+    /// "total" is total volume, other values are specific channels.
     VolumeChange(Box<str>, f32),
+    /// Change the threshold of a channel.
+    /// "total" is total threshold, other values are specific channels.
+    ThresholdChange(Box<str>, u8),
     /// Skip sound currently played by loop_player
     SkipCurrentSound(Box<str>),
     /// Play/Pause channel

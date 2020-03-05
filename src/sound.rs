@@ -66,12 +66,15 @@ pub struct SoundFile {
 #[derive(Clone)]
 pub struct VolumeLock(Arc<ShardedLock<f32>>);
 impl VolumeLock {
+    #[inline]
     pub fn new() -> Self {
         Self(Arc::new(ShardedLock::new(1.0)))
     }
+    #[inline]
     pub fn get(&self) -> f32 {
         *self.0.read().unwrap()
     }
+    #[inline]
     pub fn set(&self, volume: f32) {
         *self.0.write().unwrap() = volume;
     }
@@ -80,14 +83,17 @@ impl VolumeLock {
 #[derive(Clone)]
 pub struct IsPausedLock(Arc<AtomicBool>);
 impl IsPausedLock {
+    #[inline]
     pub fn new() -> Self {
         Self(Arc::new(AtomicBool::new(false)))
     }
 
+    #[inline]
     pub fn get(&self) -> bool {
         self.0.load(Ordering::Relaxed)
     }
 
+    #[inline]
     pub fn flip(&self) -> bool {
         self.0.fetch_nand(true, Ordering::SeqCst)
     }
@@ -193,6 +199,11 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
 
                                 VolumeChange(channel,volume) => {
                                     manager.set_volume(&channel, volume * 0.01)?;
+                                }
+
+                                ThresholdChange(channel,threshold) => {
+                                    trace!("Set channel {} threshold to {}", channel, threshold);
+                                    manager.set_threshold(&channel, threshold)?;
                                 }
 
                                 SkipCurrentSound(channel) => {

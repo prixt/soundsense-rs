@@ -178,6 +178,13 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
                                 SoundMessage::VolumeChange(channel_name, channel_volume)
                             ).unwrap();
                         }
+                        "change_threshold" => {
+                            let channel_name: Box<str> = parts[1].into();
+                            let channel_threshold: u8 = parts[2].parse().unwrap();
+                            sound_tx.send(
+                                SoundMessage::ThresholdChange(channel_name, channel_threshold)
+                            ).unwrap();
+                        }
                         "skip_current_sound" => {
                             let channel_name: Box<str> = parts[1].into();
                             sound_tx.send(
@@ -191,7 +198,7 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
                             ).unwrap();
                         }
                         "test_message" => {
-                            trace!("UI test message: {}", parts[1]);
+                            info!("UI test message: {}", parts[1]);
                         }
                         _ => {
                             add_error(
