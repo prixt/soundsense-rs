@@ -15,6 +15,7 @@ pub struct SoundChannel {
     local_volume: VolumeLock,
     delay: usize,
     local_is_paused: IsPausedLock,
+    threshold: u8,
     pub play_type: ChannelPlayType,
 }
 
@@ -49,6 +50,7 @@ impl SoundChannel {
                 }
             },
             local_is_paused,
+            threshold: 4,
         }
     }
 
@@ -150,6 +152,15 @@ impl SoundChannel {
     #[inline]
     pub fn get_local_volume(&self) -> f32 {
         self.local_volume.get()
+    }
+
+    #[inline]
+    pub fn set_threshold(&mut self, threshold: u8) {
+        self.threshold = threshold;
+    }
+    #[inline]
+    pub fn get_threshold(&mut self) -> u8 {
+        self.threshold
     }
 
     #[inline]

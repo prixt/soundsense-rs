@@ -22,6 +22,8 @@ pub struct SoundManager {
     total_volume: VolumeLock,
     /// Total is_paused.
     total_is_paused: IsPausedLock,
+    /// Total playback_treshold
+    total_threshold: u8,
     /// Sender for UIMessage sent to the UI.
     ui_sender: Sender<UIMessage>,
     /// RNG for probability and randomly choosing a soundfile from many.
@@ -96,7 +98,7 @@ impl SoundManager {
                             let mut halt_on_match: bool = false;
                             let mut random_balance: bool = false;
                             #[allow(unused_mut)]
-                            let mut playback_threshold: u8 = 5;
+                            let mut playback_threshold: u8 = 4;
                             let files = Vec::new();
                             let weights = Vec::new();
 
@@ -288,7 +290,7 @@ impl SoundManager {
                                         match attr_value {
                                             "singleEager" => play_type = ChannelPlayType::SingleEager,
                                             "singleLazy" => play_type = ChannelPlayType::SingleLazy,
-                                            "all" => (),
+                                            "total" => (),
                                             other => {
                                                 warn!("Unknown Channel PlayType: {}", other);
                                                 warn!("Will ignore this value.");
@@ -338,9 +340,9 @@ impl SoundManager {
 
         visit_dir(sound_dir, &mut func)?; // Run the DFS!
 
-        // Add the default channels "all" and "music"
+        // Add the default channels "total" and "music"
         let mut channel_names: Vec<Box<str>> = vec![
-            "all".into(),
+            "total".into(),
             "music".into(),
         ];
         for channel_name in channels.keys() {
@@ -362,6 +364,7 @@ impl SoundManager {
             channels,
             total_volume,
             total_is_paused,
+            total_threshold: 4,
             ui_sender,
             rng: thread_rng(),
         };
@@ -413,7 +416,7 @@ impl SoundManager {
 
     /// Set the volume of all, or specific channels.
     pub fn set_volume(&mut self, channel_name: &str, volume: f32) -> Result<()> {
-        if channel_name == "all" {
+        if channel_name == "total" {
             self.total_volume.set(volume);
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
@@ -422,8 +425,18 @@ impl SoundManager {
         Ok(())
     }
 
+    pub fn set_threshold(&mut self, channel_name: &str, threshold: u8) -> Result<()> {
+        if channel_name == "total" {
+            self.total_threshold = threshold;
+        }
+        else if let Some(channel) = self.channels.get_mut(channel_name) {
+            channel.set_threshold(threshold);
+        }
+        Ok(())
+    }
+
     pub fn skip(&mut self, channel_name: &str) -> Result<()> {
-        if channel_name == "all" {
+        if channel_name == "total" {
             for (_, channel) in self.channels.iter_mut() {
                 channel.skip();
             }
@@ -435,7 +448,7 @@ impl SoundManager {
     }
 
     pub fn play_pause(&mut self, channel_name: &str) -> Result<()> {
-        if channel_name == "all" {
+        if channel_name == "total" {
             let is_paused = !self.total_is_paused.flip();
             self.ui_sender.send(
                 UIMessage::ChannelWasPlayPaused(
@@ -512,6 +525,13 @@ impl SoundManager {
                             trace!("  can't play: failed probability roll");
                         }
                     }
+                    can_play &= self.total_threshold > sound.playback_threshold;
+                    if !can_play {
+                        trace!(
+                            "  can't play: at threshold limit - sound.playback_threshold: {}, total_threshold: {}",
+                            sound.playback_threshold, self.total_threshold
+                        );
+                    }
                 } else {
                     trace!("  can't play: current_timeout: {}", sound.current_timeout);
                 }
@@ -544,8 +564,18 @@ impl SoundManager {
                             continue;
                         };
                         let chn_len = channel.len();
+                        let chn_threshold = channel.get_threshold();
                         // Check if there are too many sounds playing on this channel (concurrency).
-                        if chn_len < sound.concurency.unwrap_or(std::usize::MAX) {
+                        if chn_len >= sound.concurency.unwrap_or(std::usize::MAX) {
+                            trace!("   can't play: at concurency limit: limit {}, channel {}",
+                                sound.concurency.unwrap(), chn_len);
+                        }
+                        // Check if the playback_threshold is higher than the channel threshold.
+                        else if chn_threshold <= sound.playback_threshold {
+                            trace!("   can't play: at threshold limit - sound.playback_threshold: {}, channel_threshold: {}",
+                                sound.playback_threshold, chn_threshold);
+                        }
+                        else {
                             // Set current_timeout if the sound has a timeout value.
                             if let Some(timeout) = sound.timeout {
                                 sound.current_timeout = timeout;
@@ -571,24 +601,25 @@ impl SoundManager {
                                 channel.add_oneshot(device, &files[idx], sound.delay.unwrap_or(0), rng);
                             }
                         }
-                        else {
-                            trace!("   can't play: at concurency limit: limit {}, channel {}",
-                                sound.concurency.unwrap(), chn_len);
-                        }
                     }
                     else if !sound.files.is_empty() {
                         trace!("  channel: misc");
                         let channel = self.channels.get_mut("misc").unwrap();
                         let chn_len = channel.len();
-                        if channel.len() < sound.concurency.unwrap_or(std::usize::MAX) {
+                        let chn_threshold = channel.get_threshold();
+                        if chn_len >= sound.concurency.unwrap_or(std::usize::MAX) {
+                            trace!("   can't play: at concurency limit - limit {}, channel {}",
+                                sound.concurency.unwrap(), chn_len);
+                        }
+                        else if chn_threshold <= sound.playback_threshold {
+                            trace!("   can't play: at threshold limit - sound.playback_threshold: {}, channel_threshold: {}",
+                                sound.playback_threshold, chn_threshold);
+                        }
+                        else {
                             if let Some(timeout) = sound.timeout {
                                 sound.current_timeout = timeout;
                             }
                             channel.add_oneshot(&self.device, &files[idx], sound.delay.unwrap_or(0), rng);
-                        }
-                        else {
-                            trace!("   can't play: at concurency limit: limit {}, channel {}",
-                                sound.concurency.unwrap(), chn_len);
                         }
                     }
                 }
@@ -628,7 +659,7 @@ impl SoundManager {
                     .ok_or("Failed to parse .ini file.")?
                     .as_str()
                     .parse()?;
-                if name == "all" {
+                if name == "total" {
                     self.total_volume.set(volume / 100.0);
                 }
                 else if let Some(chn) = self.channels.get_mut(name) {
