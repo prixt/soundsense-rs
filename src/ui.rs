@@ -236,6 +236,9 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
                     remove_alert(&mut webview, "loading_ignore");
                     add_alert(&mut webview, "ignore_loaded", "green", "&#x2714; Ignore list loaded!");
                 }
+                UIMessage::ChannelWasPlayPaused(name, is_paused) => {
+                    set_slider_head(&mut webview, &name, is_paused);
+                }
                 UIMessage::SoundThreadPanicked(name, text) => {
                     clear_sliders(&mut webview);
                     add_error(&mut webview, &name, &text);
@@ -262,6 +265,20 @@ fn set_slider_value(webview: &mut WebView<()>, name: Box<str>, value: f32) {
 /// remove all sliders
 fn clear_sliders(webview: &mut WebView<()>) {
     webview.eval("clearSliders()").unwrap();
+}
+fn set_slider_head(webview: &mut WebView<()>, channel_name: &str, is_paused: bool) {
+    if is_paused {
+        webview.eval(&format!(
+            r#"setSliderHead("{}", true)"#,
+            channel_name,
+        )).unwrap();
+    }
+    else {
+        webview.eval(&format!(
+            r#"setSliderHead("{}", false)"#,
+            channel_name,
+        )).unwrap();
+    }
 }
 /// display a notice for the user.
 fn add_alert(webview: &mut WebView<()>, name: &str, color: &str, text: &str) {

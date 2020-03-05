@@ -361,10 +361,22 @@ impl SoundManager {
 
     pub fn play_pause(&mut self, channel_name: &str) -> Result<()> {
         if channel_name == "all" {
-            self.total_is_paused.flip();
+            let is_paused = !self.total_is_paused.flip();
+            self.ui_sender.send(
+                UIMessage::ChannelWasPlayPaused(
+                    Box::from(channel_name),
+                    is_paused
+                )
+            )?;
         }
         else if let Some(channel) = self.channels.get_mut(channel_name) {
-            channel.play_pause();
+            let is_paused = !channel.play_pause();
+            self.ui_sender.send(
+                UIMessage::ChannelWasPlayPaused(
+                    Box::from(channel_name),
+                    is_paused
+                )
+            )?;
         }
         Ok(())
     }

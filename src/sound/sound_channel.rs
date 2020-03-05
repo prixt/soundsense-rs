@@ -107,8 +107,8 @@ impl SoundChannel {
         self.one_shots.stop();
     }
 
-    pub fn play_pause(&mut self) {
-        self.local_is_paused.flip();
+    pub fn play_pause(&mut self) -> bool {
+        self.local_is_paused.flip()
     }
 
     pub fn finish(&mut self) {
