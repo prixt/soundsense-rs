@@ -184,6 +184,12 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
                                 SoundMessage::SkipCurrentSound(channel_name)
                             ).unwrap();
                         }
+                        "play_pause" => {
+                            let channel_name: Box<str> = parts[1].into();
+                            sound_tx.send(
+                                SoundMessage::PlayPause(channel_name)
+                            ).unwrap();
+                        }
                         "test_message" => {
                             trace!("UI test message: {}", parts[1]);
                         }

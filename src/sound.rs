@@ -77,6 +77,22 @@ impl VolumeLock {
     }
 }
 
+#[derive(Clone)]
+pub struct IsPausedLock(Arc<AtomicBool>);
+impl IsPausedLock {
+    pub fn new() -> Self {
+        Self(Arc::new(AtomicBool::new(false)))
+    }
+
+    pub fn get(&self) -> bool {
+        self.0.load(Ordering::Relaxed)
+    }
+
+    pub fn flip(&self) -> bool {
+        self.0.fetch_nand(true, Ordering::SeqCst)
+    }
+}
+
 /// A struct containing all the information about a Sound, such as regex patterns, channel, loopability, etc.
 pub struct SoundEntry {
     /// regular expression matching log line
@@ -140,7 +156,12 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                         }
 
                         ChangeSoundpack(path) => {
-                            manager = Some(SoundManager::new(&path, ui_tx.clone())?);
+                            if let Some(prev_manager) = manager.take() {
+                                prev_manager.finish();
+                            }
+                            manager.replace(
+                                SoundManager::new(&path, ui_tx.clone())?
+                            );
                         }
 
                         // These types of messages require a manager.
@@ -164,6 +185,10 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
 
                                 SkipCurrentSound(channel) => {
                                     manager.skip(&channel)?;
+                                }
+
+                                PlayPause(channel) => {
+                                    manager.play_pause(&channel)?;
                                 }
 
                                 SetCurrentVolumesAsDefault(file) => {

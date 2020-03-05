@@ -22,6 +22,10 @@ pub struct LoopPlayer {
     local_volume: VolumeLock,
     /// Total volume (SoundManager's volume).
     total_volume: VolumeLock,
+    /// Channel's is_paused.
+    local_is_paused: IsPausedLock,
+    /// Total is_paused (SoundManager's is_paused).
+    total_is_paused: IsPausedLock,
     /// Option for Receiver that checks if the current source has finished playing.
     sleep_until_end: Option<Receiver<()>>,
     /// SoundFile deque.
@@ -33,7 +37,9 @@ impl LoopPlayer {
     pub fn new(
         device: &Device,
         local_volume: VolumeLock,
-        total_volume: VolumeLock
+        total_volume: VolumeLock,
+        local_is_paused: IsPausedLock,
+        total_is_paused: IsPausedLock,
     ) -> Self {
         let (queue_tx, queue_rx) = queue::queue(true);
         play_raw(device, queue_rx);
@@ -41,6 +47,8 @@ impl LoopPlayer {
             queue_tx,
             local_volume,
             total_volume,
+            local_is_paused,
+            total_is_paused,
             stopped: Arc::new(AtomicBool::new(false)),
             paused: Arc::new(AtomicBool::new(false)),
             skipped: Arc::new(AtomicBool::new(false)),
@@ -168,6 +176,8 @@ impl LoopPlayer {
         let volume = self.volume.clone();
         let local_volume = self.local_volume.clone();
         let total_volume = self.total_volume.clone();
+        let local_is_paused = self.local_is_paused.clone();
+        let total_is_paused = self.total_is_paused.clone();
         let source = source
             .pausable(false)
             .amplify(1.0)
@@ -188,7 +198,11 @@ impl LoopPlayer {
                             );
                         src.inner_mut()
                             .inner_mut()
-                            .set_paused(paused.load(Ordering::Relaxed));
+                            .set_paused(
+                                paused.load(Ordering::Relaxed)
+                                || local_is_paused.get()
+                                || total_is_paused.get()
+                            );
                     }
                 }
             ).convert_samples::<f32>();
