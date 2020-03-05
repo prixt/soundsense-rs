@@ -1,7 +1,8 @@
-use std::sync::{Mutex, mpsc::{Sender, Receiver}};
 use std::fs;
 use std::path::PathBuf;
 use std::io::Write;
+use std::sync::Mutex;
+use crossbeam::channel::{Sender, Receiver};
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
 
@@ -76,7 +77,7 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
     Version {}
     Created by prixt
     Original SoundSense created by zwei:
-    http://df.zweistein.cz/soundsense/",
+        http://df.zweistein.cz/soundsense/",
                                 env!("CARGO_PKG_VERSION")
                             )
                         ).unwrap();
@@ -169,18 +170,30 @@ r"A sound-engine utility for Dwarf Fortress, written in Rust
                 }
                 other => {
                     let parts: Vec<&str> = other.split(':').collect();
-                    if parts[0] == "change_volume" {
-                        let channel_name: Box<str> = parts[1].into();
-                        let channel_volume: f32 = parts[2].parse().unwrap();
-                        sound_tx.send(
-                            SoundMessage::VolumeChange(channel_name, channel_volume)
-                        ).unwrap();
-                    }
-                    else if parts[0] == "test_message" {
-                        trace!("UI test message: {}", parts[1]);
-                    }
-                    else {
-                        unimplemented!("Unimplemented webview argument: {}", other);
+                    match parts[0] {
+                        "change_volume" => {
+                            let channel_name: Box<str> = parts[1].into();
+                            let channel_volume: f32 = parts[2].parse().unwrap();
+                            sound_tx.send(
+                                SoundMessage::VolumeChange(channel_name, channel_volume)
+                            ).unwrap();
+                        }
+                        "skip_current_sound" => {
+                            let channel_name: Box<str> = parts[1].into();
+                            sound_tx.send(
+                                SoundMessage::SkipCurrentSound(channel_name)
+                            ).unwrap();
+                        }
+                        "test_message" => {
+                            trace!("UI test message: {}", parts[1]);
+                        }
+                        _ => {
+                            add_error(
+                                webview,
+                                "Webview Error",
+                                &format!("Unimplemented webview argument: {}", other)
+                            );
+                        }
                     }
                 }
             }

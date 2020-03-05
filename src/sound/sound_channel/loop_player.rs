@@ -1,4 +1,5 @@
 use super::*;
+use std::sync::mpsc::Receiver;
 use std::collections::VecDeque;
 
 /// Struct responsible of playing looping sounds.
@@ -12,6 +13,8 @@ pub struct LoopPlayer {
     /// Whether the loop is paused.
     /// Playing will resume the source.
     paused: Arc<AtomicBool>,
+    /// Whether current playing sound should be skipped.
+    skipped: Arc<AtomicBool>,
     /// LoopPlayer's volume.
     /// This is different from local_volume. This is for dynamic volume changes.
     volume: VolumeLock,
@@ -40,6 +43,7 @@ impl LoopPlayer {
             total_volume,
             stopped: Arc::new(AtomicBool::new(false)),
             paused: Arc::new(AtomicBool::new(false)),
+            skipped: Arc::new(AtomicBool::new(false)),
             volume: VolumeLock::new(),
             sleep_until_end: None,
             files: VecDeque::new(),
@@ -70,6 +74,11 @@ impl LoopPlayer {
     #[inline]
     pub fn is_stopped(&self) -> bool {
         self.stopped.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn skip(&self) {
+        self.skipped.store(true, Ordering::SeqCst);
     }
 
     #[inline]
@@ -155,6 +164,7 @@ impl LoopPlayer {
     {
         let stopped = self.stopped.clone();
         let paused = self.paused.clone();
+        let skipped = self.skipped.clone();
         let volume = self.volume.clone();
         let local_volume = self.local_volume.clone();
         let total_volume = self.total_volume.clone();
@@ -164,7 +174,8 @@ impl LoopPlayer {
             .stoppable()
             .periodic_access(Duration::from_millis(5),
                 move |src| {
-                    if stopped.load(Ordering::SeqCst) {
+                    if stopped.load(Ordering::Relaxed)
+                    || skipped.swap(false, Ordering::Relaxed) {
                         src.stop();
                     }
                     else {
@@ -177,7 +188,7 @@ impl LoopPlayer {
                             );
                         src.inner_mut()
                             .inner_mut()
-                            .set_paused(paused.load(Ordering::SeqCst));
+                            .set_paused(paused.load(Ordering::Relaxed));
                     }
                 }
             ).convert_samples::<f32>();

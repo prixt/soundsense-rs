@@ -10,6 +10,8 @@ pub enum SoundMessage {
     /// Change the volume of a channel.
     /// "all" is total volume, other values are specific channels.
     VolumeChange(Box<str>, f32),
+    /// Skip sound currently played by loop_player
+    SkipCurrentSound(Box<str>),
     /// Store the current channels volumes to a config file.
     SetCurrentVolumesAsDefault(std::fs::File),
 }

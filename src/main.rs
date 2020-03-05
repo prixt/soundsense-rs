@@ -2,10 +2,10 @@
 #![cfg_attr(debug_assertions, windows_subsystem = "console")]
 
 use std::env;
-use std::sync::mpsc::channel;
 use std::path::PathBuf;
 use regex::Regex;
 #[macro_use] extern crate log;
+use crossbeam::channel::unbounded as channel;
 
 mod sound;
 mod ui;

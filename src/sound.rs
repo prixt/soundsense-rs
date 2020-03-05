@@ -4,13 +4,16 @@ use std::io::{Read, Seek, SeekFrom, BufReader, BufRead};
 use std::path::{Path, PathBuf};
 use std::collections::{BTreeMap, HashSet};
 use std::sync::{
-    Arc, RwLock,
-    mpsc::{Sender, Receiver},
+    Arc,
     atomic::{AtomicBool, AtomicUsize, Ordering}
 };
 use std::error::Error;
 
 use crate::message::*;
+use crossbeam::{
+    sync::ShardedLock,
+    channel::{Sender, Receiver}
+};
 use rodio::*;
 use rand::prelude::*;
 use rand::distributions::weighted::WeightedIndex;
@@ -61,10 +64,10 @@ pub struct SoundFile {
 /// A thread-safe wrapper around a volume(f32) volume.
 /// Intended to be used by LoopPlayers and OneshotPlayers.
 #[derive(Clone)]
-pub struct VolumeLock(Arc<RwLock<f32>>);
+pub struct VolumeLock(Arc<ShardedLock<f32>>);
 impl VolumeLock {
     pub fn new() -> Self {
-        Self(Arc::new(RwLock::new(1.0)))
+        Self(Arc::new(ShardedLock::new(1.0)))
     }
     pub fn get(&self) -> f32 {
         *self.0.read().unwrap()
@@ -157,6 +160,10 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
 
                                 VolumeChange(channel,volume) => {
                                     manager.set_volume(&channel, volume * 0.01)?;
+                                }
+
+                                SkipCurrentSound(channel) => {
+                                    manager.skip(&channel)?;
                                 }
 
                                 SetCurrentVolumesAsDefault(file) => {

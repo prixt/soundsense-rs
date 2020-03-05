@@ -41,5 +41,5 @@ jobs:
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v1
         with:
-          name: soundsense-rs-${{runner.os}}.exe
+          name: soundsense-rs-${{runner.os}}
           path: target/release/soundsense-rs.exe
