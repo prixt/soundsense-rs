@@ -30,6 +30,8 @@ pub enum UIMessage {
     LoadedIgnoreList,
     /// Loaded the default volumes from config.
     LoadedVolumeSettings(Vec<(Box<str>,f32)>),
+    /// The Channel IsPause had been set.
+    ChannelWasPlayPaused(Box<str>, bool),
     /// There was an error in the Sound thread.
     SoundThreadPanicked(String,String),
 }

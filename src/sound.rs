@@ -184,10 +184,12 @@ pub fn run(sound_rx: Receiver<SoundMessage>, ui_tx: Sender<UIMessage>) {
                                 }
 
                                 SkipCurrentSound(channel) => {
+                                    trace!("Skip Current Sound in {}", channel);
                                     manager.skip(&channel)?;
                                 }
 
                                 PlayPause(channel) => {
+                                    trace!("Play/Pause {}", channel);
                                     manager.play_pause(&channel)?;
                                 }
 

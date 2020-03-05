@@ -31,22 +31,25 @@ function createSlider(channel_name) {
     slider.className="w3-cell-row w3-border-bottom";
     slider.insertAdjacentHTML(
         'afterbegin',
-        "<div class='w3-cell w3-cell-middle w3-center w3-padding-small' style='width:10%;min-width:90px'>"+
+        "<div class='w3-cell w3-cell-middle w3-center w3-padding-small' style='width:10%;min-width:90px'"+
+            "id='"+channel_name+"_head'>"+
             "<h4>"+channel_name+"</h4>"+
-        "</div>"+
-        "<div class='w3-cell w3-cell-middle w3-center w3-small w3-padding-small' style='width:2%;min-width:10px;'>"+
-            "<div class='w3-button w3-block w3-round w3-small w3-padding-small'"+
-                "id='"+channel_name+"_skip_button'>"+
-                "&#x23ED;"+
-            "</div>"+
-            "<div class='w3-button w3-block w3-round w3-small w3-padding-small'"+
-                "id='"+channel_name+"_play_pause_button'>"+
-                "&#x23EF;"+
-            "</div>"+
         "</div>"+
         "<div class='w3-cell w3-cell-middle w3-rest w3-container w3-padding-small'>"+
             "<input type='range' id='"+channel_name+"_slider'"+
                 "min='0' max='100' value='100'>"+
+        "</div>"+
+        "<div class='w3-cell w3-cell-middle w3-center w3-small w3-padding-small' style='width:2%;min-width:10px;'>"+
+            "<div class='w3-button w3-block w3-round w3-small w3-padding-small'"+
+                "title='Skip "+channel_name+"'"+
+                "id='"+channel_name+"_skip_button'>"+
+                "&#x23ED;"+
+            "</div>"+
+            "<div class='w3-button w3-block w3-round w3-small w3-padding-small'"+
+                "title='Play/Pause "+channel_name+"'"+
+                "id='"+channel_name+"_play_pause_button'>"+
+                "&#x23EF;"+
+            "</div>"+
         "</div>"
     );
     return slider;
@@ -58,6 +61,18 @@ function setSliderValue(channel_name, value) {
 function clearSliders() {
     while (channels.firstChild)
         channels.removeChild(channels.firstChild);
+}
+function setSliderHead(channel_name, is_paused) {
+    let slider_head = document.getElementById(channel_name+"_head");
+    let slider = document.getElementById(channel_name+"_slider");
+    if (is_paused) {
+        slider_head.classList.add("w3-opacity-max");
+        slider.classList.add("w3-opacity-max");
+    }
+    else {
+        slider_head.classList.remove("w3-opacity-max");
+        slider.classList.remove("w3-opacity-max");
+    }
 }
 
 let alerts_footer = null;
