@@ -1,4 +1,5 @@
 use super::*;
+use std::collections::HashMap;
 
 /// The struct that parses the log entries.
 /// Plays appropriate sounds on appropriate channels;
@@ -30,10 +31,12 @@ pub struct SoundManager {
 impl SoundManager {
     /// Create a new manager.
     /// A new manager is created every time the user reloads a soundpack.
+    #[allow(clippy::cognitive_complexity)]
 	pub fn new(sound_dir: &Path, ui_sender: Sender<UIMessage>) -> Result<Self> {
         let total_volume = VolumeLock::new();
         let total_is_paused = IsPausedLock::new();
-		let mut sounds = Vec::new();
+        let mut sounds = Vec::new();
+        let mut channel_settings = None;
         let device = default_output_device()
             .ok_or("Failed to get default audio output device.")?;
 		let mut channels : BTreeMap<Box<str>, SoundChannel> = BTreeMap::new();
@@ -160,39 +163,43 @@ impl SoundManager {
                             }
 
                             trace!("  SoundEntry");
-                            let pattern = pattern.ok_or_else(||
-                                format!("A SoundEntry in {:?} doesn't have a pattern!", file_path)
-                            )?;
-                            trace!("  -Pattern: {}", pattern);
-                            current_sound = Some(
-                                SoundEntry{
-                                    pattern,
-                                    channel,
-                                    loop_attr,
-                                    concurency,
-                                    timeout,
-                                    probability,
-                                    delay,
-                                    halt_on_match,
-                                    random_balance,
-                                    playback_threshold,
-                                    files,
-                                    weights,
-                                    current_timeout: 0,
-                                    recent_call: 0,
-                                }
-                            );
+                            if let Some(pattern) = pattern {
+                                trace!("  -Pattern: {}", pattern);
+                                current_sound = Some(
+                                    SoundEntry{
+                                        pattern,
+                                        channel,
+                                        loop_attr,
+                                        concurency,
+                                        timeout,
+                                        probability,
+                                        delay,
+                                        halt_on_match,
+                                        random_balance,
+                                        playback_threshold,
+                                        files,
+                                        weights,
+                                        current_timeout: 0,
+                                        recent_call: 0,
+                                    }
+                                );
+                            }
+                            else {
+                                warn!("A SoundEntry in {:?} doesn't have a pattern!", file_path);
+                                warn!("Will ignore this SoundEntry.");
+                            }
                         }
                         
                         // <soundFile> or <soundFile/>
                         else if local_name == b"soundFile" {
-                            current_sound.as_ref().ok_or_else(||
-                                format!("A SoundFile in {:?} was declared outside of Sound!", file_path)
-                            )?;
+                            if current_sound.is_none() {
+                                warn!("A SoundFile in {:?} was declared outside of a valid Sound!", file_path);
+                                warn!("Will ignore this SoundFile.");
+                            }
                             let mut path = PathBuf::from(file_path);
                             let mut is_playlist = false;
-                            let mut weight: f32 = 100.0;		
-                            let mut volume: f32 = 1.0;	
+                            let mut weight: f32 = 100.0;
+                            let mut volume: f32 = 1.0;
                             let mut random_balance: bool = false;
                             let mut balance: f32 = 0.0;
                             let mut delay: usize = 0;
@@ -249,6 +256,60 @@ impl SoundManager {
                             let sound = current_sound.as_mut().unwrap();
                             sound.files.push(sound_file);
                             sound.weights.push(weight);
+                        }
+
+                        else if local_name == b"channelSettings" {
+                            trace!("  ChannelSettings");
+                            channel_settings = Some(
+                                HashMap::new()
+                            );
+                        }
+                        
+                        // <channelSetting/>
+                        else if local_name == b"channelSetting" {
+                            if channel_settings.is_none() {
+                                warn!("A ChannelSetting in {:?} was declared outside of ChannelSettings!", file_path);
+                                warn!("Will ignore this ChannelSetting.");
+                                continue;
+                            }
+                            trace!("  -ChannelSetting");
+                            let mut name: Option<Box<str>> = None;
+                            let mut play_type = ChannelPlayType::All;
+                            for attr in data.attributes() {
+                                let attr = attr?;
+                                let attr_value = unsafe {std::str::from_utf8_unchecked(&attr.value)};
+                                match attr.key {
+                                    b"name" => {
+                                        trace!("  --name: {}", attr_value);
+                                        name.replace(Box::from(attr_value));
+                                    }
+                                    b"playType" => {
+                                        trace!("  --play_type: {}", attr_value);
+                                        match attr_value {
+                                            "singleEager" => play_type = ChannelPlayType::SingleEager,
+                                            "singleLazy" => play_type = ChannelPlayType::SingleLazy,
+                                            "all" => (),
+                                            other => {
+                                                warn!("Unknown Channel PlayType: {}", other);
+                                                warn!("Will ignore this value.");
+                                            },
+                                        }
+                                    }
+                                    _ => ()
+                                }
+                            }
+                            if let Some(name) = name {
+                                let channel_setting = ChannelSetting {
+                                    play_type,
+                                };
+                                channel_settings.as_mut()
+                                    .unwrap()
+                                    .insert(name, channel_setting);
+                            }
+                            else {
+                                warn!("A ChannelSetting is {:?} didn't specify a channel name.", file_path);
+                                warn!("Will ignore this ChannelSetting.");
+                            }
                         }
                     },
 
@@ -309,10 +370,24 @@ impl SoundManager {
         conf_path.push("soundsense-rs/default-volumes.ini");
         if conf_path.is_file() { // Check if there are default volumes.
             let file = fs::File::open(conf_path)?;
+            // Apply default volumes.
             manager.get_default_volume(file)?;
+        }
+        // Apply channels settings if it exists.
+        if let Some(channel_settings) = channel_settings {
+            manager.apply_channel_settings(channel_settings);
         }
 
         Ok(manager)
+    }
+
+    /// Apply ChannelSettings.
+    fn apply_channel_settings(&mut self, channel_settings: HashMap<Box<str>, ChannelSetting>) {
+        for (name, setting) in channel_settings.iter() {
+            if let Some(channel) = self.channels.get_mut(name) {
+                channel.play_type = setting.play_type;
+            }
+        }
     }
 
     /// Tick down timers on recently called SoundEntries. Maintain the channels.
@@ -394,8 +469,8 @@ impl SoundManager {
         Ok(())
     }
 
-    #[allow(clippy::cognitive_complexity)] // You flag this functions, but not `SoundManager::new`?!
     /// Process one line of log message, and make channels play/pause/stop sounds appropriately.
+    #[allow(clippy::cognitive_complexity)]
     pub fn process_log(&mut self, log: &str) -> Result<()> {
         trace!("log: {}", log);
         let mut log = log;

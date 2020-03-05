@@ -7,15 +7,6 @@ mod oneshot_player;
 use loop_player::LoopPlayer;
 use oneshot_player::OneshotPlayer;
 
-#[allow(dead_code)]
-#[non_exhaustive]
-#[derive(PartialEq)]
-enum ChannelPlayType {
-    All,
-    SingleEager,
-    SingleLazy,
-}
-
 /// Struct responsible for containing currently playing sounds.
 /// "music" and "weather" channels can play only one sound at a time.
 pub struct SoundChannel {
@@ -23,8 +14,8 @@ pub struct SoundChannel {
     one_shots: OneshotPlayer,
     local_volume: VolumeLock,
     delay: usize,
-    play_type: ChannelPlayType,
     local_is_paused: IsPausedLock,
+    pub play_type: ChannelPlayType,
 }
 
 impl SoundChannel {
