@@ -340,13 +340,17 @@ impl SoundManager {
 
         visit_dir(sound_dir, &mut func)?; // Run the DFS!
 
-        // Add the default channels "total" and "music"
+        // Add "total" channel.
         let mut channel_names: Vec<Box<str>> = vec![
             "total".into(),
-            "music".into(),
         ];
+        // Add "music" channel if it exists.
+        if channels.contains_key("music") {
+            channel_names.push("music".into());
+        }
         for channel_name in channels.keys() {
-            if !channel_names.contains(channel_name) && channel_name.as_ref() != "misc" {
+            if !channel_names.contains(channel_name)
+            && channel_name.as_ref() != "misc" {
                 channel_names.push(channel_name.clone());
             }
         }
