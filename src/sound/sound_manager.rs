@@ -290,7 +290,7 @@ impl SoundManager {
                                         match attr_value {
                                             "singleEager" => play_type = ChannelPlayType::SingleEager,
                                             "singleLazy" => play_type = ChannelPlayType::SingleLazy,
-                                            "total" => (),
+                                            "all" => (),
                                             other => {
                                                 warn!("Unknown Channel PlayType: {}", other);
                                                 warn!("Will ignore this value.");
@@ -525,7 +525,7 @@ impl SoundManager {
                             trace!("  can't play: failed probability roll");
                         }
                     }
-                    can_play &= self.total_threshold > sound.playback_threshold;
+                    can_play &= self.total_threshold >= sound.playback_threshold;
                     if !can_play {
                         trace!(
                             "  can't play: at threshold limit - sound.playback_threshold: {}, total_threshold: {}",
@@ -571,7 +571,7 @@ impl SoundManager {
                                 sound.concurency.unwrap(), chn_len);
                         }
                         // Check if the playback_threshold is higher than the channel threshold.
-                        else if chn_threshold <= sound.playback_threshold {
+                        else if chn_threshold < sound.playback_threshold {
                             trace!("   can't play: at threshold limit - sound.playback_threshold: {}, channel_threshold: {}",
                                 sound.playback_threshold, chn_threshold);
                         }
@@ -611,7 +611,7 @@ impl SoundManager {
                             trace!("   can't play: at concurency limit - limit {}, channel {}",
                                 sound.concurency.unwrap(), chn_len);
                         }
-                        else if chn_threshold <= sound.playback_threshold {
+                        else if chn_threshold < sound.playback_threshold {
                             trace!("   can't play: at threshold limit - sound.playback_threshold: {}, channel_threshold: {}",
                                 sound.playback_threshold, chn_threshold);
                         }
