@@ -58,8 +58,22 @@ fn main() {
     // If so, read `soundsense-rs/default-paths.ini`.
     let config = if !matches.opt_present("no-config") {
         dirs::config_dir()
-            .and_then(|mut p| {
+            .map(|mut p| {
                 p.push("soundsense-rs/default-paths.ini");
+                debug!("Checking for default-path config in: {}", p.display());
+                p
+            })
+            .filter(|p| p.is_file())
+            .or_else(||
+                env::current_dir().ok()
+                    .map(|mut p| {
+                        p.push("default-paths.ini");
+                        debug!("Checking for default-path config in: {}", p.display());
+                        p
+                    })
+                    .filter(|p| p.is_file())
+            )
+            .and_then(|p| {
                 std::fs::read_to_string(p).ok()
             })
     } else {None};
