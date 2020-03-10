@@ -27,6 +27,7 @@ deploy:
 - provider: releases
   on:
     condition: $RELEASE_TAG
+  tag_name: $RELEASE_TAG
   skip_cleanup: true
   draft: true
   file_glob: true
