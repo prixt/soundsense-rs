@@ -373,16 +373,31 @@ impl SoundManager {
             rng: thread_rng(),
         };
 
-        let mut conf_path = dirs::config_dir().ok_or("No configuration directory found!")?;
-        conf_path.push("soundsense-rs/default-volumes.ini");
-        if conf_path.is_file() { // Check if there are default volumes.
-            let file = fs::File::open(conf_path)?;
-            // Apply default volumes.
-            manager.get_default_volume(file)?;
-        }
         // Apply channels settings if it exists.
         if let Some(channel_settings) = channel_settings {
             manager.apply_channel_settings(channel_settings);
+        }
+
+        let conf_path = dirs::config_dir()
+            .map(|mut p| {
+                p.push("soundsense-rs/default-volumes.ini");
+                debug!("Checking for default-volumes config in: {}", p.display());
+                p
+            })
+            .filter(|p| p.is_file())
+            .or_else(||
+                std::env::current_dir().ok()
+                    .map(|mut p| {
+                        p.push("default-volumes.ini");
+                        debug!("Checking for default-volumes config in: {}", p.display());
+                        p
+                    })
+                    .filter(|p| p.is_file())
+            );
+        if let Some(conf_path) = conf_path { // Check if there are default volumes.
+            let file = fs::File::open(conf_path)?;
+            // Apply default volumes.
+            manager.get_default_volume(file)?;
         }
 
         Ok(manager)
