@@ -25,10 +25,9 @@ before_deploy:
 deploy:
 - provider: releases
   skip_cleanup: true
+  draft: true
   on:
-    tags: true
-    condition: "$TRAVIS_RUST_VERSION = stable"
-    branch: release
+    condition: "$TRAVIS_COMMIT_MESSAGE =~ /\[travis-build\]/"
   file_glob: true
   file:
   - target/release/soundsense-rs-*
