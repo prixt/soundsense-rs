@@ -55,7 +55,7 @@ You can set the following environment variables to set the logging parameters. (
 [Read about it here.](./about_channel_setting.md)
 
 ## Dependencies
-__Linux__: libasound2, libgtk-3, libgdk-3, libwebkit2gtk-4.0, libjavascriptcregtk-4.0
+__Linux__: libasound2, libgtk-3, libgdk-3, libwebkit2gtk-4.0, libjavascriptcoregtk-4.0
 
 ## MIT License
 [Read it here.](./LICENSE)
