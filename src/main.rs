@@ -65,8 +65,9 @@ fn main() {
             })
             .filter(|p| p.is_file())
             .or_else(||
-                env::current_dir().ok()
+                env::current_exe().ok()
                     .map(|mut p| {
+                        p.pop();
                         p.push("default-paths.ini");
                         debug!("Checking for default-path config in: {}", p.display());
                         p
