@@ -386,8 +386,9 @@ impl SoundManager {
             })
             .filter(|p| p.is_file())
             .or_else(||
-                std::env::current_dir().ok()
+                std::env::current_exe().ok()
                     .map(|mut p| {
+                        p.pop();
                         p.push("default-volumes.ini");
                         debug!("Checking for default-volumes config in: {}", p.display());
                         p
