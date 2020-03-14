@@ -290,7 +290,7 @@ impl SoundManager {
                                         match attr_value {
                                             "singleEager" => play_type = ChannelPlayType::SingleEager,
                                             "singleLazy" => play_type = ChannelPlayType::SingleLazy,
-                                            "all" => (),
+                                            "all" => play_type = ChannelPlayType::All,
                                             other => {
                                                 warn!("Unknown Channel PlayType: {}", other);
                                                 warn!("Will ignore this value.");
@@ -309,7 +309,7 @@ impl SoundManager {
                                     .insert(name, channel_setting);
                             }
                             else {
-                                warn!("A ChannelSetting is {:?} didn't specify a channel name.", file_path);
+                                warn!("A ChannelSetting in {:?} didn't specify a channel name.", file_path);
                                 warn!("Will ignore this ChannelSetting.");
                             }
                         }
