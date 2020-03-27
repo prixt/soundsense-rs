@@ -5,6 +5,7 @@ use std::sync::Mutex;
 use crossbeam::channel::{Sender, Receiver};
 use web_view::*;
 use crate::message::{SoundMessage, UIMessage};
+use tinyfiledialogs as tfd;
 
 /// The UI thread function.
 pub fn run(
@@ -38,9 +39,13 @@ pub fn run(
         .user_data(())
         .invoke_handler(|webview, arg| {
             match arg {
-                "load_gamelog" => if let Some(path) = webview.dialog()
-                    .open_file("Choose gamelog.txt", "")
-                    .unwrap() {
+                "load_gamelog" => if let Some(path) =
+                tfd::open_file_dialog(
+                    "Choose gamelog.txt",
+                    "gamelog.txt",
+                    Some((&["*.txt"], "*.txt")),
+                ) {
+                    let path = PathBuf::from(path);
                     sound_tx.send(SoundMessage::ChangeGamelog(path.clone())).unwrap();
                     gamelog_path.lock()
                         .unwrap()
@@ -48,9 +53,12 @@ pub fn run(
                     remove_alert(webview, "gamelog_loaded");
                     add_alert(webview, "loading_gamelog", "blue", "&#x231B; Loading gamelog...");
                 }
-                "load_soundpack" => if let Some(path) = webview.dialog()
-                    .choose_directory("Choose soundpack directory", "")
-                    .unwrap() {
+                "load_soundpack" => if let Some(path) = 
+                tfd::select_folder_dialog(
+                    "Choose soundpack directory",
+                    "soundpack",
+                ) {
+                    let path = PathBuf::from(path);
                     sound_tx.send(SoundMessage::ChangeSoundpack(path.clone())).unwrap();
                     soundpack_path.lock()
                         .unwrap()
@@ -58,9 +66,13 @@ pub fn run(
                     remove_alert(webview, "soundpack_loaded");
                     add_alert(webview, "loading_soundpack", "blue", "&#x231B; Loading soundpack...");
                 }
-                "load_ignore_list" => if let Some(path) = webview.dialog()
-                    .open_file("Choose ignore.txt", "")
-                    .unwrap() {
+                "load_ignore_list" => if let Some(path) =
+                tfd::open_file_dialog(
+                    "Choose ignore.txt",
+                    "ignore.txt",
+                    Some((&["*.txt"], "*.txt")),
+                ) {
+                    let path = PathBuf::from(path);
                     sound_tx.send(SoundMessage::ChangeIgnoreList(path.clone())).unwrap();
                     ignore_path.lock()
                         .unwrap()
@@ -69,18 +81,18 @@ pub fn run(
                     add_alert(webview, "loading_ignore", "blue", "&#x231B; Loading ignore list...");
                 }
                 "show_about" => {
-                    webview.dialog()
-                        .info(
-                            "About SoundSense-RS",
-                            &format!(
+                    tfd::message_box_ok(
+                        "About SoundSense-RS",
+                        &format!(
 r"A sound-engine utility for Dwarf Fortress, written in Rust
     Version {}
     Created by prixt
     Original SoundSense created by zwei:
         http://df.zweistein.cz/soundsense/",
-                                env!("CARGO_PKG_VERSION")
-                            )
-                        ).unwrap();
+                        env!("CARGO_PKG_VERSION"),
+                        ),
+                        tfd::MessageBoxIcon::Info
+                    );
                 }
                 "link_original" => {
                     if let Err(e) = webbrowser::open("http://df.zweistein.cz/soundsense/") {
