@@ -655,7 +655,7 @@ impl SoundManager {
     /// Write the current slider values into the soundsense-rs/default-volumes.ini file.
     pub fn set_current_volumes_as_default(&self, mut file: File) -> Result<()> {
         use std::io::Write;
-        writeln!(&mut file, "all={}", (self.total_volume.get()*100.0) as u32)?;
+        writeln!(&mut file, "total={}", (self.total_volume.get()*100.0) as u32)?;
         for (channel_name, channel) in self.channels.iter() {
             writeln!(&mut file, "{}={}", channel_name, (channel.get_local_volume()*100.0) as u32)?;
         }
