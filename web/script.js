@@ -36,7 +36,7 @@ function createSlider(channel_name) {
             "<div class='overlay-content w3-container w3-padding-small w3-animate-opacity w3-grey w3-center'>"+
                 "<span>Threshold</span><br>"+
                 "<select id='"+channel_name+"_selector' onchange='thresholdSelect(\""+channel_name+"\",this.value)'>"+
-                    "<option value='4'>Evertyhing</option>"+
+                    "<option value='4'>Everything</option>"+
                     "<option value='3'>Fluff</option>"+
                     "<option value='2'>Important</option>"+
                     "<option value='1'>Critical</option>"+
