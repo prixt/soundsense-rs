@@ -15,12 +15,22 @@ fn main() -> Result<(), Box<dyn Error>> {
 	#[cfg(all(target_os="windows", feature = "edge"))]
 	let range_css = include_str!("web/range-windows-edge.css");
 	
+	#[cfg(target_os="linux")]
+	let index_html = include_str!("web/index-linux.html")
+		.replace("{comment_start}"	, "<!--")
+		.replace("{comment_end}"	, "-->")
+		.replace("{range}"			, range_css)
+		.replace("{w3}"				, include_str!("web/w3.css"))
+		.replace("{js}"				, include_str!("web/script-linux.js"));
+
+	#[cfg(not(target_os="linux"))]
 	let index_html = include_str!("web/index.html")
 		.replace("{comment_start}"	, "<!--")
 		.replace("{comment_end}"	, "-->")
 		.replace("{range}"			, range_css)
 		.replace("{w3}"				, include_str!("web/w3.css"))
 		.replace("{js}"				, include_str!("web/script.js"));
+
 	let index_html = html_minifier::minify(index_html)?;
 
 	File::create(dest_dir)?
