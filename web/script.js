@@ -9,19 +9,19 @@ function addSlider(channel_name) {
     );
     document.getElementById(channel_name+"_slider")
         .addEventListener(is_windows?'change':'input',function(){
-                external.invoke("change_volume:"+channel_name+":"+this.value);
+                window.webkit.messageHandlers.external.postMessage("change_volume:"+channel_name+":"+this.value);
             },
             false
         );
     document.getElementById(channel_name+"_skip_button")
         .addEventListener('click',function(){
-                external.invoke("skip_current_sound:"+channel_name);
+                window.webkit.messageHandlers.external.postMessage("skip_current_sound:"+channel_name);
             },
             false
         );
     document.getElementById(channel_name+"_play_pause_button")
         .addEventListener('click',function(){
-                external.invoke("play_pause:"+channel_name);
+                window.webkit.messageHandlers.external.postMessage("play_pause:"+channel_name);
             },
             false
         );
@@ -151,7 +151,7 @@ function createError(name, text) {
 }
 
 function thresholdSelect(channel_name, value) {
-    external.invoke("change_threshold:"+channel_name+":"+value);
+    window.webkit.messageHandlers.external.postMessage("change_threshold:"+channel_name+":"+value);
 }
 
 function main() {
